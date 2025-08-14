@@ -457,6 +457,83 @@ function initializePage() {
   }
 }
 
+// Load DMO page
+async function loadDMO() {
+  const container = document.getElementById('dmo-container');
+  if (!container) return;
+
+  try {
+    const today = new Date().toISOString().split('T')[0];
+    const activities = await fetchAPI(`/api/user/${currentUser.id}/dmo?date=${today}`);
+    
+    // DMO functionality is handled server-side with JSX rendering
+    // This is a placeholder for any additional client-side DMO logic
+    console.log('DMO activities loaded:', activities);
+  } catch (error) {
+    console.error('Failed to load DMO data:', error);
+  }
+}
+
+// DMO helper functions
+function updateDMOActivity(activityType, action) {
+  // This would typically make an API call to update the activity
+  console.log(`Updating ${activityType} with action: ${action}`);
+  // For demo purposes, we could reload the page or update the UI
+}
+
+function editDMOActivity(activityType) {
+  // This would open a modal or form to edit the activity
+  console.log(`Editing ${activityType} activity`);
+}
+
+// Load profile page
+async function loadProfile() {
+  const container = document.getElementById('profile-container');
+  if (!container) return;
+
+  try {
+    const profile = await fetchAPI(`/api/user/${currentUser.id}/profile`);
+    
+    // Profile functionality is handled server-side with JSX rendering
+    // This is a placeholder for any additional client-side profile logic
+    console.log('Profile loaded:', profile);
+  } catch (error) {
+    console.error('Failed to load profile:', error);
+  }
+}
+
+// Initialize page based on current route
+function initializePage() {
+  const path = window.location.pathname;
+  
+  switch (path) {
+    case '/courses':
+      loadCourses();
+      break;
+    case '/experts':
+      loadExperts();
+      break;
+    case '/leads':
+      loadLeads();
+      break;
+    case '/affiliate':
+      loadAffiliate();
+      break;
+    case '/statistics':
+      loadStatistics();
+      break;
+    case '/dmo':
+      loadDMO();
+      break;
+    case '/profile':
+      loadProfile();
+      break;
+    default:
+      // Dashboard or other pages
+      break;
+  }
+}
+
 // Initialize when DOM is loaded
 document.addEventListener('DOMContentLoaded', function() {
   initializePage();

@@ -366,6 +366,61 @@ app.get('/api/experts', async (c) => {
   }
 })
 
+// Get user profile
+app.get('/api/user/:id/profile', async (c) => {
+  const { env } = c
+  const userId = c.req.param('id')
+
+  try {
+    const user = await env.DB.prepare(`
+      SELECT id, email, name, avatar_url, role, created_at, last_login, is_active
+      FROM users WHERE id = ?
+    `).bind(userId).first()
+
+    return c.json(user)
+  } catch (error) {
+    return c.json({ error: 'Failed to fetch user profile' }, 500)
+  }
+})
+
+// Get DMO activities
+app.get('/api/user/:id/dmo', async (c) => {
+  const { env } = c
+  const userId = c.req.param('id')
+  const date = c.req.query('date') || new Date().toISOString().split('T')[0]
+
+  try {
+    const activities = await env.DB.prepare(`
+      SELECT * FROM dmo_activities 
+      WHERE user_id = ? AND activity_date = ?
+      ORDER BY activity_type
+    `).bind(userId, date).all()
+
+    return c.json(activities)
+  } catch (error) {
+    return c.json({ error: 'Failed to fetch DMO activities' }, 500)
+  }
+})
+
+// Update DMO activity
+app.post('/api/user/:id/dmo', async (c) => {
+  const { env } = c
+  const userId = c.req.param('id')
+  const { activity_type, target_count, completed_count, notes, activity_date } = await c.req.json()
+
+  try {
+    await env.DB.prepare(`
+      INSERT OR REPLACE INTO dmo_activities 
+      (user_id, activity_date, activity_type, target_count, completed_count, notes, updated_at)
+      VALUES (?, ?, ?, ?, ?, ?, datetime('now'))
+    `).bind(userId, activity_date, activity_type, target_count, completed_count, notes || '').run()
+
+    return c.json({ success: true })
+  } catch (error) {
+    return c.json({ error: 'Failed to update DMO activity' }, 500)
+  }
+})
+
 // Simple route pages (will expand these later)
 app.get('/courses', (c) => {
   return c.render(
@@ -452,38 +507,296 @@ app.get('/statistics', (c) => {
   )
 })
 
-app.get('/dmo', (c) => {
-  return c.render(
-    <div class="min-h-screen bg-gray-50 p-8">
-      <div class="max-w-7xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Daily Method Operations (DMO)</h1>
-        <div id="dmo-container">
-          <div class="text-center py-8">
-            <i class="fas fa-spinner fa-spin text-2xl text-gray-400"></i>
-            <p class="text-gray-500 mt-2">Loading DMO data...</p>
+app.get('/dmo', async (c) => {
+  const { env } = c
+  const userId = 1 // Demo user
+  const today = new Date().toISOString().split('T')[0]
+
+  try {
+    // Get today's DMO activities
+    const activities = await env.DB.prepare(`
+      SELECT * FROM dmo_activities 
+      WHERE user_id = ? AND activity_date = ?
+      ORDER BY activity_type
+    `).bind(userId, today).all()
+
+    const activityTypes = [
+      { type: 'prospecting', label: 'Prospecting', icon: 'fa-search', color: 'blue' },
+      { type: 'follow_up', label: 'Follow Up', icon: 'fa-phone', color: 'green' },
+      { type: 'presentation', label: 'Presentations', icon: 'fa-presentation', color: 'purple' },
+      { type: 'content_creation', label: 'Content Creation', icon: 'fa-edit', color: 'orange' }
+    ]
+
+    return c.render(
+      <div class="min-h-screen bg-gray-50 p-8">
+        <div class="max-w-6xl mx-auto">
+          <div class="flex justify-between items-center mb-8">
+            <div>
+              <h1 class="text-3xl font-bold text-gray-900">Daily Method Operations (DMO)</h1>
+              <p class="text-gray-600 mt-2">Track your daily business-building activities</p>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-indigo-600">{new Date().toLocaleDateString()}</div>
+              <div class="text-sm text-gray-500">Today's Date</div>
+            </div>
+          </div>
+
+          {/* DMO Progress Cards */}
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+            {activityTypes.map(actType => {
+              const activity = activities.results?.find((a: any) => a.activity_type === actType.type)
+              const completed = activity?.completed_count || 0
+              const target = activity?.target_count || 0
+              const percentage = target > 0 ? Math.round((completed / target) * 100) : 0
+              const isCompleted = completed >= target && target > 0
+
+              return (
+                <div class={`bg-white rounded-lg shadow-lg p-6 border-l-4 border-${actType.color}-500`}>
+                  <div class="flex items-center justify-between mb-4">
+                    <div class={`p-3 rounded-lg bg-${actType.color}-100`}>
+                      <i class={`fas ${actType.icon} text-${actType.color}-600 text-xl`}></i>
+                    </div>
+                    <div class={`dmo-circle ${isCompleted ? 'completed' : target > 0 ? 'partial' : 'pending'}`}>
+                      {percentage}%
+                    </div>
+                  </div>
+                  <h3 class="text-lg font-semibold text-gray-900 mb-2">{actType.label}</h3>
+                  <div class="flex justify-between text-sm text-gray-600 mb-3">
+                    <span>Completed: {completed}</span>
+                    <span>Target: {target}</span>
+                  </div>
+                  <div class="w-full bg-gray-200 rounded-full h-2 mb-4">
+                    <div class={`bg-${actType.color}-500 h-2 rounded-full transition-all duration-300`} 
+                         style={`width: ${Math.min(percentage, 100)}%`}></div>
+                  </div>
+                  <div class="flex gap-2">
+                    <button onclick={`updateDMOActivity('${actType.type}', 'increment')`}
+                            class={`flex-1 bg-${actType.color}-600 text-white py-2 px-3 rounded-md text-sm font-medium hover:bg-${actType.color}-700`}>
+                      + Add
+                    </button>
+                    <button onclick={`editDMOActivity('${actType.type}')`}
+                            class="px-3 py-2 border border-gray-300 rounded-md text-sm text-gray-700 hover:bg-gray-50">
+                      <i class="fas fa-edit"></i>
+                    </button>
+                  </div>
+                </div>
+              )
+            })}
+          </div>
+
+          {/* Daily Summary */}
+          <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+            <div class="bg-white rounded-lg shadow p-6">
+              <h2 class="text-xl font-semibold text-gray-900 mb-4">Today's Summary</h2>
+              <div class="space-y-4">
+                {activities.results?.map((activity: any) => (
+                  <div class="flex justify-between items-center p-3 bg-gray-50 rounded-lg">
+                    <div>
+                      <div class="font-medium text-gray-900 capitalize">
+                        {activity.activity_type.replace('_', ' ')}
+                      </div>
+                      {activity.notes && (
+                        <div class="text-sm text-gray-600 mt-1">{activity.notes}</div>
+                      )}
+                    </div>
+                    <div class="text-right">
+                      <div class="font-semibold text-gray-900">
+                        {activity.completed_count}/{activity.target_count}
+                      </div>
+                      <div class="text-xs text-gray-500">
+                        {Math.round((activity.completed_count / activity.target_count) * 100)}%
+                      </div>
+                    </div>
+                  </div>
+                )) || (
+                  <div class="text-center py-8 text-gray-500">
+                    <i class="fas fa-calendar-plus text-2xl mb-2"></i>
+                    <p>No activities set for today. Click "Set Goals" to get started!</p>
+                  </div>
+                )}
+              </div>
+              <button class="w-full mt-4 bg-indigo-600 text-white py-2 px-4 rounded-md font-medium hover:bg-indigo-700">
+                Set Daily Goals
+              </button>
+            </div>
+
+            <div class="bg-white rounded-lg shadow p-6">
+              <h2 class="text-xl font-semibold text-gray-900 mb-4">Weekly Progress</h2>
+              <div class="space-y-3">
+                <div class="flex items-center justify-between">
+                  <span class="text-gray-600">This Week's Completion</span>
+                  <span class="text-2xl font-bold text-green-600">78%</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-3">
+                  <div class="bg-green-500 h-3 rounded-full" style="width: 78%"></div>
+                </div>
+                <div class="mt-4 space-y-2">
+                  <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Monday</span>
+                    <span class="text-green-600">✓ 100%</span>
+                  </div>
+                  <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Tuesday</span>
+                    <span class="text-green-600">✓ 95%</span>
+                  </div>
+                  <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Wednesday</span>
+                    <span class="text-green-600">✓ 88%</span>
+                  </div>
+                  <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Thursday</span>
+                    <span class="text-orange-600">○ 65%</span>
+                  </div>
+                  <div class="flex justify-between text-sm">
+                    <span class="text-gray-600">Friday</span>
+                    <span class="text-blue-600">→ In Progress</span>
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>,
-    { title: 'Daily Method (DMO) - Online Empires' }
-  )
+      </div>,
+      { title: 'Daily Method (DMO) - Online Empires' }
+    )
+  } catch (error) {
+    return c.text('Failed to load DMO data', 500)
+  }
 })
 
-app.get('/profile', (c) => {
-  return c.render(
-    <div class="min-h-screen bg-gray-50 p-8">
-      <div class="max-w-7xl mx-auto">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8">Profile</h1>
-        <div id="profile-container">
-          <div class="text-center py-8">
-            <i class="fas fa-spinner fa-spin text-2xl text-gray-400"></i>
-            <p class="text-gray-500 mt-2">Loading profile...</p>
+app.get('/profile', async (c) => {
+  const { env } = c
+  const userId = 1 // Demo user
+
+  try {
+    // Get user profile
+    const user = await env.DB.prepare(`
+      SELECT id, email, name, avatar_url, role, created_at, last_login, is_active
+      FROM users WHERE id = ?
+    `).bind(userId).first() as User | null
+
+    // Get user statistics
+    const stats = await env.DB.prepare(`
+      SELECT * FROM user_statistics WHERE user_id = ?
+    `).bind(userId).first() as UserStatistics | null
+
+    return c.render(
+      <div class="min-h-screen bg-gray-50 p-8">
+        <div class="max-w-4xl mx-auto">
+          <h1 class="text-3xl font-bold text-gray-900 mb-8">Profile</h1>
+          
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Profile Info */}
+            <div class="lg:col-span-2">
+              <div class="bg-white rounded-lg shadow p-6 mb-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Personal Information</h2>
+                <div class="space-y-4">
+                  <div class="flex items-center">
+                    <img src={user?.avatar_url || 'https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=100'} 
+                         alt="Profile" class="w-16 h-16 rounded-full mr-4" />
+                    <div>
+                      <h3 class="text-lg font-semibold text-gray-900">{user?.name || 'Ashley Kemp'}</h3>
+                      <p class="text-gray-600">{user?.email || 'ashley.kemp@example.com'}</p>
+                      <span class="inline-block bg-indigo-100 text-indigo-800 text-xs px-2 py-1 rounded-full mt-1">
+                        {user?.role || 'user'}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mt-6">
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Full Name</label>
+                      <input type="text" value={user?.name || 'Ashley Kemp'} 
+                             class="w-full p-3 border border-gray-300 rounded-md" />
+                    </div>
+                    <div>
+                      <label class="block text-sm font-medium text-gray-700 mb-1">Email</label>
+                      <input type="email" value={user?.email || 'ashley.kemp@example.com'} 
+                             class="w-full p-3 border border-gray-300 rounded-md" />
+                    </div>
+                  </div>
+                  <button class="bg-indigo-600 text-white px-6 py-2 rounded-md font-medium hover:bg-indigo-700">
+                    Update Profile
+                  </button>
+                </div>
+              </div>
+
+              {/* Account Activity */}
+              <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Account Activity</h2>
+                <div class="space-y-3">
+                  <div class="flex justify-between items-center py-2">
+                    <span class="text-gray-600">Member Since</span>
+                    <span class="text-gray-900">{new Date(user?.created_at || '2024-01-01').toLocaleDateString()}</span>
+                  </div>
+                  <div class="flex justify-between items-center py-2">
+                    <span class="text-gray-600">Last Login</span>
+                    <span class="text-gray-900">{user?.last_login ? new Date(user.last_login).toLocaleDateString() : 'Today'}</span>
+                  </div>
+                  <div class="flex justify-between items-center py-2">
+                    <span class="text-gray-600">Account Status</span>
+                    <span class={`px-2 py-1 text-xs font-semibold rounded-full ${user?.is_active ? 'bg-green-100 text-green-800' : 'bg-red-100 text-red-800'}`}>
+                      {user?.is_active ? 'Active' : 'Inactive'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Stats Summary */}
+            <div class="space-y-6">
+              <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Your Stats</h2>
+                <div class="space-y-4">
+                  <div class="text-center">
+                    <div class="text-2xl font-bold text-indigo-600">{stats?.total_courses_completed || 8}</div>
+                    <div class="text-sm text-gray-500">Courses Completed</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="text-2xl font-bold text-green-600">${(stats?.total_commissions || 2847).toFixed(2)}</div>
+                    <div class="text-sm text-gray-500">Total Earnings</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="text-2xl font-bold text-orange-600">{stats?.current_streak_days || 12}</div>
+                    <div class="text-sm text-gray-500">Day Streak</div>
+                  </div>
+                  <div class="text-center">
+                    <div class="text-2xl font-bold text-purple-600">{(stats?.total_learning_hours || 45.5).toFixed(1)}h</div>
+                    <div class="text-sm text-gray-500">Learning Time</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div class="bg-white rounded-lg shadow p-6">
+                <h2 class="text-xl font-semibold text-gray-900 mb-4">Quick Actions</h2>
+                <div class="space-y-2">
+                  <button class="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md">
+                    <i class="fas fa-key mr-2"></i>
+                    Change Password
+                  </button>
+                  <button class="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md">
+                    <i class="fas fa-bell mr-2"></i>
+                    Notification Settings
+                  </button>
+                  <button class="w-full text-left px-3 py-2 text-sm text-gray-700 hover:bg-gray-50 rounded-md">
+                    <i class="fas fa-download mr-2"></i>
+                    Download Data
+                  </button>
+                  <button class="w-full text-left px-3 py-2 text-sm text-red-600 hover:bg-red-50 rounded-md">
+                    <i class="fas fa-trash mr-2"></i>
+                    Delete Account
+                  </button>
+                </div>
+              </div>
+            </div>
           </div>
         </div>
-      </div>
-    </div>,
-    { title: 'Profile - Online Empires' }
-  )
+      </div>,
+      { title: 'Profile - Online Empires' }
+    )
+  } catch (error) {
+    return c.text('Failed to load profile', 500)
+  }
 })
 
 export default app
