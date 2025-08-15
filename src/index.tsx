@@ -165,7 +165,7 @@ const Layout = ({ children, title, currentPage }: { children: any, title: string
               {/* Profile Dropdown */}
               <div class="relative">
                 <button id="profileBtn" class="flex items-center space-x-2 hover:bg-gray-50 rounded-lg p-2">
-                  <img id="headerProfileImage" src="https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=32" alt="Profile" class="w-8 h-8 rounded-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=32'" />
+                  <img id="headerProfileImage" src="https://ui-avatars.com/api/?name=Ashley+Kemp&background=6366f1&color=fff&size=32" alt="Profile" class="w-8 h-8 rounded-full object-cover" onerror="this.src='https://ui-avatars.com/api/?name=Ashley+Kemp&background=6366f1&color=fff&size=32'" />
                   <span class="text-sm font-medium text-gray-700">Ashley Kemp</span>
                   <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
                 </button>
@@ -231,7 +231,7 @@ app.get('/', async (c) => {
         {/* Welcome Banner */}
         <div class="bg-gradient-to-r from-purple-500 to-blue-600 rounded-xl p-6 text-white mb-8">
           <div class="flex items-center">
-            <img src="https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=64" alt="Ashley" class="w-12 h-12 rounded-full mr-4" />
+            <img src="https://ui-avatars.com/api/?name=Ashley+Kemp&background=6366f1&color=fff&size=64" alt="Ashley" class="w-12 h-12 rounded-full mr-4" />
             <div>
               <h2 class="text-2xl font-bold mb-1">Hello, {userName}!</h2>
               <p class="text-purple-100">Welcome back {userName} to The Digital Era!</p>
@@ -318,39 +318,77 @@ app.get('/', async (c) => {
         <div>
           <h3 class="text-xl font-semibold text-gray-900 mb-6">Start Here</h3>
           <div class="grid grid-cols-3 gap-6">
-            <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+            <div class="course-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full">
               <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400" alt="Business Blueprint" class="w-full h-48 object-cover" />
-              <div class="p-6">
+              <div class="p-6 flex flex-col flex-grow">
                 <h4 class="font-semibold text-gray-900 mb-2">The Business Blueprint</h4>
-                <p class="text-sm text-gray-600 mb-4">Foundation principles for building your online business</p>
+                <p class="text-sm text-gray-600 mb-4 flex-grow">Foundation principles for building your online business</p>
                 <p class="text-xs text-gray-500 mb-4">5 modules</p>
-                <button onclick="window.location.href='/lesson/1/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
+                <button onclick="window.location.href='/lesson/1/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-all duration-200">
                   Start Course
                 </button>
               </div>
             </div>
 
-            <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+            <div class="course-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full">
               <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400" alt="Discovery Process" class="w-full h-48 object-cover" />
-              <div class="p-6">
+              <div class="p-6 flex flex-col flex-grow">
                 <h4 class="font-semibold text-gray-900 mb-2">The Discovery Process</h4>
-                <p class="text-sm text-gray-600 mb-4">Find your niche and identify opportunities</p>
+                <p class="text-sm text-gray-600 mb-4 flex-grow">Find your niche and identify opportunities</p>
                 <p class="text-xs text-gray-500 mb-4">3 modules</p>
-                <button onclick="window.location.href='/lesson/3/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
+                <button onclick="window.location.href='/lesson/3/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-all duration-200">
                   Start Course
                 </button>
               </div>
             </div>
 
-            <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+            <div class="course-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full">
               <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400" alt="Next Steps" class="w-full h-48 object-cover" />
-              <div class="p-6">
+              <div class="p-6 flex flex-col flex-grow">
                 <h4 class="font-semibold text-gray-900 mb-2">Next Steps</h4>
-                <p class="text-sm text-gray-600 mb-4">Action plan for immediate implementation</p>
+                <p class="text-sm text-gray-600 mb-4 flex-grow">Action plan for immediate implementation</p>
                 <p class="text-xs text-gray-500 mb-4">4 modules</p>
-                <button onclick="window.location.href='/lesson/3/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
+                <button onclick="window.location.href='/lesson/3/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-all duration-200">
                   Start Course
                 </button>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Recent Achievements Section */}
+        <div class="mt-8">
+          <h3 class="text-xl font-semibold text-gray-900 mb-6">🏆 Recent Achievements</h3>
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div class="flex items-center p-4 bg-green-50 rounded-lg border border-green-200">
+                <div class="w-10 h-10 bg-green-500 rounded-full flex items-center justify-center mr-4">
+                  <i class="fas fa-check text-white"></i>
+                </div>
+                <div>
+                  <p class="font-medium text-gray-900">Completed "Facebook Advertising Mastery" course</p>
+                  <p class="text-sm text-gray-500">Earned 500 XP points</p>
+                </div>
+              </div>
+              
+              <div class="flex items-center p-4 bg-blue-50 rounded-lg border border-blue-200">
+                <div class="w-10 h-10 bg-blue-500 rounded-full flex items-center justify-center mr-4">
+                  <i class="fas fa-fire text-white"></i>
+                </div>
+                <div>
+                  <p class="font-medium text-gray-900">Achieved 10-day learning streak</p>
+                  <p class="text-sm text-gray-500">Consistency is key to success!</p>
+                </div>
+              </div>
+              
+              <div class="flex items-center p-4 bg-yellow-50 rounded-lg border border-yellow-200">
+                <div class="w-10 h-10 bg-yellow-500 rounded-full flex items-center justify-center mr-4">
+                  <i class="fas fa-dollar-sign text-white"></i>
+                </div>
+                <div>
+                  <p class="font-medium text-gray-900">Earned $500 in commissions this week</p>
+                  <p class="text-sm text-gray-500">Your business is growing!</p>
+                </div>
               </div>
             </div>
           </div>
@@ -368,45 +406,164 @@ app.get('/', async (c) => {
 app.get('/courses', (c) => {
   return c.render(
     <Layout title="All Courses" currentPage="courses">
-      <div class="mb-6">
-        <p class="text-gray-600">Master the skills to build your online empire</p>
+      {/* Course Progress Overview */}
+      <div class="grid grid-cols-4 gap-6 mb-8">
+        <div class="bg-gradient-to-r from-green-500 to-emerald-600 rounded-xl p-6 text-white">
+          <div class="flex items-center">
+            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
+              <i class="fas fa-trophy text-2xl"></i>
+            </div>
+            <div>
+              <p class="text-sm text-green-100">Courses Completed</p>
+              <p class="text-2xl font-bold">3/12</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-blue-500 to-indigo-600 rounded-xl p-6 text-white">
+          <div class="flex items-center">
+            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
+              <i class="fas fa-fire text-2xl"></i>
+            </div>
+            <div>
+              <p class="text-sm text-blue-100">Learning Streak</p>
+              <p class="text-2xl font-bold">12 days</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-purple-500 to-pink-600 rounded-xl p-6 text-white">
+          <div class="flex items-center">
+            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
+              <i class="fas fa-star text-2xl"></i>
+            </div>
+            <div>
+              <p class="text-sm text-purple-100">XP Points</p>
+              <p class="text-2xl font-bold">2,450</p>
+            </div>
+          </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-yellow-500 to-orange-600 rounded-xl p-6 text-white">
+          <div class="flex items-center">
+            <div class="w-12 h-12 bg-white bg-opacity-20 rounded-lg flex items-center justify-center mr-4">
+              <i class="fas fa-medal text-2xl"></i>
+            </div>
+            <div>
+              <p class="text-sm text-yellow-100">Level</p>
+              <p class="text-2xl font-bold">Expert</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Achievements */}
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Achievements</h3>
+        <div class="space-y-3">
+          <div class="flex items-center p-3 bg-green-50 rounded-lg border border-green-200">
+            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-3">
+              <i class="fas fa-check text-white text-sm"></i>
+            </div>
+            <div class="flex-grow">
+              <p class="font-medium text-gray-900">Completed "Facebook Advertising Mastery" course</p>
+              <p class="text-sm text-gray-500">Earned 500 XP points</p>
+            </div>
+            <span class="text-xs text-gray-400">2 days ago</span>
+          </div>
+          
+          <div class="flex items-center p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+              <i class="fas fa-fire text-white text-sm"></i>
+            </div>
+            <div class="flex-grow">
+              <p class="font-medium text-gray-900">Achieved 10-day learning streak</p>
+              <p class="text-sm text-gray-500">Consistency is key to success!</p>
+            </div>
+            <span class="text-xs text-gray-400">3 days ago</span>
+          </div>
+          
+          <div class="flex items-center p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+            <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center mr-3">
+              <i class="fas fa-dollar-sign text-white text-sm"></i>
+            </div>
+            <div class="flex-grow">
+              <p class="font-medium text-gray-900">Earned $500 in commissions this week</p>
+              <p class="text-sm text-gray-500">Your business is growing!</p>
+            </div>
+            <span class="text-xs text-gray-400">1 week ago</span>
+          </div>
+        </div>
       </div>
 
       {/* Start Here Section */}
       <div class="mb-8">
-        <h3 class="text-lg font-semibold text-gray-900 mb-6">Start Here</h3>
+        <h3 class="text-xl font-semibold text-gray-900 mb-6">🚀 Start Here</h3>
         <div class="grid grid-cols-3 gap-6">
-          <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+          <div class="course-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full">
             <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=400" alt="Business Blueprint" class="w-full h-48 object-cover" />
-            <div class="p-6">
-              <h4 class="font-semibold text-gray-900 mb-2">The Business Blueprint</h4>
-              <p class="text-sm text-gray-600 mb-4">Foundation principles for building your online business</p>
-              <p class="text-xs text-gray-500 mb-4">5 modules</p>
-              <button onclick="window.location.href='/lesson/1/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
+            <div class="p-6 flex flex-col flex-grow">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-semibold text-gray-900">The Business Blueprint</h4>
+                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">8 Modules</span>
+              </div>
+              <p class="text-sm text-gray-600 mb-4 flex-grow">Master the fundamentals of building your online empire</p>
+              <div class="mb-4">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs text-gray-500">Progress</span>
+                  <span class="text-xs text-gray-700 font-medium">45 Lessons</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+              <button onclick="window.location.href='/lesson/1/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-all duration-200">
                 Start Course
               </button>
             </div>
           </div>
 
-          <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+          <div class="course-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full">
             <img src="https://images.unsplash.com/photo-1516321318423-f06f85e504b3?w=400" alt="Discovery Process" class="w-full h-48 object-cover" />
-            <div class="p-6">
-              <h4 class="font-semibold text-gray-900 mb-2">The Discovery Process</h4>
-              <p class="text-sm text-gray-600 mb-4">Find your niche and identify opportunities</p>
-              <p class="text-xs text-gray-500 mb-4">3 modules</p>
-              <button onclick="window.location.href='/lesson/2/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
-                Start Course
+            <div class="p-6 flex flex-col flex-grow">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-semibold text-gray-900">The Discovery Process</h4>
+                <span class="text-xs bg-green-100 text-green-800 px-2 py-1 rounded-full">3 Modules</span>
+              </div>
+              <p class="text-sm text-gray-600 mb-4 flex-grow">Find your niche and identify opportunities</p>
+              <div class="mb-4">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs text-gray-500">Progress</span>
+                  <span class="text-xs text-gray-700 font-medium">15 Lessons</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-green-600 h-2 rounded-full" style="width: 30%"></div>
+                </div>
+              </div>
+              <button onclick="window.location.href='/lesson/2/1'" class="w-full bg-green-600 text-white py-2 rounded-lg font-medium hover:bg-green-700 transition-all duration-200">
+                Continue Course
               </button>
             </div>
           </div>
 
-          <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+          <div class="course-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full">
             <img src="https://images.unsplash.com/photo-1556761175-b413da4baf72?w=400" alt="Next Steps" class="w-full h-48 object-cover" />
-            <div class="p-6">
-              <h4 class="font-semibold text-gray-900 mb-2">Next Steps</h4>
-              <p class="text-sm text-gray-600 mb-4">Action plan for immediate implementation</p>
-              <p class="text-xs text-gray-500 mb-4">4 modules</p>
-              <button onclick="window.location.href='/lesson/3/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
+            <div class="p-6 flex flex-col flex-grow">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-semibold text-gray-900">Next Steps</h4>
+                <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">4 Modules</span>
+              </div>
+              <p class="text-sm text-gray-600 mb-4 flex-grow">Action plan for immediate implementation</p>
+              <div class="mb-4">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs text-gray-500">Progress</span>
+                  <span class="text-xs text-gray-700 font-medium">20 Lessons</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-purple-600 h-2 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+              <button onclick="window.location.href='/lesson/3/1'" class="w-full bg-purple-600 text-white py-2 rounded-lg font-medium hover:bg-purple-700 transition-all duration-200">
                 Start Course
               </button>
             </div>
@@ -415,48 +572,96 @@ app.get('/courses', (c) => {
       </div>
 
       {/* Social Media & Sales Section */}
-      <div>
-        <h3 class="text-lg font-semibold text-gray-900 mb-6">Social Media & Sales</h3>
+      <div class="mb-8">
+        <h3 class="text-xl font-semibold text-gray-900 mb-6">📱 Social Media & Sales</h3>
         <div class="grid grid-cols-4 gap-6">
-          <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+          <div class="course-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full">
             <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=400" alt="TikTok Mastery" class="w-full h-40 object-cover" />
-            <div class="p-4">
-              <h4 class="font-semibold text-gray-900 mb-2">TikTok Mastery</h4>
-              <p class="text-xs text-gray-500 mb-3">6 modules</p>
-              <button onclick="window.location.href='/lesson/4/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
-                Start Course
+            <div class="p-4 flex flex-col flex-grow">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-semibold text-gray-900 text-sm">TIK-TOK MASTERY</h4>
+                <span class="text-xs bg-red-100 text-red-800 px-2 py-1 rounded-full">6 Modules</span>
+              </div>
+              <p class="text-xs text-gray-600 mb-3 flex-grow">Dominate TikTok and grow exponentially</p>
+              <div class="mb-3">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs text-gray-500">67% Complete</span>
+                  <span class="text-xs text-gray-700 font-medium">25 Lessons</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-red-600 h-2 rounded-full" style="width: 67%"></div>
+                </div>
+              </div>
+              <button onclick="window.location.href='/lesson/1/2'" class="w-full bg-red-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-red-700 transition-all duration-200">
+                Continue Course
               </button>
             </div>
           </div>
 
-          <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+          <div class="course-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full">
             <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=400" alt="Facebook Ads" class="w-full h-40 object-cover" />
-            <div class="p-4">
-              <h4 class="font-semibold text-gray-900 mb-2">Facebook Advertising</h4>
-              <p class="text-xs text-gray-500 mb-3">8 modules</p>
-              <button onclick="window.location.href='/lesson/4/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
-                Start Course
+            <div class="p-4 flex flex-col flex-grow">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-semibold text-gray-900 text-sm">Facebook Advertising Mastery</h4>
+                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">8 Modules</span>
+              </div>
+              <p class="text-xs text-gray-600 mb-3 flex-grow">Create profitable Facebook ad campaigns</p>
+              <div class="mb-3">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs text-green-600 font-medium">✓ Completed</span>
+                  <span class="text-xs text-gray-700 font-medium">35 Lessons</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-green-600 h-2 rounded-full" style="width: 100%"></div>
+                </div>
+              </div>
+              <button onclick="window.location.href='/lesson/4/1'" class="w-full bg-gray-500 text-white py-2 rounded-lg text-sm font-medium">
+                Review Course
               </button>
             </div>
           </div>
 
-          <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+          <div class="course-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full">
             <img src="https://images.unsplash.com/photo-1580894908361-967195033215?w=400" alt="Instagram Marketing" class="w-full h-40 object-cover" />
-            <div class="p-4">
-              <h4 class="font-semibold text-gray-900 mb-2">Instagram Marketing</h4>
-              <p class="text-xs text-gray-500 mb-3">5 modules</p>
-              <button onclick="window.location.href='/lesson/4/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
+            <div class="p-4 flex flex-col flex-grow">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-semibold text-gray-900 text-sm">Instagram Marketing</h4>
+                <span class="text-xs bg-pink-100 text-pink-800 px-2 py-1 rounded-full">5 Modules</span>
+              </div>
+              <p class="text-xs text-gray-600 mb-3 flex-grow">Build a powerful Instagram presence</p>
+              <div class="mb-3">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs text-gray-500">Progress</span>
+                  <span class="text-xs text-gray-700 font-medium">22 Lessons</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-pink-600 h-2 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+              <button onclick="window.location.href='/lesson/5/1'" class="w-full bg-pink-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-pink-700 transition-all duration-200">
                 Start Course
               </button>
             </div>
           </div>
 
-          <div class="bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100">
+          <div class="course-card bg-white rounded-xl overflow-hidden shadow-sm border border-gray-100 flex flex-col h-full">
             <img src="https://images.unsplash.com/photo-1553877522-43269d4ea984?w=400" alt="Sales Funnel" class="w-full h-40 object-cover" />
-            <div class="p-4">
-              <h4 class="font-semibold text-gray-900 mb-2">Sales Funnel Mastery</h4>
-              <p class="text-xs text-gray-500 mb-3">7 modules</p>
-              <button onclick="window.location.href='/lesson/4/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
+            <div class="p-4 flex flex-col flex-grow">
+              <div class="flex items-center justify-between mb-2">
+                <h4 class="font-semibold text-gray-900 text-sm">Sales Funnel Mastery</h4>
+                <span class="text-xs bg-indigo-100 text-indigo-800 px-2 py-1 rounded-full">7 Modules</span>
+              </div>
+              <p class="text-xs text-gray-600 mb-3 flex-grow">Build high-converting sales funnels</p>
+              <div class="mb-3">
+                <div class="flex items-center justify-between mb-1">
+                  <span class="text-xs text-gray-500">Progress</span>
+                  <span class="text-xs text-gray-700 font-medium">30 Lessons</span>
+                </div>
+                <div class="w-full bg-gray-200 rounded-full h-2">
+                  <div class="bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
+                </div>
+              </div>
+              <button onclick="window.location.href='/lesson/6/1'" class="w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all duration-200">
                 Start Course
               </button>
             </div>
@@ -825,7 +1030,7 @@ app.get('/profile', async (c) => {
                   src={userData.avatar_url} 
                   alt="Profile" 
                   class="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
-                  onerror="this.src='https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=150'"
+                  onerror="this.src='https://ui-avatars.com/api/?name=Ashley+Kemp&background=6366f1&color=fff&size=150'"
                 />
                 <button 
                   id="changeProfilePicBtn"
@@ -1091,7 +1296,7 @@ app.get('/api/user/:id/profile', async (c) => {
       id: 1,
       name: 'Ashley Kemp',
       email: 'ashley@digitalera.com',
-      avatar_url: 'https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=150',
+      avatar_url: 'https://ui-avatars.com/api/?name=Ashley+Kemp&background=6366f1&color=fff&size=150',
       phone: '+1 (555) 123-4567',
       location: 'Los Angeles, CA',
       bio: 'Digital entrepreneur passionate about building digital success.',
@@ -1143,7 +1348,7 @@ app.post('/api/user/:id/upload-avatar', async (c) => {
   try {
     // In a real app, you would handle file upload here
     // For demo purposes, we'll simulate a successful upload
-    const mockAvatarUrl = `https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=150&t=${Date.now()}`
+    const mockAvatarUrl = `https://ui-avatars.com/api/?name=Ashley+Kemp&background=6366f1&color=fff&size=150&t=${Date.now()}`
     
     return c.json({ 
       success: true, 
@@ -1190,6 +1395,208 @@ app.delete('/api/user/:id/account', async (c) => {
   } catch (error) {
     return c.json({ error: 'Failed to delete account' }, 500)
   }
+})
+
+// Lesson routes
+app.get('/lesson/:courseId/:lessonId', async (c) => {
+  const courseId = c.req.param('courseId')
+  const lessonId = c.req.param('lessonId')
+  
+  // Course data mapping
+  const courses = {
+    '1': {
+      title: 'TIK-TOK MASTERY',
+      description: 'Dominate TikTok and grow your following exponentially',
+      progress: 67,
+      modules: [
+        { id: 1, title: 'Module 1', status: 'Complete', lessons: [
+          { id: 1, title: 'Getting Started with TikTok', duration: '15 min' },
+          { id: 2, title: 'Profile Optimization', duration: '12 min' }
+        ]},
+        { id: 2, title: 'Module 2', status: 'Complete', lessons: [
+          { id: 1, title: 'Content Strategy Basics', duration: '18 min' },
+          { id: 2, title: 'Understanding the Algorithm', duration: '20 min' }
+        ]},
+        { id: 3, title: 'Module 3', status: 'In Progress', lessons: [
+          { id: 1, title: 'Advanced Content Creation', duration: '25 min' },
+          { id: 2, title: 'Viral Content Creation', duration: '22 min', current: true },
+          { id: 3, title: 'Engagement Strategies', duration: '18 min' }
+        ]}
+      ]
+    },
+    '2': {
+      title: 'The Discovery Process',
+      description: 'Find your niche and identify opportunities',
+      progress: 30,
+      modules: [
+        { id: 1, title: 'Module 1', status: 'In Progress', lessons: [
+          { id: 1, title: 'Self-Assessment', duration: '20 min', current: true },
+          { id: 2, title: 'Market Research', duration: '25 min' }
+        ]}
+      ]
+    },
+    '3': {
+      title: 'Next Steps',
+      description: 'Action plan for immediate implementation',
+      progress: 0,
+      modules: [
+        { id: 1, title: 'Module 1', status: 'Not Started', lessons: [
+          { id: 1, title: 'Creating Your Action Plan', duration: '30 min', current: true }
+        ]}
+      ]
+    }
+  }
+
+  const course = courses[courseId]
+  if (!course) {
+    return c.notFound()
+  }
+
+  // Find current lesson
+  let currentLesson = null
+  let currentModule = null
+  
+  for (const module of course.modules) {
+    for (const lesson of module.lessons) {
+      if (lesson.id.toString() === lessonId) {
+        currentLesson = lesson
+        currentModule = module
+        break
+      }
+    }
+    if (currentLesson) break
+  }
+
+  if (!currentLesson) {
+    currentLesson = course.modules[0].lessons[0]
+    currentModule = course.modules[0]
+  }
+
+  return c.render(
+    <Layout title={`${course.title} - ${currentLesson.title}`} currentPage="courses">
+      <div class="flex gap-6">
+        {/* Course Progress Sidebar */}
+        <div class="w-80 bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 class="font-semibold text-gray-900 mb-4">Course Progress</h3>
+          
+          <div class="space-y-4">
+            {course.modules.map((module) => (
+              <div class="border-b border-gray-100 pb-4 last:border-b-0">
+                <div class="flex items-center justify-between mb-2">
+                  <h4 class="font-medium text-gray-900">{module.title}</h4>
+                  <span class={`text-xs px-2 py-1 rounded-full ${
+                    module.status === 'Complete' ? 'bg-green-100 text-green-800' :
+                    module.status === 'In Progress' ? 'bg-blue-100 text-blue-800' :
+                    'bg-gray-100 text-gray-600'
+                  }`}>
+                    {module.status}
+                  </span>
+                </div>
+                
+                <div class="space-y-2">
+                  {module.lessons.map((lesson) => (
+                    <a 
+                      href={`/lesson/${courseId}/${lesson.id}`}
+                      class={`block px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer ${
+                        lesson.id.toString() === lessonId 
+                          ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                          : 'text-gray-600 hover:bg-gray-50'
+                      }`}
+                    >
+                      <div class="flex items-center justify-between">
+                        <span>Lesson {lesson.id}: {lesson.title}</span>
+                        <span class="text-xs text-gray-500">{lesson.duration}</span>
+                      </div>
+                    </a>
+                  ))}
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+
+        {/* Main Content */}
+        <div class="flex-1">
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+            <div class="flex items-center justify-between mb-4">
+              <div>
+                <h1 class="text-2xl font-bold text-gray-900">Lesson {lessonId}: {currentLesson.title}</h1>
+                <p class="text-gray-600 mt-1">{course.description}</p>
+              </div>
+              <div class="text-right">
+                <div class="text-sm text-gray-500">Progress</div>
+                <div class="text-2xl font-bold text-blue-600">{course.progress}%</div>
+              </div>
+            </div>
+
+            {/* Video Player */}
+            <div class="aspect-video bg-gray-900 rounded-lg mb-6 flex items-center justify-center">
+              <div class="text-center text-white">
+                <div class="w-16 h-16 bg-white bg-opacity-20 rounded-full flex items-center justify-center mb-4 mx-auto">
+                  <i class="fas fa-play text-2xl"></i>
+                </div>
+                <h3 class="text-lg font-medium mb-2">Video Player</h3>
+                <p class="text-sm text-gray-300">Learn the secrets to creating {course.title.toLowerCase()} content that goes viral</p>
+                <button class="mt-4 bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+                  <i class="fas fa-play mr-2"></i>
+                  Play Video
+                </button>
+              </div>
+            </div>
+
+            {/* Lesson Navigation */}
+            <div class="flex items-center justify-between">
+              <button 
+                onclick="history.back()" 
+                class="bg-gray-100 text-gray-700 px-6 py-2 rounded-lg hover:bg-gray-200 transition-colors"
+              >
+                <i class="fas fa-arrow-left mr-2"></i>
+                Back to Course
+              </button>
+              
+              <div class="flex items-center space-x-4">
+                <button class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                  <i class="fas fa-check mr-2"></i>
+                  Mark Complete
+                </button>
+                
+                <button 
+                  onclick={`window.location.href='/lesson/${courseId}/${parseInt(lessonId) + 1}'`}
+                  class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
+                >
+                  Next Lesson
+                  <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+
+          {/* Lesson Resources */}
+          <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+            <h3 class="font-semibold text-gray-900 mb-4">Lesson Resources</h3>
+            <div class="space-y-3">
+              <a href="#" class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <i class="fas fa-file-pdf text-red-500 mr-3"></i>
+                <div>
+                  <div class="font-medium text-gray-900">{currentLesson.title} - Study Guide</div>
+                  <div class="text-sm text-gray-500">PDF Download</div>
+                </div>
+              </a>
+              
+              <a href="#" class="flex items-center p-3 border border-gray-200 rounded-lg hover:bg-gray-50 transition-colors">
+                <i class="fas fa-download text-blue-500 mr-3"></i>
+                <div>
+                  <div class="font-medium text-gray-900">Templates & Worksheets</div>
+                  <div class="text-sm text-gray-500">ZIP Archive</div>
+                </div>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </Layout>,
+    { title: `${course.title} - ${currentLesson.title} - Digital Era` }
+  )
 })
 
 export default app

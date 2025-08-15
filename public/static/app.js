@@ -289,8 +289,12 @@ document.addEventListener('click', function(e) {
 function initializeCourseCards() {
   const courseCards = document.querySelectorAll('.course-card');
   courseCards.forEach(card => {
-    // Only apply hover effects to actual course cards, not Continue Journey
-    if (!card.textContent.includes('Continue Your Journey')) {
+    // Apply hover effects to all course cards except the "Continue Your Journey" card with TIK-TOK MASTERY
+    const isontinueJourney = card.textContent.includes('TIK-TOK MASTERY') && 
+                            (card.closest('div').previousElementSibling?.textContent?.includes('Continue Your Journey') ||
+                             card.parentElement?.parentElement?.previousElementSibling?.textContent?.includes('Continue Your Journey'));
+                             
+    if (!isontinueJourney) {
       card.addEventListener('mouseenter', function() {
         this.classList.add('shadow-xl', 'scale-105');
         this.style.transition = 'all 0.3s ease';
