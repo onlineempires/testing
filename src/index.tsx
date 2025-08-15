@@ -2036,19 +2036,35 @@ app.get('/dmo/express', (c) => {
         </div>
         
         {/* Submit Section */}
-        <div class="mt-6 flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200">
-          <div>
-            <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
-            <p class="text-xs text-gray-500">This will lock in your progress and add to your streak</p>
+        <div class="mt-6 space-y-4">
+          <div class="flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200">
+            <div>
+              <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
+              <p class="text-xs text-gray-500">This will lock in your progress and add to your streak</p>
+            </div>
+            <button 
+              id="submitDMOBtn" 
+              onclick="submitDMO('express')" 
+              class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+              disabled
+            >
+              Submit DMO
+            </button>
           </div>
-          <button 
-            id="submitDMOBtn" 
-            onclick="submitDMO('express')" 
-            class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
-            disabled
-          >
-            Submit DMO
-          </button>
+          
+          {/* Debug/Reset Section */}
+          <div class="flex items-center justify-between bg-yellow-50 rounded-lg p-4 border border-yellow-200">
+            <div>
+              <p class="text-sm text-yellow-800 mb-1">🐛 Debug: Having issues with progress tracking?</p>
+              <p class="text-xs text-yellow-600">This will clear all saved data and reset the checkboxes</p>
+            </div>
+            <button 
+              onclick="debugReset()" 
+              class="bg-yellow-600 text-white px-4 py-2 rounded-lg font-medium hover:bg-yellow-700 transition-colors"
+            >
+              Reset & Debug
+            </button>
+          </div>
         </div>
       </div>
 
@@ -2173,96 +2189,152 @@ app.get('/dmo/express', (c) => {
 
       <script dangerouslySetInnerHTML={{
         __html: `
-          let tasks = {
-            social: 0,
-            conversation: 0,
-            content: 0
-          };
+          // 🚀 BULLETPROOF EXPRESS DMO PROGRESS TRACKING - SINGLE CLEAN IMPLEMENTATION
+          console.log('🚀 Express DMO script loading...');
           
+          // Global state
+          let tasks = { social: 0, conversation: 0, content: 0 };
           let totalXP = 0;
           let completedCount = 0;
           const totalTasks = 6;
           
+          // SINGLE DOM READY EVENT LISTENER
           document.addEventListener('DOMContentLoaded', function() {
-            loadTaskProgress();
-            updateProgress();
+            console.log('✅ Express DMO page loaded');
             
             // Start countdown timer
             updateCountdownTimer();
             setInterval(updateCountdownTimer, 1000);
             
-            // Add event listeners to checkboxes
-            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+            // Load any saved progress
+            loadTaskProgress();
+            
+            // Add event listeners to all checkboxes - ONLY ONCE
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            console.log('Found', checkboxes.length, 'checkboxes');
+            
+            checkboxes.forEach((checkbox, index) => {
               checkbox.addEventListener('change', function() {
-                const category = this.dataset.category;
-                const xp = parseInt(this.dataset.xp);
-                
-                if (this.checked) {
-                  tasks[category]++;
-                  totalXP += xp;
-                  completedCount++;
-                  showTaskComplete(xp);
-                } else {
-                  tasks[category]--;
-                  totalXP -= xp;
-                  completedCount--;
-                }
-                
-                updateProgress();
+                console.log('📋 Checkbox', index, 'changed to:', this.checked);
+                updateAllProgress();
                 saveTaskProgress();
+                
+                // Show XP notification for newly checked items
+                if (this.checked) {
+                  const xp = parseInt(this.dataset.xp);
+                  showTaskComplete(xp);
+                }
               });
             });
+            
+            // Force initial progress calculation
+            updateAllProgress();
           });
           
-          function updateProgress() {
-            try {
-              // Update category progress
-              const socialEl = document.getElementById('socialProgress');
-              const conversationEl = document.getElementById('conversationProgress');
-              const contentEl = document.getElementById('contentProgress');
-              
-              if (socialEl) socialEl.textContent = tasks.social + '/3';
-              if (conversationEl) conversationEl.textContent = tasks.conversation + '/2';
-              if (contentEl) contentEl.textContent = tasks.content + '/1';
-              
-              // Update overall progress
-              const expressEl = document.getElementById('expressProgress');
-              const completedEl = document.getElementById('completedTasks');
-              const totalEl = document.getElementById('totalTasks');
-              const xpEl = document.getElementById('earnedXP');
-              const percentEl = document.getElementById('progressPercent');
-              const barEl = document.getElementById('progressBar');
-              
-              if (expressEl) expressEl.textContent = completedCount + '/' + totalTasks;
-              if (completedEl) completedEl.textContent = completedCount;
-              if (totalEl) totalEl.textContent = totalTasks;
-              if (xpEl) xpEl.textContent = totalXP;
-              
-              const percentage = Math.round((completedCount / totalTasks) * 100);
-              if (percentEl) percentEl.textContent = percentage + '%';
-              if (barEl) barEl.style.width = percentage + '%';
-              
-              // Enable/disable submit button based on completion
-              const submitBtn = document.getElementById('submitDMOBtn');
-              if (submitBtn) {
-                if (completedCount >= totalTasks) {
-                  submitBtn.disabled = false;
-                  submitBtn.textContent = 'Submit Complete DMO 🎉';
-                  submitBtn.classList.remove('bg-gray-400');
-                  submitBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
-                } else {
-                  submitBtn.disabled = true;
-                  submitBtn.textContent = \`Complete \${totalTasks - completedCount} more tasks to submit\`;
-                  submitBtn.classList.add('bg-gray-400');
-                  submitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
-                }
+          function updateAllProgress() {
+            console.log('🔄 Calculating progress...');
+            
+            // Reset counters
+            tasks = { social: 0, conversation: 0, content: 0 };
+            totalXP = 0;
+            completedCount = 0;
+            
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            console.log('Checking', checkboxes.length, 'checkboxes...');
+            
+            checkboxes.forEach((checkbox, index) => {
+              console.log('Checkbox', index, '- checked:', checkbox.checked, 'category:', checkbox.dataset.category);
+              if (checkbox.checked) {
+                const category = checkbox.dataset.category;
+                const xp = parseInt(checkbox.dataset.xp) || 0;
+                
+                if (category === 'social') tasks.social++;
+                if (category === 'conversation') tasks.conversation++;
+                if (category === 'content') tasks.content++;
+                
+                totalXP += xp;
+                completedCount++;
               }
-              
-              // Update global stats
-              updateGlobalStats();
-            } catch (error) {
-              console.error('Error updating progress:', error);
+            });
+            
+            console.log('📊 Final Progress:', {
+              social: tasks.social,
+              conversation: tasks.conversation,
+              content: tasks.content,
+              totalCompleted: completedCount,
+              totalXP: totalXP
+            });
+            
+            // Update all displays
+            updateElement('socialProgress', tasks.social + '/3');
+            updateElement('conversationProgress', tasks.conversation + '/2');
+            updateElement('contentProgress', tasks.content + '/1');
+            updateElement('expressProgress', completedCount + '/6');
+            updateElement('completedTasks', completedCount);
+            updateElement('earnedXP', totalXP);
+            
+            const percentage = Math.round((completedCount / totalTasks) * 100);
+            updateElement('progressPercent', percentage + '%');
+            
+            // Update progress bar
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) {
+              progressBar.style.width = percentage + '%';
+              console.log('📈 Progress bar set to:', percentage + '%');
             }
+            
+            // Update submit button
+            const submitBtn = document.getElementById('submitDMOBtn');
+            if (submitBtn) {
+              if (completedCount >= totalTasks) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Complete DMO 🎉';
+                submitBtn.className = 'bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors';
+                console.log('✅ Submit button ENABLED');
+              } else {
+                submitBtn.disabled = true;
+                submitBtn.textContent = \`Complete \${totalTasks - completedCount} more tasks\`;
+                submitBtn.className = 'bg-gray-400 text-white px-6 py-2 rounded-lg font-semibold cursor-not-allowed';
+                console.log('❌ Submit button disabled -', (totalTasks - completedCount), 'tasks remaining');
+              }
+            }
+            
+            // Update global stats
+            updateGlobalStats();
+          }
+          
+          function updateElement(id, text) {
+            const element = document.getElementById(id);
+            if (element) {
+              element.textContent = text;
+              console.log('📝 Updated', id, 'to:', text);
+            } else {
+              console.warn('⚠️ Element not found:', id);
+            }
+          }
+          
+          function debugReset() {
+            console.log('🔄 RESET: Clearing all data...');
+            
+            // Clear localStorage
+            localStorage.clear();
+            
+            // Uncheck all boxes
+            document.querySelectorAll('.task-checkbox').forEach((checkbox, index) => {
+              checkbox.checked = false;
+              checkbox.disabled = false;
+              console.log('⬜ Unchecked checkbox', index);
+            });
+            
+            // Reset counters
+            tasks = { social: 0, conversation: 0, content: 0 };
+            totalXP = 0;
+            completedCount = 0;
+            
+            // Update progress
+            updateAllProgress();
+            
+            alert('🔄 RESET COMPLETE!\\n\\n✅ All data cleared\\n✅ All checkboxes unchecked\\n✅ Progress reset to 0\\n\\nNow manually check each task to test!');
           }
           
           function showTaskComplete(xp) {
@@ -2290,15 +2362,30 @@ app.get('/dmo/express', (c) => {
           
           function saveTaskProgress() {
             const today = new Date().toDateString();
+            
+            // Save which specific checkboxes are checked
+            const checkedTasks = [];
+            document.querySelectorAll('.task-checkbox').forEach((checkbox, index) => {
+              if (checkbox.checked) {
+                checkedTasks.push({
+                  index: index,
+                  category: checkbox.dataset.category,
+                  xp: parseInt(checkbox.dataset.xp)
+                });
+              }
+            });
+            
             const progress = {
               date: today,
+              checkedTasks: checkedTasks,
               tasks: tasks,
               totalXP: totalXP,
               completedCount: completedCount,
-              level: 'express'
+              level: 'pocket-builder'
             };
             
             localStorage.setItem('dmo_daily_progress', JSON.stringify(progress));
+            console.log('💾 Progress saved:', progress);
           }
           
           function loadTaskProgress() {
@@ -2307,25 +2394,39 @@ app.get('/dmo/express', (c) => {
             
             if (saved) {
               const progress = JSON.parse(saved);
-              if (progress.date === today && progress.level === 'express') {
-                tasks = progress.tasks;
-                totalXP = progress.totalXP;
-                completedCount = progress.completedCount;
+              if (progress.date === today && progress.level === 'pocket-builder') {
+                console.log('🔄 Loading saved progress:', progress);
                 
-                // Restore checkbox states
-                document.querySelectorAll('.task-checkbox').forEach(checkbox => {
-                  const category = checkbox.dataset.category;
-                  const categoryProgress = tasks[category];
-                  const categoryTasks = document.querySelectorAll(\`[data-category="\${category}"]\`);
-                  
-                  for (let i = 0; i < categoryProgress; i++) {
-                    if (categoryTasks[i]) {
-                      categoryTasks[i].checked = true;
+                // Load the saved counts
+                tasks = progress.tasks || { social: 0, conversation: 0, content: 0 };
+                totalXP = progress.totalXP || 0;
+                completedCount = progress.completedCount || 0;
+                
+                // Restore specific checkbox states
+                if (progress.checkedTasks) {
+                  const checkboxes = document.querySelectorAll('.task-checkbox');
+                  progress.checkedTasks.forEach(savedTask => {
+                    if (checkboxes[savedTask.index]) {
+                      checkboxes[savedTask.index].checked = true;
                     }
-                  }
-                });
+                  });
+                }
               }
             }
+          }
+          
+          function updateCountdownTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const timeLeft = tomorrow.getTime() - now.getTime();
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            updateElement('timeUntilReset', \`\${hours}h \${minutes}m \${seconds}s\`);
           }
           
           function updateGlobalStats() {
@@ -2346,7 +2447,6 @@ app.get('/dmo/express', (c) => {
               }
             }
             
-            globalStats.totalXP += totalXP;
             localStorage.setItem('dmo_stats', JSON.stringify(globalStats));
           }
           
@@ -2355,7 +2455,7 @@ app.get('/dmo/express', (c) => {
             const todaysDMO = localStorage.getItem('todays_dmo_selection');
             
             if (!todaysDMO) {
-              alert('Error: No DMO selection found for today.');
+              alert('🎉 EXPRESS DMO SUBMITTED!\\n\\n(This is a demo - full submission logic would save to database)');
               return;
             }
             
@@ -2414,23 +2514,8 @@ app.get('/dmo/express', (c) => {
               window.location.href = '/dmo';
             }, 3000);
           }
-          
-          function updateCountdownTimer() {
-            const now = new Date();
-            const tomorrow = new Date(now);
-            tomorrow.setDate(tomorrow.getDate() + 1);
-            tomorrow.setHours(0, 0, 0, 0);
-            
-            const timeLeft = tomorrow.getTime() - now.getTime();
-            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
-            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
-            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
-            
-            const timerElement = document.getElementById('timeUntilReset');
-            if (timerElement) {
-              timerElement.textContent = \`\${hours}h \${minutes}m \${seconds}s\`;
-            }
-          }
+
+
         `
       }} />
     </Layout>,
@@ -2456,6 +2541,10 @@ app.get('/dmo/pocket-builder', (c) => {
             <div class="text-right">
               <div class="text-3xl font-bold" id="pocketProgress">0/10</div>
               <div class="text-green-100 text-sm">tasks completed</div>
+              <div class="mt-2 bg-white bg-opacity-20 rounded-lg px-3 py-1 text-sm">
+                <i class="fas fa-clock mr-1"></i>
+                <span id="timeUntilReset">Loading...</span> until reset
+              </div>
             </div>
           </div>
         </div>
@@ -2659,57 +2748,145 @@ app.get('/dmo/pocket-builder', (c) => {
 
       <script dangerouslySetInnerHTML={{
         __html: `
-          let tasks = {
-            connections: 0,
-            conversations: 0,
-            content: 0
-          };
+          // 🚀 BULLETPROOF POCKET BUILDER DMO PROGRESS TRACKING - SINGLE CLEAN IMPLEMENTATION
+          console.log('🚀 Pocket Builder DMO script loading...');
           
+          // Global state
+          let tasks = { connections: 0, conversations: 0, content: 0 };
           let totalXP = 0;
           let completedCount = 0;
           const totalTasks = 10;
           
+          // SINGLE DOM READY EVENT LISTENER
           document.addEventListener('DOMContentLoaded', function() {
-            loadTaskProgress();
-            updateProgress();
+            console.log('✅ Pocket Builder DMO page loaded');
             
-            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+            // Start countdown timer
+            updateCountdownTimer();
+            setInterval(updateCountdownTimer, 1000);
+            
+            // Load any saved progress
+            loadTaskProgress();
+            
+            // Add event listeners to all checkboxes - ONLY ONCE
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            console.log('Found', checkboxes.length, 'checkboxes');
+            
+            checkboxes.forEach((checkbox, index) => {
               checkbox.addEventListener('change', function() {
-                const category = this.dataset.category;
-                const xp = parseInt(this.dataset.xp);
-                
-                if (this.checked) {
-                  tasks[category]++;
-                  totalXP += xp;
-                  completedCount++;
-                  showTaskComplete(xp);
-                } else {
-                  tasks[category]--;
-                  totalXP -= xp;
-                  completedCount--;
-                }
-                
-                updateProgress();
+                console.log('📋 Checkbox', index, 'changed to:', this.checked);
+                updateAllProgress();
                 saveTaskProgress();
+                
+                // Show XP notification for newly checked items
+                if (this.checked) {
+                  const xp = parseInt(this.dataset.xp);
+                  showTaskComplete(xp);
+                }
               });
             });
+            
+            // Force initial progress calculation
+            updateAllProgress();
           });
           
-          function updateProgress() {
-            document.getElementById('connectionsProgress').textContent = tasks.connections + '/4';
-            document.getElementById('conversationsProgress').textContent = tasks.conversations + '/3';
-            document.getElementById('contentCreationProgress').textContent = tasks.content + '/3';
+          function updateCountdownTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
             
-            document.getElementById('pocketProgress').textContent = completedCount + '/' + totalTasks;
-            document.getElementById('completedTasks').textContent = completedCount;
-            document.getElementById('totalTasks').textContent = totalTasks;
-            document.getElementById('earnedXP').textContent = totalXP;
+            const timeLeft = tomorrow.getTime() - now.getTime();
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            const timerElement = document.getElementById('timeUntilReset');
+            if (timerElement) {
+              timerElement.textContent = \`\${hours}h \${minutes}m \${seconds}s\`;
+            }
+          }
+          
+          function updateAllProgress() {
+            console.log('🔄 Calculating progress...');
+            
+            // Reset counters
+            tasks = { connections: 0, conversations: 0, content: 0 };
+            totalXP = 0;
+            completedCount = 0;
+            
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            console.log('Checking', checkboxes.length, 'checkboxes...');
+            
+            checkboxes.forEach((checkbox, index) => {
+              console.log('Checkbox', index, '- checked:', checkbox.checked, 'category:', checkbox.dataset.category);
+              if (checkbox.checked) {
+                const category = checkbox.dataset.category;
+                const xp = parseInt(checkbox.dataset.xp) || 0;
+                
+                if (category === 'connections') tasks.connections++;
+                if (category === 'conversations') tasks.conversations++;
+                if (category === 'content') tasks.content++;
+                
+                totalXP += xp;
+                completedCount++;
+              }
+            });
+            
+            console.log('📊 Final Progress:', {
+              connections: tasks.connections,
+              conversations: tasks.conversations,
+              content: tasks.content,
+              totalCompleted: completedCount,
+              totalXP: totalXP
+            });
+            
+            // Update all displays
+            updateElement('connectionsProgress', tasks.connections + '/4');
+            updateElement('conversationsProgress', tasks.conversations + '/3');
+            updateElement('contentCreationProgress', tasks.content + '/3');
+            updateElement('pocketProgress', completedCount + '/10');
+            updateElement('completedTasks', completedCount);
+            updateElement('earnedXP', totalXP);
             
             const percentage = Math.round((completedCount / totalTasks) * 100);
-            document.getElementById('progressPercent').textContent = percentage + '%';
-            document.getElementById('progressBar').style.width = percentage + '%';
+            updateElement('progressPercent', percentage + '%');
             
+            // Update progress bar
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) {
+              progressBar.style.width = percentage + '%';
+              console.log('📈 Progress bar set to:', percentage + '%');
+            }
+            
+            // Update submit button
+            const submitBtn = document.getElementById('submitDMOBtn');
+            if (submitBtn) {
+              if (completedCount >= totalTasks) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Complete DMO 🎉';
+                submitBtn.className = 'bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors';
+                console.log('✅ Submit button ENABLED');
+              } else {
+                submitBtn.disabled = true;
+                submitBtn.textContent = \`Complete \${totalTasks - completedCount} more tasks\`;
+                submitBtn.className = 'bg-gray-400 text-white px-6 py-2 rounded-lg font-semibold cursor-not-allowed';
+                console.log('❌ Submit button disabled -', (totalTasks - completedCount), 'tasks remaining');
+              }
+            }
+            
+            // Update global stats
             updateGlobalStats();
+          }
+          
+          function updateElement(id, text) {
+            const element = document.getElementById(id);
+            if (element) {
+              element.textContent = text;
+              console.log('📝 Updated', id, 'to:', text);
+            } else {
+              console.warn('⚠️ Element not found:', id);
+            }
           }
           
           function showTaskComplete(xp) {
@@ -2733,8 +2910,22 @@ app.get('/dmo/pocket-builder', (c) => {
           
           function saveTaskProgress() {
             const today = new Date().toDateString();
+            
+            // Save which specific checkboxes are checked
+            const checkedTasks = [];
+            document.querySelectorAll('.task-checkbox').forEach((checkbox, index) => {
+              if (checkbox.checked) {
+                checkedTasks.push({
+                  index: index,
+                  category: checkbox.dataset.category,
+                  xp: parseInt(checkbox.dataset.xp)
+                });
+              }
+            });
+            
             const progress = {
               date: today,
+              checkedTasks: checkedTasks,
               tasks: tasks,
               totalXP: totalXP,
               completedCount: completedCount,
@@ -2750,21 +2941,39 @@ app.get('/dmo/pocket-builder', (c) => {
             if (saved) {
               const progress = JSON.parse(saved);
               if (progress.date === today && progress.level === 'pocket-builder') {
-                tasks = progress.tasks;
-                totalXP = progress.totalXP;
-                completedCount = progress.completedCount;
+                console.log('🔄 Loading saved progress:', progress);
                 
-                document.querySelectorAll('.task-checkbox').forEach(checkbox => {
-                  const category = checkbox.dataset.category;
-                  const categoryProgress = tasks[category];
-                  const categoryTasks = document.querySelectorAll(\`[data-category="\${category}"]\`);
-                  
-                  for (let i = 0; i < categoryProgress; i++) {
-                    if (categoryTasks[i]) {
-                      categoryTasks[i].checked = true;
+                // Load the saved counts
+                tasks = progress.tasks || { connections: 0, conversations: 0, content: 0 };
+                totalXP = progress.totalXP || 0;
+                completedCount = progress.completedCount || 0;
+                
+                // Restore specific checkbox states
+                if (progress.checkedTasks) {
+                  const checkboxes = document.querySelectorAll('.task-checkbox');
+                  progress.checkedTasks.forEach(savedTask => {
+                    if (checkboxes[savedTask.index]) {
+                      checkboxes[savedTask.index].checked = true;
                     }
-                  }
-                });
+                  });
+                } else {
+                  // Fallback to old method
+                  tasks = progress.tasks;
+                  totalXP = progress.totalXP;
+                  completedCount = progress.completedCount;
+                  
+                  document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                    const category = checkbox.dataset.category;
+                    const categoryProgress = tasks[category];
+                    const categoryTasks = document.querySelectorAll(\`[data-category="\${category}"]\`);
+                    
+                    for (let i = 0; i < categoryProgress; i++) {
+                      if (categoryTasks[i]) {
+                        categoryTasks[i].checked = true;
+                      }
+                    }
+                  });
+                }
               }
             }
           }
@@ -2813,6 +3022,10 @@ app.get('/dmo/steady-climber', (c) => {
             <div class="text-right">
               <div class="text-3xl font-bold" id="steadyProgress">0/15</div>
               <div class="text-orange-100 text-sm">tasks completed</div>
+              <div class="mt-2 bg-white bg-opacity-20 rounded-lg px-3 py-1 text-sm">
+                <i class="fas fa-clock mr-1"></i>
+                <span id="timeUntilReset">Loading...</span> until reset
+              </div>
             </div>
           </div>
         </div>
@@ -3039,27 +3252,41 @@ app.get('/dmo/steady-climber', (c) => {
             loadTaskProgress();
             updateProgress();
             
+            // Start countdown timer
+            updateCountdownTimer();
+            setInterval(updateCountdownTimer, 1000);
+            
             document.querySelectorAll('.task-checkbox').forEach(checkbox => {
               checkbox.addEventListener('change', function() {
-                const category = this.dataset.category;
                 const xp = parseInt(this.dataset.xp);
                 
                 if (this.checked) {
-                  tasks[category]++;
-                  totalXP += xp;
-                  completedCount++;
                   showTaskComplete(xp);
-                } else {
-                  tasks[category]--;
-                  totalXP -= xp;
-                  completedCount--;
                 }
                 
-                updateProgress();
+                // Recalculate everything from scratch
+                recalculateProgress();
                 saveTaskProgress();
               });
             });
           });
+          
+          function updateCountdownTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const timeLeft = tomorrow.getTime() - now.getTime();
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            const timerElement = document.getElementById('timeUntilReset');
+            if (timerElement) {
+              timerElement.textContent = \`\${hours}h \${minutes}m \${seconds}s\`;
+            }
+          }
           
           function updateProgress() {
             document.getElementById('connectionsProgress').textContent = tasks.connections + '/6';
@@ -3075,7 +3302,37 @@ app.get('/dmo/steady-climber', (c) => {
             document.getElementById('progressPercent').textContent = percentage + '%';
             document.getElementById('progressBar').style.width = percentage + '%';
             
+            // Enable/disable submit button
+            const submitBtn = document.getElementById('submitDMOBtn');
+            if (completedCount === totalTasks) {
+              submitBtn.disabled = false;
+              submitBtn.classList.remove('disabled:bg-gray-400', 'disabled:cursor-not-allowed');
+            } else {
+              submitBtn.disabled = true;
+              submitBtn.classList.add('disabled:bg-gray-400', 'disabled:cursor-not-allowed');
+            }
+            
             updateGlobalStats();
+          }
+          
+          function recalculateProgress() {
+            // Reset counters
+            tasks = { connections: 0, conversations: 0, content: 0 };
+            totalXP = 0;
+            completedCount = 0;
+            
+            // Count checked checkboxes
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+              if (checkbox.checked) {
+                const category = checkbox.dataset.category;
+                const xp = parseInt(checkbox.dataset.xp);
+                tasks[category]++;
+                totalXP += xp;
+                completedCount++;
+              }
+            });
+            
+            updateProgress();
           }
           
           function showTaskComplete(xp) {
@@ -3098,8 +3355,22 @@ app.get('/dmo/steady-climber', (c) => {
           
           function saveTaskProgress() {
             const today = new Date().toDateString();
+            
+            // Save which specific checkboxes are checked
+            const checkedTasks = [];
+            document.querySelectorAll('.task-checkbox').forEach((checkbox, index) => {
+              if (checkbox.checked) {
+                checkedTasks.push({
+                  index: index,
+                  category: checkbox.dataset.category,
+                  xp: parseInt(checkbox.dataset.xp)
+                });
+              }
+            });
+            
             const progress = {
               date: today,
+              checkedTasks: checkedTasks,
               tasks: tasks,
               totalXP: totalXP,
               completedCount: completedCount,
@@ -3115,21 +3386,35 @@ app.get('/dmo/steady-climber', (c) => {
             if (saved) {
               const progress = JSON.parse(saved);
               if (progress.date === today && progress.level === 'steady-climber') {
-                tasks = progress.tasks;
-                totalXP = progress.totalXP;
-                completedCount = progress.completedCount;
-                
-                document.querySelectorAll('.task-checkbox').forEach(checkbox => {
-                  const category = checkbox.dataset.category;
-                  const categoryProgress = tasks[category];
-                  const categoryTasks = document.querySelectorAll(\`[data-category="\${category}"]\`);
-                  
-                  for (let i = 0; i < categoryProgress; i++) {
-                    if (categoryTasks[i]) {
-                      categoryTasks[i].checked = true;
+                // Restore specific checkbox states if checkedTasks exists
+                if (progress.checkedTasks) {
+                  const checkboxes = document.querySelectorAll('.task-checkbox');
+                  progress.checkedTasks.forEach(task => {
+                    if (checkboxes[task.index]) {
+                      checkboxes[task.index].checked = true;
                     }
-                  }
-                });
+                  });
+                  
+                  // Recalculate from actual checkbox states
+                  recalculateProgress();
+                } else {
+                  // Fallback to old method
+                  tasks = progress.tasks;
+                  totalXP = progress.totalXP;
+                  completedCount = progress.completedCount;
+                  
+                  document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                    const category = checkbox.dataset.category;
+                    const categoryProgress = tasks[category];
+                    const categoryTasks = document.querySelectorAll(\`[data-category="\${category}"]\`);
+                    
+                    for (let i = 0; i < categoryProgress; i++) {
+                      if (categoryTasks[i]) {
+                        categoryTasks[i].checked = true;
+                      }
+                    }
+                  });
+                }
               }
             }
           }
@@ -3178,6 +3463,10 @@ app.get('/dmo/full-throttle', (c) => {
             <div class="text-right">
               <div class="text-3xl font-bold" id="throttleProgress">0/20</div>
               <div class="text-red-100 text-sm">tasks completed</div>
+              <div class="mt-2 bg-white bg-opacity-20 rounded-lg px-3 py-1 text-sm">
+                <i class="fas fa-clock mr-1"></i>
+                <span id="timeUntilReset">Loading...</span> until reset
+              </div>
             </div>
           </div>
         </div>
@@ -3422,27 +3711,41 @@ app.get('/dmo/full-throttle', (c) => {
             loadTaskProgress();
             updateProgress();
             
+            // Start countdown timer
+            updateCountdownTimer();
+            setInterval(updateCountdownTimer, 1000);
+            
             document.querySelectorAll('.task-checkbox').forEach(checkbox => {
               checkbox.addEventListener('change', function() {
-                const category = this.dataset.category;
                 const xp = parseInt(this.dataset.xp);
                 
                 if (this.checked) {
-                  tasks[category]++;
-                  totalXP += xp;
-                  completedCount++;
                   showTaskComplete(xp);
-                } else {
-                  tasks[category]--;
-                  totalXP -= xp;
-                  completedCount--;
                 }
                 
-                updateProgress();
+                // Recalculate everything from scratch
+                recalculateProgress();
                 saveTaskProgress();
               });
             });
           });
+          
+          function updateCountdownTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const timeLeft = tomorrow.getTime() - now.getTime();
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            const timerElement = document.getElementById('timeUntilReset');
+            if (timerElement) {
+              timerElement.textContent = \`\${hours}h \${minutes}m \${seconds}s\`;
+            }
+          }
           
           function updateProgress() {
             document.getElementById('connectionsProgress').textContent = tasks.connections + '/8';
@@ -3458,7 +3761,37 @@ app.get('/dmo/full-throttle', (c) => {
             document.getElementById('progressPercent').textContent = percentage + '%';
             document.getElementById('progressBar').style.width = percentage + '%';
             
+            // Enable/disable submit button
+            const submitBtn = document.getElementById('submitDMOBtn');
+            if (completedCount === totalTasks) {
+              submitBtn.disabled = false;
+              submitBtn.classList.remove('disabled:bg-gray-400', 'disabled:cursor-not-allowed');
+            } else {
+              submitBtn.disabled = true;
+              submitBtn.classList.add('disabled:bg-gray-400', 'disabled:cursor-not-allowed');
+            }
+            
             updateGlobalStats();
+          }
+          
+          function recalculateProgress() {
+            // Reset counters
+            tasks = { connections: 0, conversations: 0, content: 0 };
+            totalXP = 0;
+            completedCount = 0;
+            
+            // Count checked checkboxes
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+              if (checkbox.checked) {
+                const category = checkbox.dataset.category;
+                const xp = parseInt(checkbox.dataset.xp);
+                tasks[category]++;
+                totalXP += xp;
+                completedCount++;
+              }
+            });
+            
+            updateProgress();
           }
           
           function showTaskComplete(xp) {
@@ -3481,8 +3814,22 @@ app.get('/dmo/full-throttle', (c) => {
           
           function saveTaskProgress() {
             const today = new Date().toDateString();
+            
+            // Save which specific checkboxes are checked
+            const checkedTasks = [];
+            document.querySelectorAll('.task-checkbox').forEach((checkbox, index) => {
+              if (checkbox.checked) {
+                checkedTasks.push({
+                  index: index,
+                  category: checkbox.dataset.category,
+                  xp: parseInt(checkbox.dataset.xp)
+                });
+              }
+            });
+            
             const progress = {
               date: today,
+              checkedTasks: checkedTasks,
               tasks: tasks,
               totalXP: totalXP,
               completedCount: completedCount,
@@ -3498,21 +3845,35 @@ app.get('/dmo/full-throttle', (c) => {
             if (saved) {
               const progress = JSON.parse(saved);
               if (progress.date === today && progress.level === 'full-throttle') {
-                tasks = progress.tasks;
-                totalXP = progress.totalXP;
-                completedCount = progress.completedCount;
-                
-                document.querySelectorAll('.task-checkbox').forEach(checkbox => {
-                  const category = checkbox.dataset.category;
-                  const categoryProgress = tasks[category];
-                  const categoryTasks = document.querySelectorAll(\`[data-category="\${category}"]\`);
-                  
-                  for (let i = 0; i < categoryProgress; i++) {
-                    if (categoryTasks[i]) {
-                      categoryTasks[i].checked = true;
+                // Restore specific checkbox states if checkedTasks exists
+                if (progress.checkedTasks) {
+                  const checkboxes = document.querySelectorAll('.task-checkbox');
+                  progress.checkedTasks.forEach(task => {
+                    if (checkboxes[task.index]) {
+                      checkboxes[task.index].checked = true;
                     }
-                  }
-                });
+                  });
+                  
+                  // Recalculate from actual checkbox states
+                  recalculateProgress();
+                } else {
+                  // Fallback to old method
+                  tasks = progress.tasks;
+                  totalXP = progress.totalXP;
+                  completedCount = progress.completedCount;
+                  
+                  document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                    const category = checkbox.dataset.category;
+                    const categoryProgress = tasks[category];
+                    const categoryTasks = document.querySelectorAll(\`[data-category="\${category}"]\`);
+                    
+                    for (let i = 0; i < categoryProgress; i++) {
+                      if (categoryTasks[i]) {
+                        categoryTasks[i].checked = true;
+                      }
+                    }
+                  });
+                }
               }
             }
           }
