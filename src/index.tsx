@@ -1687,7 +1687,17 @@ app.get('/dmo', (c) => {
   return c.render(
     <Layout title="Daily Method of Operation (DMO)" currentPage="dmo">
       <div class="mb-6">
-        <p class="text-gray-600">Choose your commitment level and get daily task lists designed to help you achieve consistent results in your business.</p>
+        <h1 class="text-3xl font-bold text-gray-900 mb-3">🎯 Daily Method of Operation (DMO)</h1>
+        <p class="text-lg text-gray-700 mb-2">Choose your daily commitment level and complete structured tasks to build consistent business growth.</p>
+        <div class="bg-amber-50 border border-amber-200 rounded-lg p-4">
+          <div class="flex items-center">
+            <i class="fas fa-exclamation-triangle text-amber-600 mr-3"></i>
+            <div>
+              <p class="font-semibold text-amber-800">Important: One DMO Selection Per Day</p>
+              <p class="text-sm text-amber-700">Choose wisely! You can only select and complete one commitment level per day to ensure fair leaderboard competition.</p>
+            </div>
+          </div>
+        </div>
       </div>
 
       {/* Current Streak & Stats */}
@@ -1800,24 +1810,15 @@ app.get('/dmo', (c) => {
         </div>
       </div>
 
-      {/* Quick Stats */}
-      <div class="mt-8 bg-gray-50 rounded-xl p-6">
-        <div class="grid grid-cols-4 gap-6 text-center">
-          <div>
-            <p class="text-2xl font-bold text-gray-900">89%</p>
-            <p class="text-sm text-gray-600">Completion Rate</p>
-          </div>
-          <div>
-            <p class="text-2xl font-bold text-gray-900">24</p>
-            <p class="text-sm text-gray-600">Day Challenge</p>
-          </div>
-          <div>
-            <p class="text-2xl font-bold text-gray-900">1,247</p>
-            <p class="text-sm text-gray-600">Active Users</p>
-          </div>
-          <div>
-            <p class="text-2xl font-bold text-gray-900">4.9★</p>
-            <p class="text-sm text-gray-600">User Rating</p>
+      {/* Call to Action */}
+      <div class="mt-8 bg-gradient-to-r from-blue-600 to-purple-600 text-white rounded-xl p-8 text-center">
+        <h2 class="text-3xl font-bold mb-4">🎯 Which DMO Will You Choose Today?</h2>
+        <p class="text-xl text-blue-100 mb-2">Select your daily commitment level and start building your success!</p>
+        <p class="text-blue-200 text-sm">⚡ Remember: You can only choose ONE level per day to maintain leaderboard integrity</p>
+        <div class="mt-4 flex items-center justify-center">
+          <div class="bg-white bg-opacity-20 rounded-lg px-4 py-2 text-sm">
+            <i class="fas fa-clock mr-2"></i>
+            <span id="timeUntilReset">Loading...</span> until daily reset
           </div>
         </div>
       </div>
@@ -1872,7 +1873,28 @@ app.get('/dmo', (c) => {
             
             // Check if user has already selected a DMO today and show status
             checkTodaysDMOSelection();
+            
+            // Start countdown timer
+            updateCountdownTimer();
+            setInterval(updateCountdownTimer, 1000);
           });
+          
+          function updateCountdownTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const timeLeft = tomorrow.getTime() - now.getTime();
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            const timerElement = document.getElementById('timeUntilReset');
+            if (timerElement) {
+              timerElement.textContent = \`\${hours}h \${minutes}m \${seconds}s\`;
+            }
+          }
           
           function checkTodaysDMOSelection() {
             const today = new Date().toDateString();
@@ -1980,6 +2002,10 @@ app.get('/dmo/express', (c) => {
             <div class="text-right">
               <div class="text-3xl font-bold" id="expressProgress">0/6</div>
               <div class="text-blue-100 text-sm">tasks completed</div>
+              <div class="mt-2 bg-white bg-opacity-20 rounded-lg px-3 py-1 text-sm">
+                <i class="fas fa-clock mr-1"></i>
+                <span id="timeUntilReset">Loading...</span> until reset
+              </div>
             </div>
           </div>
         </div>
@@ -2161,6 +2187,10 @@ app.get('/dmo/express', (c) => {
             loadTaskProgress();
             updateProgress();
             
+            // Start countdown timer
+            updateCountdownTimer();
+            setInterval(updateCountdownTimer, 1000);
+            
             // Add event listeners to checkboxes
             document.querySelectorAll('.task-checkbox').forEach(checkbox => {
               checkbox.addEventListener('change', function() {
@@ -2185,37 +2215,54 @@ app.get('/dmo/express', (c) => {
           });
           
           function updateProgress() {
-            // Update category progress
-            document.getElementById('socialProgress').textContent = tasks.social + '/3';
-            document.getElementById('conversationProgress').textContent = tasks.conversation + '/2';
-            document.getElementById('contentProgress').textContent = tasks.content + '/1';
-            
-            // Update overall progress
-            document.getElementById('expressProgress').textContent = completedCount + '/' + totalTasks;
-            document.getElementById('completedTasks').textContent = completedCount;
-            document.getElementById('totalTasks').textContent = totalTasks;
-            document.getElementById('earnedXP').textContent = totalXP;
-            
-            const percentage = Math.round((completedCount / totalTasks) * 100);
-            document.getElementById('progressPercent').textContent = percentage + '%';
-            document.getElementById('progressBar').style.width = percentage + '%';
-            
-            // Enable/disable submit button based on completion
-            const submitBtn = document.getElementById('submitDMOBtn');
-            if (completedCount >= totalTasks) {
-              submitBtn.disabled = false;
-              submitBtn.textContent = 'Submit Complete DMO 🎉';
-              submitBtn.classList.remove('bg-gray-400');
-              submitBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
-            } else {
-              submitBtn.disabled = true;
-              submitBtn.textContent = \`Complete \${totalTasks - completedCount} more tasks to submit\`;
-              submitBtn.classList.add('bg-gray-400');
-              submitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            try {
+              // Update category progress
+              const socialEl = document.getElementById('socialProgress');
+              const conversationEl = document.getElementById('conversationProgress');
+              const contentEl = document.getElementById('contentProgress');
+              
+              if (socialEl) socialEl.textContent = tasks.social + '/3';
+              if (conversationEl) conversationEl.textContent = tasks.conversation + '/2';
+              if (contentEl) contentEl.textContent = tasks.content + '/1';
+              
+              // Update overall progress
+              const expressEl = document.getElementById('expressProgress');
+              const completedEl = document.getElementById('completedTasks');
+              const totalEl = document.getElementById('totalTasks');
+              const xpEl = document.getElementById('earnedXP');
+              const percentEl = document.getElementById('progressPercent');
+              const barEl = document.getElementById('progressBar');
+              
+              if (expressEl) expressEl.textContent = completedCount + '/' + totalTasks;
+              if (completedEl) completedEl.textContent = completedCount;
+              if (totalEl) totalEl.textContent = totalTasks;
+              if (xpEl) xpEl.textContent = totalXP;
+              
+              const percentage = Math.round((completedCount / totalTasks) * 100);
+              if (percentEl) percentEl.textContent = percentage + '%';
+              if (barEl) barEl.style.width = percentage + '%';
+              
+              // Enable/disable submit button based on completion
+              const submitBtn = document.getElementById('submitDMOBtn');
+              if (submitBtn) {
+                if (completedCount >= totalTasks) {
+                  submitBtn.disabled = false;
+                  submitBtn.textContent = 'Submit Complete DMO 🎉';
+                  submitBtn.classList.remove('bg-gray-400');
+                  submitBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+                } else {
+                  submitBtn.disabled = true;
+                  submitBtn.textContent = \`Complete \${totalTasks - completedCount} more tasks to submit\`;
+                  submitBtn.classList.add('bg-gray-400');
+                  submitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+                }
+              }
+              
+              // Update global stats
+              updateGlobalStats();
+            } catch (error) {
+              console.error('Error updating progress:', error);
             }
-            
-            // Update global stats
-            updateGlobalStats();
           }
           
           function showTaskComplete(xp) {
@@ -2344,7 +2391,7 @@ app.get('/dmo/express', (c) => {
             localStorage.setItem('dmo_stats', JSON.stringify(globalStats));
             
             // Show success message
-            showTaskComplete(0, 'DMO Submitted Successfully! 🎉\\n\\nYour progress has been locked in and your streak has been updated. Come back tomorrow for your next DMO!');
+            alert('DMO Submitted Successfully! 🎉\\n\\nYour progress has been locked in and your streak has been updated. Come back tomorrow for your next DMO!');
             
             // Disable submit button and update UI
             const submitBtn = document.getElementById('submitDMOBtn');
@@ -2366,6 +2413,23 @@ app.get('/dmo/express', (c) => {
             setTimeout(() => {
               window.location.href = '/dmo';
             }, 3000);
+          }
+          
+          function updateCountdownTimer() {
+            const now = new Date();
+            const tomorrow = new Date(now);
+            tomorrow.setDate(tomorrow.getDate() + 1);
+            tomorrow.setHours(0, 0, 0, 0);
+            
+            const timeLeft = tomorrow.getTime() - now.getTime();
+            const hours = Math.floor(timeLeft / (1000 * 60 * 60));
+            const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+            const seconds = Math.floor((timeLeft % (1000 * 60)) / 1000);
+            
+            const timerElement = document.getElementById('timeUntilReset');
+            if (timerElement) {
+              timerElement.textContent = \`\${hours}h \${minutes}m \${seconds}s\`;
+            }
           }
         `
       }} />
