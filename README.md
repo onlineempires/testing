@@ -1,10 +1,11 @@
 # 🚀 Digital Era Learning Platform
 
-A comprehensive learning management system with expert coaching marketplace built with Hono, TypeScript, and Cloudflare Pages.
+A comprehensive learning management system with expert coaching marketplace and gamified Daily Method of Operation (DMO) system built with Hono, TypeScript, and Cloudflare Pages.
 
 ## 🌟 Live Demo
 
 - **Platform URL**: `https://3000-itqefy3w5hz5y99w8kjwz-6532622b.e2b.dev`
+- **DMO System**: `https://3000-itqefy3w5hz5y99w8kjwz-6532622b.e2b.dev/dmo`
 - **Expert Directory**: `https://3000-itqefy3w5hz5y99w8kjwz-6532622b.e2b.dev/experts`
 - **Admin Panel**: `https://3000-itqefy3w5hz5y99w8kjwz-6532622b.e2b.dev/admin/login`
 
@@ -16,6 +17,19 @@ A comprehensive learning management system with expert coaching marketplace buil
 - **Video-based Learning** with completion tracking
 - **Gamification** - XP points, achievements, streaks
 - **Responsive Design** - Works on all devices
+
+### 🎮 Daily Method of Operation (DMO) System
+- **4 Commitment Levels** with different time requirements:
+  - **Express DMO**: 1 hour/day (6 tasks) - Perfect for busy beginners
+  - **Pocket Builder DMO**: 2 hours/day (10 tasks) - Steady business building
+  - **Steady Climber DMO**: 4 hours/day (15 tasks) - Serious business builders
+  - **Full Throttle DMO**: 6+ hours/day (20 tasks) - Maximum acceleration
+- **Anti-Cheat Protection** - Users can only select ONE DMO level per day
+- **Daily Lock System** - Progress locked to chosen commitment level
+- **Submit Functionality** - Required submission to finalize daily progress
+- **Gamified Progress** - XP rewards (10-45 points per task), streaks, completion tracking
+- **Real-time Validation** - Task completion required before submission
+- **Leaderboard Integrity** - Prevents multiple DMO completions per day
 
 ### 👥 Expert Coaching Marketplace
 - **6 Expert Coaches** with different specialties
@@ -32,6 +46,27 @@ A comprehensive learning management system with expert coaching marketplace buil
 - **Content Management** - Upload videos and lessons
 - **Analytics Dashboard** - Track engagement and progress
 - **Settings Management** - Configure platform settings
+
+## 🎯 DMO System Features
+
+### Anti-Cheat Protection:
+- **Single Selection**: Users can only choose one DMO level per day
+- **Daily Lock**: Once selected, users are locked to that commitment level
+- **Progress Validation**: Tasks must be completed before submission
+- **Submit Requirement**: Progress must be submitted to count toward streak
+- **Visual Indicators**: Clear UI showing selected/locked/completed states
+
+### Task Categories (All DMO Levels):
+1. **Connections** - Social media engagement, friend requests, networking
+2. **Conversations** - Prospect outreach, follow-ups, relationship building  
+3. **Content Creation** - Posts, stories, videos, value-driven content
+
+### Gamification Features:
+- **XP Rewards**: 10-45 points per task based on complexity
+- **Daily Streaks**: Build consecutive completion days
+- **Progress Tracking**: Real-time completion percentages
+- **Achievement System**: Visual feedback for task completion
+- **Leaderboard Ready**: Anti-cheat measures ensure fair competition
 
 ## 💰 Expert Directory Features
 
@@ -173,6 +208,7 @@ webapp/
 - **Booking Conversion** metrics
 - **Revenue Tracking** for experts and platform
 - **Admin Dashboard** with charts and insights
+- **DMO Completion** statistics and streak tracking
 
 ## 🔒 Security Features
 
@@ -182,6 +218,7 @@ webapp/
 - **CSRF Protection** for forms
 - **Secure Payment** processing simulation
 - **Environment Variables** for sensitive data
+- **DMO Anti-Cheat** protection for leaderboard integrity
 
 ## 📧 Email & Notifications
 
@@ -189,6 +226,7 @@ webapp/
 - **Booking Confirmations** - Expert and user notifications
 - **Course Progress** updates
 - **Achievement Notifications** - XP and streak alerts
+- **DMO Completion** alerts and streak milestones
 - **Admin Alerts** - New user registrations, bookings
 - **Expert Payouts** - Payment confirmation emails
 
@@ -202,6 +240,8 @@ webapp/
 - ✅ **Payment Integration** - Stripe-ready forms
 - ✅ **Calendar Integration** - Calendly URLs configured
 - ✅ **Admin System** - Complete management interface
+- ✅ **DMO System** - Complete gamified daily task system
+- ✅ **Anti-Cheat Protection** - Leaderboard integrity maintained
 - ✅ **Mobile Responsive** - Works on all devices
 - ✅ **SEO Optimized** - Meta tags and structure
 - ✅ **Error Handling** - Comprehensive error management
@@ -209,11 +249,12 @@ webapp/
 
 ## 📞 Support & Contact
 
-This is a complete, production-ready learning platform with expert coaching marketplace. All features are implemented and tested, ready for deployment to Cloudflare Pages.
+This is a complete, production-ready learning platform with expert coaching marketplace and gamified DMO system. All features are implemented and tested, ready for deployment to Cloudflare Pages.
 
 **Repository**: https://github.com/onlineempires/testing  
-**Live Demo**: https://3000-itqefy3w5hz5y99w8kjwz-6532622b.e2b.dev
+**Live Demo**: https://3000-itqefy3w5hz5y99w8kjwz-6532622b.e2b.dev  
+**DMO System**: https://3000-itqefy3w5hz5y99w8kjwz-6532622b.e2b.dev/dmo
 
 ---
 
-*Built with ❤️ for Online Empires - Transforming digital education and expert coaching*
+*Built with ❤️ for Online Empires - Transforming digital education, expert coaching, and daily business growth*
