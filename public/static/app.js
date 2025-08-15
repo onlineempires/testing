@@ -638,6 +638,85 @@ function initializeProfilePage() {
   }
 }
 
+// Lesson functionality
+async function markLessonComplete(courseId, lessonId) {
+  try {
+    const response = await axios.post(`/api/lesson/${courseId}/${lessonId}/complete`);
+    if (response.data.success) {
+      // Update UI to show completion
+      const markCompleteBtn = document.getElementById('markCompleteBtn');
+      if (markCompleteBtn) {
+        markCompleteBtn.innerHTML = '<i class="fas fa-check-circle mr-2"></i>Completed';
+        markCompleteBtn.classList.remove('bg-green-600', 'hover:bg-green-700');
+        markCompleteBtn.classList.add('bg-gray-500');
+        markCompleteBtn.disabled = true;
+      }
+      
+      // Show success message
+      showToast('Lesson marked as complete! Great progress!', 'success');
+      
+      // Update sidebar if exists
+      const lessonLink = document.querySelector(`a[href="/lesson/${courseId}/${lessonId}"]`);
+      if (lessonLink) {
+        lessonLink.classList.remove('text-gray-600');
+        lessonLink.classList.add('text-green-700', 'bg-green-50');
+        
+        // Add checkmark
+        const textDiv = lessonLink.querySelector('div > span');
+        if (textDiv && !lessonLink.querySelector('.fa-check-circle')) {
+          textDiv.innerHTML = '<i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>' + textDiv.innerHTML;
+        }
+      }
+      
+    } else {
+      showToast('Failed to mark lesson complete. Please try again.', 'error');
+    }
+  } catch (error) {
+    console.error('Error marking lesson complete:', error);
+    showToast('Failed to mark lesson complete. Please try again.', 'error');
+  }
+}
+
+async function goToNextLesson(courseId, currentLessonId) {
+  try {
+    // First mark current lesson as complete
+    await markLessonComplete(courseId, currentLessonId);
+    
+    // Simple next lesson navigation
+    const nextLessonId = parseInt(currentLessonId) + 1;
+    
+    // Check if next lesson exists by trying to navigate
+    setTimeout(() => {
+      window.location.href = `/lesson/${courseId}/${nextLessonId}`;
+    }, 1000);
+    
+  } catch (error) {
+    console.error('Error navigating to next lesson:', error);
+    // Fallback navigation
+    const nextLessonId = parseInt(currentLessonId) + 1;
+    window.location.href = `/lesson/${courseId}/${nextLessonId}`;
+  }
+}
+
+function showToast(message, type = 'success') {
+  const toast = document.createElement('div');
+  toast.className = `fixed top-4 right-4 z-50 p-4 rounded-lg shadow-lg transition-all duration-300 ${
+    type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+  }`;
+  toast.innerHTML = `
+    <div class="flex items-center">
+      <i class="fas fa-${type === 'success' ? 'check' : 'exclamation-triangle'} mr-2"></i>
+      ${message}
+    </div>
+  `;
+  
+  document.body.appendChild(toast);
+  
+  setTimeout(() => {
+    toast.remove();
+  }, 3000);
+}
+
 // Helper functions for profile messages
 function showSuccessMessage(message) {
   const messagesDiv = document.getElementById('profileMessages');
@@ -671,6 +750,124 @@ function showErrorMessage(message) {
       messagesDiv.innerHTML = '';
     }, 5000);
   }
+}
+
+// Initialize notifications functionality
+function initializeNotifications() {
+  // Handle notification item clicks
+  document.addEventListener('click', function(e) {
+    const notificationItem = e.target.closest('.notification-item');
+    if (notificationItem) {
+      const type = notificationItem.dataset.type;
+      const id = notificationItem.dataset.id;
+      
+      // Handle different notification types
+      switch (type) {
+        case 'lead':
+          showLeadDetails(id);
+          break;
+        case 'commission':
+          showSaleDetails(id);
+          break;
+        case 'team':
+          showTeamMemberDetails(id);
+          break;
+      }
+    }
+    
+    // Handle mark as read buttons
+    if (e.target.closest('.mark-read-btn')) {
+      e.preventDefault();
+      e.stopPropagation();
+      const notificationItem = e.target.closest('.notification-item');
+      if (notificationItem) {
+        markNotificationAsRead(notificationItem);
+      }
+    }
+    
+    // Handle clear all notifications
+    if (e.target.id === 'clearAllNotifications') {
+      clearAllNotifications();
+    }
+  });
+}
+
+function showLeadDetails(leadId) {
+  showToast('Opening lead details...', 'success');
+  console.log('Opening lead details for ID:', leadId);
+}
+
+function showSaleDetails(saleId) {
+  showToast('Opening sale details...', 'success');
+  console.log('Opening sale details for ID:', saleId);
+}
+
+function showTeamMemberDetails(memberId) {
+  showToast('Opening team member profile...', 'success');
+  console.log('Opening team member details for ID:', memberId);
+}
+
+function markNotificationAsRead(notificationElement) {
+  notificationElement.style.opacity = '0.5';
+  notificationElement.classList.add('pointer-events-none');
+  
+  // Update notification badge
+  const badge = document.getElementById('notificationBadge');
+  if (badge) {
+    const currentCount = parseInt(badge.textContent) || 0;
+    if (currentCount > 0) {
+      badge.textContent = currentCount - 1;
+      if (currentCount - 1 === 0) {
+        badge.style.display = 'none';
+      }
+    }
+  }
+  
+  showToast('Notification marked as read', 'success');
+}
+
+function clearAllNotifications() {
+  const notificationsList = document.getElementById('notificationsList');
+  if (notificationsList) {
+    notificationsList.innerHTML = '<div class="p-8 text-center text-gray-500">No new notifications</div>';
+  }
+  
+  // Hide notification badge
+  const badge = document.getElementById('notificationBadge');
+  if (badge) {
+    badge.style.display = 'none';
+  }
+  
+  showToast('All notifications cleared', 'success');
+}
+
+// Stub functions for missing initializers
+function initializeExpertCards() {
+  // Expert cards initialization
+}
+
+function initializeVideoPlayer() {
+  // Video player initialization
+}
+
+function initializeLessonNavigation() {
+  // Lesson navigation initialization
+}
+
+function initializeProfilePage() {
+  // Profile page initialization
+}
+
+function updateProgress() {
+  // Progress update functionality
+}
+
+function animateStats() {
+  // Stats animation functionality
+}
+
+function handleResponsiveDesign() {
+  // Responsive design handling
 }
 
 // Initialize all functionality

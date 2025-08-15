@@ -138,26 +138,89 @@ const Layout = ({ children, title, currentPage }: { children: any, title: string
               
               {/* Notification Bell */}
               <div class="relative">
-                <button id="notificationBtn" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg transition-colors duration-200">
+                <button id="notificationBtn" class="relative p-3 text-gray-400 hover:text-gray-600 hover:bg-gray-50 rounded-lg transition-all duration-200">
                   <i class="fas fa-bell text-lg"></i>
-                  <span id="notificationBadge" class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                  <span id="notificationBadge" class="absolute top-2 right-2 w-4 h-4 bg-red-500 text-white text-xs rounded-full flex items-center justify-center font-bold" style="font-size: 10px;">3</span>
                 </button>
-{/* Notifications Dropdown */}
-                <div id="notificationsDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
-                  <div class="p-4">
-                    <h3 class="font-semibold text-gray-900 mb-3">Notifications</h3>
-                    <div id="notificationsList" class="space-y-2 max-h-64 overflow-y-auto">
-                      <div class="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
-                        <p class="text-sm font-medium text-blue-900">New Lead Generated!</p>
-                        <p class="text-xs text-blue-700 mt-1">John Smith signed up through your referral link</p>
-                        <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
-                      </div>
-                      <div class="p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
-                        <p class="text-sm font-medium text-green-900">Commission Earned!</p>
-                        <p class="text-xs text-green-700 mt-1">$150 commission from Sarah's purchase</p>
-                        <p class="text-xs text-gray-500 mt-1">1 day ago</p>
+                {/* Notifications Dropdown */}
+                <div id="notificationsDropdown" class="hidden absolute right-0 mt-2 w-96 bg-white rounded-lg shadow-xl border border-gray-200 z-50">
+                  <div class="p-4 border-b border-gray-100">
+                    <div class="flex items-center justify-between">
+                      <h3 class="font-semibold text-gray-900">Notifications</h3>
+                      <button id="clearAllNotifications" class="text-xs text-blue-600 hover:text-blue-800 font-medium">
+                        Clear All
+                      </button>
+                    </div>
+                  </div>
+                  <div id="notificationsList" class="max-h-80 overflow-y-auto">
+                    <div class="notification-item p-4 hover:bg-gray-50 border-b border-gray-100 cursor-pointer transition-colors" data-type="lead" data-id="1">
+                      <div class="flex items-start">
+                        <div class="w-10 h-10 bg-blue-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                          <i class="fas fa-user-plus text-blue-600"></i>
+                        </div>
+                        <div class="flex-grow">
+                          <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium text-gray-900">New Lead Generated!</p>
+                            <button class="mark-read-btn text-xs text-gray-400 hover:text-gray-600">
+                              <i class="fas fa-times"></i>
+                            </button>
+                          </div>
+                          <p class="text-sm text-gray-600 mt-1">John Smith signed up through your referral link</p>
+                          <div class="flex items-center justify-between mt-2">
+                            <p class="text-xs text-gray-500">2 hours ago</p>
+                            <button class="text-xs text-blue-600 hover:text-blue-800 font-medium">View Lead</button>
+                          </div>
+                        </div>
                       </div>
                     </div>
+                    
+                    <div class="notification-item p-4 hover:bg-gray-50 border-b border-gray-100 cursor-pointer transition-colors" data-type="commission" data-id="2">
+                      <div class="flex items-start">
+                        <div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                          <i class="fas fa-dollar-sign text-green-600"></i>
+                        </div>
+                        <div class="flex-grow">
+                          <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium text-gray-900">Commission Earned!</p>
+                            <button class="mark-read-btn text-xs text-gray-400 hover:text-gray-600">
+                              <i class="fas fa-times"></i>
+                            </button>
+                          </div>
+                          <p class="text-sm text-gray-600 mt-1">$150 commission from Sarah's purchase</p>
+                          <div class="flex items-center justify-between mt-2">
+                            <p class="text-xs text-gray-500">1 day ago</p>
+                            <button class="text-xs text-green-600 hover:text-green-800 font-medium">View Sale</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    
+                    <div class="notification-item p-4 hover:bg-gray-50 cursor-pointer transition-colors" data-type="team" data-id="3">
+                      <div class="flex items-start">
+                        <div class="w-10 h-10 bg-purple-100 rounded-full flex items-center justify-center mr-3 flex-shrink-0">
+                          <i class="fas fa-users text-purple-600"></i>
+                        </div>
+                        <div class="flex-grow">
+                          <div class="flex items-center justify-between">
+                            <p class="text-sm font-medium text-gray-900">New Team Member!</p>
+                            <button class="mark-read-btn text-xs text-gray-400 hover:text-gray-600">
+                              <i class="fas fa-times"></i>
+                            </button>
+                          </div>
+                          <p class="text-sm text-gray-600 mt-1">Maria Rodriguez joined your team</p>
+                          <div class="flex items-center justify-between mt-2">
+                            <p class="text-xs text-gray-500">3 days ago</p>
+                            <button class="text-xs text-purple-600 hover:text-purple-800 font-medium">View Profile</button>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
+                  <div class="p-4 border-t border-gray-100 text-center">
+                    <button class="text-sm text-blue-600 hover:text-blue-800 font-medium">
+                      View All Notifications
+                    </button>
                   </div>
                 </div>
               </div>
@@ -241,7 +304,7 @@ app.get('/', async (c) => {
 
         {/* Stats Cards */}
         <div class="grid grid-cols-4 gap-6 mb-8">
-          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 cursor-pointer hover:shadow-lg hover:scale-105 transition-all duration-200">
             <div class="flex items-center">
               <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
                 <i class="fas fa-graduation-cap text-blue-600 text-xl"></i>
@@ -253,7 +316,7 @@ app.get('/', async (c) => {
             </div>
           </div>
 
-          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 cursor-pointer hover:shadow-lg hover:scale-105 transition-all duration-200">
             <div class="flex items-center">
               <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
                 <i class="fas fa-fire text-green-600 text-xl"></i>
@@ -265,7 +328,7 @@ app.get('/', async (c) => {
             </div>
           </div>
 
-          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 cursor-pointer hover:shadow-lg hover:scale-105 transition-all duration-200">
             <div class="flex items-center">
               <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mr-4">
                 <i class="fas fa-dollar-sign text-yellow-600 text-xl"></i>
@@ -277,7 +340,7 @@ app.get('/', async (c) => {
             </div>
           </div>
 
-          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+          <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 cursor-pointer hover:shadow-lg hover:scale-105 transition-all duration-200">
             <div class="flex items-center">
               <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
                 <i class="fas fa-user-plus text-purple-600 text-xl"></i>
@@ -457,45 +520,6 @@ app.get('/courses', (c) => {
         </div>
       </div>
 
-      {/* Recent Achievements */}
-      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-8">
-        <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Achievements</h3>
-        <div class="space-y-3">
-          <div class="flex items-center p-3 bg-green-50 rounded-lg border border-green-200">
-            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-3">
-              <i class="fas fa-check text-white text-sm"></i>
-            </div>
-            <div class="flex-grow">
-              <p class="font-medium text-gray-900">Completed "Facebook Advertising Mastery" course</p>
-              <p class="text-sm text-gray-500">Earned 500 XP points</p>
-            </div>
-            <span class="text-xs text-gray-400">2 days ago</span>
-          </div>
-          
-          <div class="flex items-center p-3 bg-blue-50 rounded-lg border border-blue-200">
-            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-3">
-              <i class="fas fa-fire text-white text-sm"></i>
-            </div>
-            <div class="flex-grow">
-              <p class="font-medium text-gray-900">Achieved 10-day learning streak</p>
-              <p class="text-sm text-gray-500">Consistency is key to success!</p>
-            </div>
-            <span class="text-xs text-gray-400">3 days ago</span>
-          </div>
-          
-          <div class="flex items-center p-3 bg-yellow-50 rounded-lg border border-yellow-200">
-            <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center mr-3">
-              <i class="fas fa-dollar-sign text-white text-sm"></i>
-            </div>
-            <div class="flex-grow">
-              <p class="font-medium text-gray-900">Earned $500 in commissions this week</p>
-              <p class="text-sm text-gray-500">Your business is growing!</p>
-            </div>
-            <span class="text-xs text-gray-400">1 week ago</span>
-          </div>
-        </div>
-      </div>
-
       {/* Start Here Section */}
       <div class="mb-8">
         <h3 class="text-xl font-semibold text-gray-900 mb-6">🚀 Start Here</h3>
@@ -551,7 +575,7 @@ app.get('/courses', (c) => {
             <div class="p-6 flex flex-col flex-grow">
               <div class="flex items-center justify-between mb-2">
                 <h4 class="font-semibold text-gray-900">Next Steps</h4>
-                <span class="text-xs bg-purple-100 text-purple-800 px-2 py-1 rounded-full">4 Modules</span>
+                <span class="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded-full">4 Modules</span>
               </div>
               <p class="text-sm text-gray-600 mb-4 flex-grow">Action plan for immediate implementation</p>
               <div class="mb-4">
@@ -560,10 +584,10 @@ app.get('/courses', (c) => {
                   <span class="text-xs text-gray-700 font-medium">20 Lessons</span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-2">
-                  <div class="bg-purple-600 h-2 rounded-full" style="width: 0%"></div>
+                  <div class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
                 </div>
               </div>
-              <button onclick="window.location.href='/lesson/3/1'" class="w-full bg-purple-600 text-white py-2 rounded-lg font-medium hover:bg-purple-700 transition-all duration-200">
+              <button onclick="window.location.href='/lesson/3/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-all duration-200">
                 Start Course
               </button>
             </div>
@@ -665,6 +689,45 @@ app.get('/courses', (c) => {
                 Start Course
               </button>
             </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Recent Achievements */}
+      <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+        <h3 class="text-lg font-semibold text-gray-900 mb-4">🏆 Recent Achievements</h3>
+        <div class="space-y-3">
+          <div class="flex items-center p-3 bg-green-50 rounded-lg border border-green-200">
+            <div class="w-8 h-8 bg-green-500 rounded-full flex items-center justify-center mr-3">
+              <i class="fas fa-check text-white text-sm"></i>
+            </div>
+            <div class="flex-grow">
+              <p class="font-medium text-gray-900">Completed "Facebook Advertising Mastery" course</p>
+              <p class="text-sm text-gray-500">Earned 500 XP points</p>
+            </div>
+            <span class="text-xs text-gray-400">2 days ago</span>
+          </div>
+          
+          <div class="flex items-center p-3 bg-blue-50 rounded-lg border border-blue-200">
+            <div class="w-8 h-8 bg-blue-500 rounded-full flex items-center justify-center mr-3">
+              <i class="fas fa-fire text-white text-sm"></i>
+            </div>
+            <div class="flex-grow">
+              <p class="font-medium text-gray-900">Achieved 10-day learning streak</p>
+              <p class="text-sm text-gray-500">Consistency is key to success!</p>
+            </div>
+            <span class="text-xs text-gray-400">3 days ago</span>
+          </div>
+          
+          <div class="flex items-center p-3 bg-yellow-50 rounded-lg border border-yellow-200">
+            <div class="w-8 h-8 bg-yellow-500 rounded-full flex items-center justify-center mr-3">
+              <i class="fas fa-dollar-sign text-white text-sm"></i>
+            </div>
+            <div class="flex-grow">
+              <p class="font-medium text-gray-900">Earned $500 in commissions this week</p>
+              <p class="text-sm text-gray-500">Your business is growing!</p>
+            </div>
+            <span class="text-xs text-gray-400">1 week ago</span>
           </div>
         </div>
       </div>
@@ -1410,15 +1473,15 @@ app.get('/lesson/:courseId/:lessonId', async (c) => {
       progress: 67,
       modules: [
         { id: 1, title: 'Module 1', status: 'Complete', lessons: [
-          { id: 1, title: 'Getting Started with TikTok', duration: '15 min' },
-          { id: 2, title: 'Profile Optimization', duration: '12 min' }
+          { id: 1, title: 'Getting Started with TikTok', duration: '15 min', completed: true },
+          { id: 2, title: 'Profile Optimization', duration: '12 min', completed: true }
         ]},
         { id: 2, title: 'Module 2', status: 'Complete', lessons: [
-          { id: 1, title: 'Content Strategy Basics', duration: '18 min' },
-          { id: 2, title: 'Understanding the Algorithm', duration: '20 min' }
+          { id: 1, title: 'Content Strategy Basics', duration: '18 min', completed: true },
+          { id: 2, title: 'Understanding the Algorithm', duration: '20 min', completed: true }
         ]},
         { id: 3, title: 'Module 3', status: 'In Progress', lessons: [
-          { id: 1, title: 'Advanced Content Creation', duration: '25 min' },
+          { id: 1, title: 'Advanced Content Creation', duration: '25 min', completed: true },
           { id: 2, title: 'Viral Content Creation', duration: '22 min', current: true },
           { id: 3, title: 'Engagement Strategies', duration: '18 min' }
         ]}
@@ -1500,11 +1563,21 @@ app.get('/lesson/:courseId/:lessonId', async (c) => {
                       class={`block px-3 py-2 rounded-lg text-sm transition-colors cursor-pointer ${
                         lesson.id.toString() === lessonId 
                           ? 'bg-blue-50 text-blue-700 border border-blue-200' 
+                          : lesson.completed
+                          ? 'text-green-700 hover:bg-green-50 bg-green-50'
                           : 'text-gray-600 hover:bg-gray-50'
                       }`}
                     >
                       <div class="flex items-center justify-between">
-                        <span>Lesson {lesson.id}: {lesson.title}</span>
+                        <div class="flex items-center">
+                          {lesson.completed && (
+                            <i class="fas fa-check-circle text-green-500 mr-2 text-xs"></i>
+                          )}
+                          {lesson.current && !lesson.completed && (
+                            <i class="fas fa-play-circle text-blue-500 mr-2 text-xs"></i>
+                          )}
+                          <span>Lesson {lesson.id}: {lesson.title}</span>
+                        </div>
                         <span class="text-xs text-gray-500">{lesson.duration}</span>
                       </div>
                     </a>
@@ -1555,13 +1628,18 @@ app.get('/lesson/:courseId/:lessonId', async (c) => {
               </button>
               
               <div class="flex items-center space-x-4">
-                <button class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors">
+                <button 
+                  id="markCompleteBtn"
+                  onclick={`markLessonComplete(${courseId}, ${lessonId})`}
+                  class="bg-green-600 text-white px-6 py-2 rounded-lg hover:bg-green-700 transition-colors"
+                >
                   <i class="fas fa-check mr-2"></i>
                   Mark Complete
                 </button>
                 
                 <button 
-                  onclick={`window.location.href='/lesson/${courseId}/${parseInt(lessonId) + 1}'`}
+                  id="nextLessonBtn"
+                  onclick={`goToNextLesson(${courseId}, ${lessonId})`}
                   class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors"
                 >
                   Next Lesson
@@ -1597,6 +1675,27 @@ app.get('/lesson/:courseId/:lessonId', async (c) => {
     </Layout>,
     { title: `${course.title} - ${currentLesson.title} - Digital Era` }
   )
+})
+
+// Lesson completion API
+app.post('/api/lesson/:courseId/:lessonId/complete', async (c) => {
+  const courseId = c.req.param('courseId')
+  const lessonId = c.req.param('lessonId')
+  
+  try {
+    // In a real app, you would update the user's progress in the database
+    // For now, we'll simulate a successful completion
+    
+    return c.json({
+      success: true,
+      message: 'Lesson marked as complete',
+      courseId: courseId,
+      lessonId: lessonId,
+      xpEarned: 50 // Award XP for completion
+    })
+  } catch (error) {
+    return c.json({ success: false, error: 'Failed to mark lesson complete' }, 500)
+  }
 })
 
 export default app
