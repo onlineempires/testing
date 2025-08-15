@@ -538,7 +538,7 @@ app.get('/courses', (c) => {
                   <span class="text-xs text-gray-700 font-medium">45 Lessons</span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-2">
-                  <div class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                  <div class="bg-blue-600 h-2 rounded-full" style={{width: '0%'}}></div>
                 </div>
               </div>
               <button onclick="window.location.href='/lesson/1/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-all duration-200">
@@ -584,7 +584,7 @@ app.get('/courses', (c) => {
                   <span class="text-xs text-gray-700 font-medium">20 Lessons</span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-2">
-                  <div class="bg-blue-600 h-2 rounded-full" style="width: 0%"></div>
+                  <div class="bg-blue-600 h-2 rounded-full" style={{width: '0%'}}></div>
                 </div>
               </div>
               <button onclick="window.location.href='/lesson/3/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700 transition-all duration-200">
@@ -659,7 +659,7 @@ app.get('/courses', (c) => {
                   <span class="text-xs text-gray-700 font-medium">22 Lessons</span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-2">
-                  <div class="bg-pink-600 h-2 rounded-full" style="width: 0%"></div>
+                  <div class="bg-pink-600 h-2 rounded-full" style={{width: '0%'}}></div>
                 </div>
               </div>
               <button onclick="window.location.href='/lesson/5/1'" class="w-full bg-pink-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-pink-700 transition-all duration-200">
@@ -682,7 +682,7 @@ app.get('/courses', (c) => {
                   <span class="text-xs text-gray-700 font-medium">30 Lessons</span>
                 </div>
                 <div class="w-full bg-gray-200 rounded-full h-2">
-                  <div class="bg-indigo-600 h-2 rounded-full" style="width: 0%"></div>
+                  <div class="bg-indigo-600 h-2 rounded-full" style={{width: '0%'}}></div>
                 </div>
               </div>
               <button onclick="window.location.href='/lesson/6/1'" class="w-full bg-indigo-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-indigo-700 transition-all duration-200">
@@ -1682,17 +1682,1549 @@ app.get('/lesson/:courseId/:lessonId', (c) => {
   )
 })
 
-// Simple placeholder pages for other routes
+// Daily Method of Operation (DMO) - Main Selection Page
 app.get('/dmo', (c) => {
   return c.render(
-    <Layout title="Daily Method (DMO)" currentPage="dmo">
-      <div class="text-center py-20">
-        <i class="fas fa-calendar-check text-6xl text-gray-400 mb-4"></i>
-        <h2 class="text-2xl font-semibold text-gray-900 mb-2">Daily Method Operations</h2>
-        <p class="text-gray-600">Track your daily activities and goals</p>
+    <Layout title="Daily Method of Operation (DMO)" currentPage="dmo">
+      <div class="mb-6">
+        <p class="text-gray-600">Choose your commitment level and get daily task lists designed to help you achieve consistent results in your business.</p>
       </div>
+
+      {/* Current Streak & Stats */}
+      <div class="grid grid-cols-4 gap-6 mb-8">
+        <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white p-6 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-orange-100 text-sm font-medium">Current Streak</p>
+              <p class="text-3xl font-bold" id="currentStreak">7</p>
+              <p class="text-orange-100 text-xs">days in a row</p>
+            </div>
+            <i class="fas fa-fire text-4xl text-orange-200"></i>
+          </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-6 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-green-100 text-sm font-medium">Tasks Completed</p>
+              <p class="text-3xl font-bold" id="todayCompleted">12</p>
+              <p class="text-green-100 text-xs">today</p>
+            </div>
+            <i class="fas fa-check-circle text-4xl text-green-200"></i>
+          </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-6 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-blue-100 text-sm font-medium">Total XP</p>
+              <p class="text-3xl font-bold" id="totalXP">2,450</p>
+              <p class="text-blue-100 text-xs">experience points</p>
+            </div>
+            <i class="fas fa-star text-4xl text-blue-200"></i>
+          </div>
+        </div>
+        
+        <div class="bg-gradient-to-r from-purple-500 to-pink-500 text-white p-6 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <p class="text-purple-100 text-sm font-medium">Rank</p>
+              <p class="text-3xl font-bold">#3</p>
+              <p class="text-purple-100 text-xs">leaderboard</p>
+            </div>
+            <i class="fas fa-trophy text-4xl text-purple-200"></i>
+          </div>
+        </div>
+      </div>
+
+      {/* DMO Level Selection */}
+      <div class="grid grid-cols-2 gap-8">
+        {/* Express - 1 Hour */}
+        <div class="bg-white rounded-xl p-8 border border-gray-200 hover:border-blue-300 hover:shadow-lg transition-all cursor-pointer" onclick="selectDMO('express')">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-bolt text-2xl text-blue-600"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Express</h3>
+            <p class="text-gray-600 mb-4">Perfect for busy beginners getting started</p>
+            <div class="text-4xl font-bold text-blue-600 mb-4">1 Hour Per Day</div>
+            <button class="w-full bg-blue-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-blue-700 transition-colors">
+              Choose Success Path
+            </button>
+          </div>
+        </div>
+
+        {/* Pocket Builder - 2 Hours */}
+        <div class="bg-white rounded-xl p-8 border border-gray-200 hover:border-green-300 hover:shadow-lg transition-all cursor-pointer" onclick="selectDMO('pocket-builder')">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-rocket text-2xl text-green-600"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Pocket Builder</h3>
+            <p class="text-gray-600 mb-4">For those building their business steadily</p>
+            <div class="text-4xl font-bold text-green-600 mb-4">2 Hours Per Day</div>
+            <button class="w-full bg-green-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-green-700 transition-colors">
+              Choose Success Path
+            </button>
+          </div>
+        </div>
+
+        {/* Steady Climber - 4 Hours */}
+        <div class="bg-white rounded-xl p-8 border border-gray-200 hover:border-orange-300 hover:shadow-lg transition-all cursor-pointer" onclick="selectDMO('steady-climber')">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-mountain text-2xl text-orange-600"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Steady Climber</h3>
+            <p class="text-gray-600 mb-4">For serious business builders</p>
+            <div class="text-4xl font-bold text-orange-600 mb-4">4 Hours Per Day</div>
+            <button class="w-full bg-orange-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-orange-700 transition-colors">
+              Choose Success Path
+            </button>
+          </div>
+        </div>
+
+        {/* Full Throttle - 6+ Hours */}
+        <div class="bg-white rounded-xl p-8 border border-gray-200 hover:border-red-300 hover:shadow-lg transition-all cursor-pointer" onclick="selectDMO('full-throttle')">
+          <div class="text-center mb-6">
+            <div class="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mx-auto mb-4">
+              <i class="fas fa-fire text-2xl text-red-600"></i>
+            </div>
+            <h3 class="text-2xl font-bold text-gray-900 mb-2">Full Throttle</h3>
+            <p class="text-gray-600 mb-4">Maximum acceleration for rapid growth</p>
+            <div class="text-4xl font-bold text-red-600 mb-4">6+ Hours Per Day</div>
+            <button class="w-full bg-red-600 text-white py-3 px-6 rounded-lg font-semibold hover:bg-red-700 transition-colors">
+              Choose Success Path
+            </button>
+          </div>
+        </div>
+      </div>
+
+      {/* Quick Stats */}
+      <div class="mt-8 bg-gray-50 rounded-xl p-6">
+        <div class="grid grid-cols-4 gap-6 text-center">
+          <div>
+            <p class="text-2xl font-bold text-gray-900">89%</p>
+            <p class="text-sm text-gray-600">Completion Rate</p>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-gray-900">24</p>
+            <p class="text-sm text-gray-600">Day Challenge</p>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-gray-900">1,247</p>
+            <p class="text-sm text-gray-600">Active Users</p>
+          </div>
+          <div>
+            <p class="text-2xl font-bold text-gray-900">4.9★</p>
+            <p class="text-sm text-gray-600">User Rating</p>
+          </div>
+        </div>
+      </div>
+
+      <script dangerouslySetInnerHTML={{
+        __html: `
+          function selectDMO(level) {
+            window.location.href = '/dmo/' + level;
+          }
+          
+          // Initialize DMO stats from localStorage
+          document.addEventListener('DOMContentLoaded', function() {
+            const stats = getDMOStats();
+            document.getElementById('currentStreak').textContent = stats.streak;
+            document.getElementById('todayCompleted').textContent = stats.todayCompleted;
+            document.getElementById('totalXP').textContent = stats.totalXP.toLocaleString();
+          });
+          
+          function getDMOStats() {
+            const stats = localStorage.getItem('dmo_stats');
+            if (stats) {
+              return JSON.parse(stats);
+            }
+            return {
+              streak: 0,
+              todayCompleted: 0,
+              totalXP: 0,
+              lastCompletedDate: null
+            };
+          }
+        `
+      }} />
     </Layout>,
     { title: 'Daily Method (DMO) - Digital Era' }
+  )
+})
+
+// Express DMO - 1 Hour Per Day
+app.get('/dmo/express', (c) => {
+  return c.render(
+    <Layout title="Express DMO - 1 Hour Per Day" currentPage="dmo">
+      <div class="mb-6">
+        <button onclick="window.location.href='/dmo'" class="flex items-center text-gray-600 hover:text-gray-900 mb-4">
+          <i class="fas fa-arrow-left mr-2"></i>
+          Back to DMO Selection
+        </button>
+        <div class="bg-gradient-to-r from-blue-500 to-blue-600 text-white p-6 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold mb-2">Express DMO - 1 Hour Per Day</h1>
+              <p class="text-blue-100">Perfect for busy beginners getting started</p>
+            </div>
+            <div class="text-right">
+              <div class="text-3xl font-bold" id="expressProgress">0/6</div>
+              <div class="text-blue-100 text-sm">tasks completed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Progress Summary - Moved Above Tasks */}
+      <div class="mb-8 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Today's Progress</h3>
+            <div class="flex items-center space-x-4">
+              <div class="text-sm text-gray-600">
+                <span id="completedTasks">0</span> of <span id="totalTasks">6</span> tasks completed
+              </div>
+              <div class="text-sm text-blue-600 font-medium">
+                +<span id="earnedXP">0</span> XP earned today
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-bold text-blue-600" id="progressPercent">0%</div>
+            <div class="text-sm text-gray-600">completion</div>
+          </div>
+        </div>
+        
+        <div class="mt-4 bg-gray-200 rounded-full h-3">
+          <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6">
+        {/* Social Media Connections - 15 minutes */}
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-users text-blue-600 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Social Media Connections</h3>
+                <p class="text-gray-600 text-sm">15 minutes</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-blue-600" id="socialProgress">0/3</div>
+              <div class="text-gray-500 text-xs">completed</div>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="social" data-xp="10" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Check friend requests and respond to new connections</div>
+                <div class="text-sm text-gray-600">Review and accept relevant connection requests (5 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+10 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="social" data-xp="15" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Send 5-10 friend requests with personal messages</div>
+                <div class="text-sm text-gray-600">Target relevant prospects in your niche (5 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+15 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="social" data-xp="10" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Engage with 10+ posts in your timeline</div>
+                <div class="text-sm text-gray-600">Like, comment, and share valuable content (5 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+10 XP</div>
+            </label>
+          </div>
+        </div>
+
+        {/* Quick Conversations - 20 minutes */}
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-comments text-green-600 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Quick Conversations</h3>
+                <p class="text-gray-600 text-sm">20 minutes</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-green-600" id="conversationProgress">0/2</div>
+              <div class="text-gray-500 text-xs">completed</div>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversation" data-xp="20" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Message 5-10 warm prospects with value-first approach</div>
+                <div class="text-sm text-gray-600">Share tips, articles, or helpful resources (15 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+20 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversation" data-xp="15" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Follow up with previous conversations</div>
+                <div class="text-sm text-gray-600">Check in with recent contacts and continue building relationships (5 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+15 XP</div>
+            </label>
+          </div>
+        </div>
+
+        {/* Content Creation - 25 minutes */}
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-edit text-purple-600 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Content Creation</h3>
+                <p class="text-gray-600 text-sm">25 minutes</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-purple-600" id="contentProgress">0/1</div>
+              <div class="text-gray-500 text-xs">completed</div>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="25" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Create and post 1 high-value post</div>
+                <div class="text-sm text-gray-600">Share a tip, success story, or motivational content (25 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+25 XP</div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <script dangerouslySetInnerHTML={{
+        __html: `
+          let tasks = {
+            social: 0,
+            conversation: 0,
+            content: 0
+          };
+          
+          let totalXP = 0;
+          let completedCount = 0;
+          const totalTasks = 6;
+          
+          document.addEventListener('DOMContentLoaded', function() {
+            loadTaskProgress();
+            updateProgress();
+            
+            // Add event listeners to checkboxes
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+              checkbox.addEventListener('change', function() {
+                const category = this.dataset.category;
+                const xp = parseInt(this.dataset.xp);
+                
+                if (this.checked) {
+                  tasks[category]++;
+                  totalXP += xp;
+                  completedCount++;
+                  showTaskComplete(xp);
+                } else {
+                  tasks[category]--;
+                  totalXP -= xp;
+                  completedCount--;
+                }
+                
+                updateProgress();
+                saveTaskProgress();
+              });
+            });
+          });
+          
+          function updateProgress() {
+            // Update category progress
+            document.getElementById('socialProgress').textContent = tasks.social + '/3';
+            document.getElementById('conversationProgress').textContent = tasks.conversation + '/2';
+            document.getElementById('contentProgress').textContent = tasks.content + '/1';
+            
+            // Update overall progress
+            document.getElementById('expressProgress').textContent = completedCount + '/' + totalTasks;
+            document.getElementById('completedTasks').textContent = completedCount;
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('earnedXP').textContent = totalXP;
+            
+            const percentage = Math.round((completedCount / totalTasks) * 100);
+            document.getElementById('progressPercent').textContent = percentage + '%';
+            document.getElementById('progressBar').style.width = percentage + '%';
+            
+            // Update global stats
+            updateGlobalStats();
+          }
+          
+          function showTaskComplete(xp) {
+            // Create floating XP notification
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+            notification.innerHTML = \`
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-check-circle"></i>
+                <span>Task Complete! +\${xp} XP</span>
+              </div>
+            \`;
+            
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+              notification.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+              notification.style.transform = 'translateX(100%)';
+              setTimeout(() => document.body.removeChild(notification), 300);
+            }, 2000);
+          }
+          
+          function saveTaskProgress() {
+            const today = new Date().toDateString();
+            const progress = {
+              date: today,
+              tasks: tasks,
+              totalXP: totalXP,
+              completedCount: completedCount,
+              level: 'express'
+            };
+            
+            localStorage.setItem('dmo_daily_progress', JSON.stringify(progress));
+          }
+          
+          function loadTaskProgress() {
+            const today = new Date().toDateString();
+            const saved = localStorage.getItem('dmo_daily_progress');
+            
+            if (saved) {
+              const progress = JSON.parse(saved);
+              if (progress.date === today && progress.level === 'express') {
+                tasks = progress.tasks;
+                totalXP = progress.totalXP;
+                completedCount = progress.completedCount;
+                
+                // Restore checkbox states
+                document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                  const category = checkbox.dataset.category;
+                  const categoryProgress = tasks[category];
+                  const categoryTasks = document.querySelectorAll(\`[data-category="\${category}"]\`);
+                  
+                  for (let i = 0; i < categoryProgress; i++) {
+                    if (categoryTasks[i]) {
+                      categoryTasks[i].checked = true;
+                    }
+                  }
+                });
+              }
+            }
+          }
+          
+          function updateGlobalStats() {
+            let globalStats = JSON.parse(localStorage.getItem('dmo_stats') || '{"streak": 0, "todayCompleted": 0, "totalXP": 0, "lastCompletedDate": null}');
+            
+            globalStats.todayCompleted = completedCount;
+            
+            // Check if user completed all tasks today
+            if (completedCount === totalTasks) {
+              const today = new Date().toDateString();
+              if (globalStats.lastCompletedDate !== today) {
+                if (globalStats.lastCompletedDate === new Date(Date.now() - 86400000).toDateString()) {
+                  globalStats.streak += 1;
+                } else {
+                  globalStats.streak = 1;
+                }
+                globalStats.lastCompletedDate = today;
+              }
+            }
+            
+            globalStats.totalXP += totalXP;
+            localStorage.setItem('dmo_stats', JSON.stringify(globalStats));
+          }
+        `
+      }} />
+    </Layout>,
+    { title: 'Express DMO - Digital Era' }
+  )
+})
+
+// Pocket Builder DMO - 2 Hours Per Day
+app.get('/dmo/pocket-builder', (c) => {
+  return c.render(
+    <Layout title="Pocket Builder DMO - 2 Hours Per Day" currentPage="dmo">
+      <div class="mb-6">
+        <button onclick="window.location.href='/dmo'" class="flex items-center text-gray-600 hover:text-gray-900 mb-4">
+          <i class="fas fa-arrow-left mr-2"></i>
+          Back to DMO Selection
+        </button>
+        <div class="bg-gradient-to-r from-green-500 to-green-600 text-white p-6 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold mb-2">Pocket Builder DMO - 2 Hours Per Day</h1>
+              <p class="text-green-100">For those building their business steadily</p>
+            </div>
+            <div class="text-right">
+              <div class="text-3xl font-bold" id="pocketProgress">0/10</div>
+              <div class="text-green-100 text-sm">tasks completed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6">
+        {/* Connections - 30 minutes */
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-users text-blue-600 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Connections</h3>
+                <p class="text-gray-600 text-sm">30 minutes</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-blue-600" id="connectionsProgress">0/4</div>
+              <div class="text-gray-500 text-xs">completed</div>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="15" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Check and respond to friend requests</div>
+                <div class="text-sm text-gray-600">Accept relevant connections (5 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+15 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="20" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Send 15-25 friend requests with personal messages</div>
+                <div class="text-sm text-gray-600">Target quality prospects in your market (10 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+20 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="15" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Engage with 20+ posts in your timeline</div>
+                <div class="text-sm text-gray-600">Like, comment meaningfully, and share (10 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+15 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="10" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Join and engage in 2-3 relevant groups</div>
+                <div class="text-sm text-gray-600">Find and participate in industry groups (5 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+10 XP</div>
+            </label>
+          </div>
+        </div>
+
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-comments text-green-600 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Conversations</h3>
+                <p class="text-gray-600 text-sm">45 minutes</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-green-600" id="conversationsProgress">0/3</div>
+              <div class="text-gray-500 text-xs">completed</div>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversations" data-xp="25" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Message 10-15 warm prospects with value</div>
+                <div class="text-sm text-gray-600">Share resources, tips, or helpful content (20 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+25 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversations" data-xp="20" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Follow up with previous conversations</div>
+                <div class="text-sm text-gray-600">Continue building relationships (15 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+20 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversations" data-xp="15" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Conduct 1-2 product/opportunity mini-presentations</div>
+                <div class="text-sm text-gray-600">Share your business opportunity briefly (10 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+15 XP</div>
+            </label>
+          </div>
+        </div>
+
+        {/* Content Creation - 45 minutes */}
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-edit text-purple-600 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Content Creation</h3>
+                <p class="text-gray-600 text-sm">45 minutes</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-purple-600" id="contentCreationProgress">0/3</div>
+              <div class="text-gray-500 text-xs">completed</div>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="25" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Create and post 2-3 high-value posts</div>
+                <div class="text-sm text-gray-600">Educational, motivational, or behind-the-scenes content (20 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+25 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="20" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Record and post 1 short educational video</div>
+                <div class="text-sm text-gray-600">Quick tip, testimonial, or product demo (15 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+20 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="15" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Update stories with behind-the-scenes content</div>
+                <div class="text-sm text-gray-600">Show your daily routine or business activities (10 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+15 XP</div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      {/* Progress Summary */}
+      <div class="mt-8 bg-gradient-to-r from-gray-50 to-green-50 rounded-xl p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Today's Progress</h3>
+            <div class="flex items-center space-x-4">
+              <div class="text-sm text-gray-600">
+                <span id="completedTasks">0</span> of <span id="totalTasks">10</span> tasks completed
+              </div>
+              <div class="text-sm text-green-600 font-medium">
+                +<span id="earnedXP">0</span> XP earned today
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-bold text-green-600" id="progressPercent">0%</div>
+            <div class="text-sm text-gray-600">completion</div>
+          </div>
+        </div>
+        
+        <div class="mt-4 bg-gray-200 rounded-full h-3">
+          <div id="progressBar" class="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
+        </div>
+      </div>
+
+      <script dangerouslySetInnerHTML={{
+        __html: `
+          let tasks = {
+            connections: 0,
+            conversations: 0,
+            content: 0
+          };
+          
+          let totalXP = 0;
+          let completedCount = 0;
+          const totalTasks = 10;
+          
+          document.addEventListener('DOMContentLoaded', function() {
+            loadTaskProgress();
+            updateProgress();
+            
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+              checkbox.addEventListener('change', function() {
+                const category = this.dataset.category;
+                const xp = parseInt(this.dataset.xp);
+                
+                if (this.checked) {
+                  tasks[category]++;
+                  totalXP += xp;
+                  completedCount++;
+                  showTaskComplete(xp);
+                } else {
+                  tasks[category]--;
+                  totalXP -= xp;
+                  completedCount--;
+                }
+                
+                updateProgress();
+                saveTaskProgress();
+              });
+            });
+          });
+          
+          function updateProgress() {
+            document.getElementById('connectionsProgress').textContent = tasks.connections + '/4';
+            document.getElementById('conversationsProgress').textContent = tasks.conversations + '/3';
+            document.getElementById('contentCreationProgress').textContent = tasks.content + '/3';
+            
+            document.getElementById('pocketProgress').textContent = completedCount + '/' + totalTasks;
+            document.getElementById('completedTasks').textContent = completedCount;
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('earnedXP').textContent = totalXP;
+            
+            const percentage = Math.round((completedCount / totalTasks) * 100);
+            document.getElementById('progressPercent').textContent = percentage + '%';
+            document.getElementById('progressBar').style.width = percentage + '%';
+            
+            updateGlobalStats();
+          }
+          
+          function showTaskComplete(xp) {
+            // Same as Express implementation
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+            notification.innerHTML = \`
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-check-circle"></i>
+                <span>Task Complete! +\${xp} XP</span>
+              </div>
+            \`;
+            
+            document.body.appendChild(notification);
+            setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+            setTimeout(() => {
+              notification.style.transform = 'translateX(100%)';
+              setTimeout(() => document.body.removeChild(notification), 300);
+            }, 2000);
+          }
+          
+          function saveTaskProgress() {
+            const today = new Date().toDateString();
+            const progress = {
+              date: today,
+              tasks: tasks,
+              totalXP: totalXP,
+              completedCount: completedCount,
+              level: 'pocket-builder'
+            };
+            localStorage.setItem('dmo_daily_progress', JSON.stringify(progress));
+          }
+          
+          function loadTaskProgress() {
+            const today = new Date().toDateString();
+            const saved = localStorage.getItem('dmo_daily_progress');
+            
+            if (saved) {
+              const progress = JSON.parse(saved);
+              if (progress.date === today && progress.level === 'pocket-builder') {
+                tasks = progress.tasks;
+                totalXP = progress.totalXP;
+                completedCount = progress.completedCount;
+                
+                document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                  const category = checkbox.dataset.category;
+                  const categoryProgress = tasks[category];
+                  const categoryTasks = document.querySelectorAll(\`[data-category="\${category}"]\`);
+                  
+                  for (let i = 0; i < categoryProgress; i++) {
+                    if (categoryTasks[i]) {
+                      categoryTasks[i].checked = true;
+                    }
+                  }
+                });
+              }
+            }
+          }
+          
+          function updateGlobalStats() {
+            let globalStats = JSON.parse(localStorage.getItem('dmo_stats') || '{"streak": 0, "todayCompleted": 0, "totalXP": 0, "lastCompletedDate": null}');
+            globalStats.todayCompleted = completedCount;
+            
+            if (completedCount === totalTasks) {
+              const today = new Date().toDateString();
+              if (globalStats.lastCompletedDate !== today) {
+                if (globalStats.lastCompletedDate === new Date(Date.now() - 86400000).toDateString()) {
+                  globalStats.streak += 1;
+                } else {
+                  globalStats.streak = 1;
+                }
+                globalStats.lastCompletedDate = today;
+              }
+            }
+            
+            globalStats.totalXP = (globalStats.totalXP || 0) + totalXP;
+            localStorage.setItem('dmo_stats', JSON.stringify(globalStats));
+          }
+        `
+      }} />
+    </Layout>,
+    { title: 'Pocket Builder DMO - Digital Era' }
+  )
+})
+
+// Steady Climber DMO - 4 Hours Per Day
+app.get('/dmo/steady-climber', (c) => {
+  return c.render(
+    <Layout title="Steady Climber DMO - 4 Hours Per Day" currentPage="dmo">
+      <div class="mb-6">
+        <button onclick="window.location.href='/dmo'" class="flex items-center text-gray-600 hover:text-gray-900 mb-4">
+          <i class="fas fa-arrow-left mr-2"></i>
+          Back to DMO Selection
+        </button>
+        <div class="bg-gradient-to-r from-orange-500 to-orange-600 text-white p-6 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold mb-2">Steady Climber DMO - 4 Hours Per Day</h1>
+              <p class="text-orange-100">For serious business builders</p>
+            </div>
+            <div class="text-right">
+              <div class="text-3xl font-bold" id="steadyProgress">0/15</div>
+              <div class="text-orange-100 text-sm">tasks completed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Progress Summary - Moved Above Tasks */}
+      <div class="mb-8 bg-gradient-to-r from-gray-50 to-orange-50 rounded-xl p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Today's Progress</h3>
+            <div class="flex items-center space-x-4">
+              <div class="text-sm text-gray-600">
+                <span id="completedTasks">0</span> of <span id="totalTasks">15</span> tasks completed
+              </div>
+              <div class="text-sm text-orange-600 font-medium">
+                +<span id="earnedXP">0</span> XP earned today
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-bold text-orange-600" id="progressPercent">0%</div>
+            <div class="text-sm text-gray-600">completion</div>
+          </div>
+        </div>
+        
+        <div class="mt-4 bg-gray-200 rounded-full h-3">
+          <div id="progressBar" class="bg-gradient-to-r from-orange-500 to-orange-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6">
+        {/* Connections - 60 minutes */}
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-users text-blue-600 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Connections</h3>
+                <p class="text-gray-600 text-sm">60 minutes</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-blue-600" id="connectionsProgress">0/6</div>
+              <div class="text-gray-500 text-xs">completed</div>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="20" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Check friend requests and respond to new connections</div>
+                <div class="text-sm text-gray-600">Review and accept quality connections (10 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+20 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="25" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Send 25-50 friend requests with personal messages</div>
+                <div class="text-sm text-gray-600">Target high-quality prospects with personalized outreach (20 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+25 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="20" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Engage with 20+ posts in your timeline</div>
+                <div class="text-sm text-gray-600">Meaningful comments and shares (15 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+20 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="15" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Join and engage in 3-5 relevant groups</div>
+                <div class="text-sm text-gray-600">Active participation in industry groups (10 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+15 XP</div>
+            </label>
+
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="10" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Research and connect with industry influencers</div>
+                <div class="text-sm text-gray-600">Find and connect with key people in your niche (5 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+10 XP</div>
+            </label>
+          </div>
+        </div>
+
+        {/* Conversations - 90 minutes */}
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-comments text-green-600 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Conversations</h3>
+                <p class="text-gray-600 text-sm">90 minutes</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-green-600" id="conversationsProgress">0/5</div>
+              <div class="text-gray-500 text-xs">completed</div>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversations" data-xp="30" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Message 15-20 warm prospects with value-first approach</div>
+                <div class="text-sm text-gray-600">Share tips, resources, and build relationships (30 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+30 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversations" data-xp="25" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Follow up with previous conversations</div>
+                <div class="text-sm text-gray-600">Continue nurturing existing relationships (20 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+25 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversations" data-xp="35" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Conduct 2-3 product/opportunity presentations</div>
+                <div class="text-sm text-gray-600">Formal business presentations with interested prospects (40 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+35 XP</div>
+            </label>
+          </div>
+        </div>
+
+        {/* Content Creation - 90 minutes */}
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-edit text-purple-600 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Content Creation</h3>
+                <p class="text-gray-600 text-sm">90 minutes</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-purple-600" id="contentCreationProgress">0/4</div>
+              <div class="text-gray-500 text-xs">completed</div>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="30" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Create and post 2-3 high-value posts</div>
+                <div class="text-sm text-gray-600">Educational, motivational, or success stories (30 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+30 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="35" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Record and post 1 educational video</div>
+                <div class="text-sm text-gray-600">Product demo, testimonial, or training content (45 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+35 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="20" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Update stories with behind-the-scenes content</div>
+                <div class="text-sm text-gray-600">Show daily activities and business journey (15 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+20 XP</div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <script dangerouslySetInnerHTML={{
+        __html: `
+          let tasks = {
+            connections: 0,
+            conversations: 0,
+            content: 0
+          };
+          
+          let totalXP = 0;
+          let completedCount = 0;
+          const totalTasks = 15;
+          
+          document.addEventListener('DOMContentLoaded', function() {
+            loadTaskProgress();
+            updateProgress();
+            
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+              checkbox.addEventListener('change', function() {
+                const category = this.dataset.category;
+                const xp = parseInt(this.dataset.xp);
+                
+                if (this.checked) {
+                  tasks[category]++;
+                  totalXP += xp;
+                  completedCount++;
+                  showTaskComplete(xp);
+                } else {
+                  tasks[category]--;
+                  totalXP -= xp;
+                  completedCount--;
+                }
+                
+                updateProgress();
+                saveTaskProgress();
+              });
+            });
+          });
+          
+          function updateProgress() {
+            document.getElementById('connectionsProgress').textContent = tasks.connections + '/6';
+            document.getElementById('conversationsProgress').textContent = tasks.conversations + '/5';
+            document.getElementById('contentCreationProgress').textContent = tasks.content + '/4';
+            
+            document.getElementById('steadyProgress').textContent = completedCount + '/' + totalTasks;
+            document.getElementById('completedTasks').textContent = completedCount;
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('earnedXP').textContent = totalXP;
+            
+            const percentage = Math.round((completedCount / totalTasks) * 100);
+            document.getElementById('progressPercent').textContent = percentage + '%';
+            document.getElementById('progressBar').style.width = percentage + '%';
+            
+            updateGlobalStats();
+          }
+          
+          function showTaskComplete(xp) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+            notification.innerHTML = \`
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-check-circle"></i>
+                <span>Task Complete! +\${xp} XP</span>
+              </div>
+            \`;
+            
+            document.body.appendChild(notification);
+            setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+            setTimeout(() => {
+              notification.style.transform = 'translateX(100%)';
+              setTimeout(() => document.body.removeChild(notification), 300);
+            }, 2000);
+          }
+          
+          function saveTaskProgress() {
+            const today = new Date().toDateString();
+            const progress = {
+              date: today,
+              tasks: tasks,
+              totalXP: totalXP,
+              completedCount: completedCount,
+              level: 'steady-climber'
+            };
+            localStorage.setItem('dmo_daily_progress', JSON.stringify(progress));
+          }
+          
+          function loadTaskProgress() {
+            const today = new Date().toDateString();
+            const saved = localStorage.getItem('dmo_daily_progress');
+            
+            if (saved) {
+              const progress = JSON.parse(saved);
+              if (progress.date === today && progress.level === 'steady-climber') {
+                tasks = progress.tasks;
+                totalXP = progress.totalXP;
+                completedCount = progress.completedCount;
+                
+                document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                  const category = checkbox.dataset.category;
+                  const categoryProgress = tasks[category];
+                  const categoryTasks = document.querySelectorAll(\`[data-category="\${category}"]\`);
+                  
+                  for (let i = 0; i < categoryProgress; i++) {
+                    if (categoryTasks[i]) {
+                      categoryTasks[i].checked = true;
+                    }
+                  }
+                });
+              }
+            }
+          }
+          
+          function updateGlobalStats() {
+            let globalStats = JSON.parse(localStorage.getItem('dmo_stats') || '{"streak": 0, "todayCompleted": 0, "totalXP": 0, "lastCompletedDate": null}');
+            globalStats.todayCompleted = completedCount;
+            
+            if (completedCount === totalTasks) {
+              const today = new Date().toDateString();
+              if (globalStats.lastCompletedDate !== today) {
+                if (globalStats.lastCompletedDate === new Date(Date.now() - 86400000).toDateString()) {
+                  globalStats.streak += 1;
+                } else {
+                  globalStats.streak = 1;
+                }
+                globalStats.lastCompletedDate = today;
+              }
+            }
+            
+            globalStats.totalXP = (globalStats.totalXP || 0) + totalXP;
+            localStorage.setItem('dmo_stats', JSON.stringify(globalStats));
+          }
+        `
+      }} />
+    </Layout>,
+    { title: 'Steady Climber DMO - Digital Era' }
+  )
+})
+
+// Full Throttle DMO - 6+ Hours Per Day
+app.get('/dmo/full-throttle', (c) => {
+  return c.render(
+    <Layout title="Full Throttle DMO - 6+ Hours Per Day" currentPage="dmo">
+      <div class="mb-6">
+        <button onclick="window.location.href='/dmo'" class="flex items-center text-gray-600 hover:text-gray-900 mb-4">
+          <i class="fas fa-arrow-left mr-2"></i>
+          Back to DMO Selection
+        </button>
+        <div class="bg-gradient-to-r from-red-500 to-red-600 text-white p-6 rounded-xl">
+          <div class="flex items-center justify-between">
+            <div>
+              <h1 class="text-2xl font-bold mb-2">Full Throttle DMO - 6+ Hours Per Day</h1>
+              <p class="text-red-100">Maximum acceleration for rapid growth</p>
+            </div>
+            <div class="text-right">
+              <div class="text-3xl font-bold" id="throttleProgress">0/20</div>
+              <div class="text-red-100 text-sm">tasks completed</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Progress Summary - Moved Above Tasks */}
+      <div class="mb-8 bg-gradient-to-r from-gray-50 to-red-50 rounded-xl p-6">
+        <div class="flex items-center justify-between">
+          <div>
+            <h3 class="text-lg font-semibold text-gray-900 mb-2">Today's Progress</h3>
+            <div class="flex items-center space-x-4">
+              <div class="text-sm text-gray-600">
+                <span id="completedTasks">0</span> of <span id="totalTasks">20</span> tasks completed
+              </div>
+              <div class="text-sm text-red-600 font-medium">
+                +<span id="earnedXP">0</span> XP earned today
+              </div>
+            </div>
+          </div>
+          <div class="text-right">
+            <div class="text-3xl font-bold text-red-600" id="progressPercent">0%</div>
+            <div class="text-sm text-gray-600">completion</div>
+          </div>
+        </div>
+        
+        <div class="mt-4 bg-gray-200 rounded-full h-3">
+          <div id="progressBar" class="bg-gradient-to-r from-red-500 to-red-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
+        </div>
+      </div>
+
+      <div class="grid grid-cols-1 gap-6">
+        {/* Connections - 120 minutes */}
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-users text-blue-600 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Connections</h3>
+                <p class="text-gray-600 text-sm">120 minutes</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-blue-600" id="connectionsProgress">0/8</div>
+              <div class="text-gray-500 text-xs">completed</div>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="25" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Check friend requests and respond to connections</div>
+                <div class="text-sm text-gray-600">Review and manage all incoming requests (15 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+25 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="35" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Send 50-100 friend requests with personal messages</div>
+                <div class="text-sm text-gray-600">Mass targeted outreach with personalization (30 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+35 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="30" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Engage with 30+ posts in your timeline</div>
+                <div class="text-sm text-gray-600">Deep engagement with meaningful comments (25 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+30 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="25" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Join and actively engage in 5-10 relevant groups</div>
+                <div class="text-sm text-gray-600">Post valuable content and engage discussions (20 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+25 XP</div>
+            </label>
+
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="20" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Research and connect with industry influencers</div>
+                <div class="text-sm text-gray-600">Strategic networking with key industry leaders (15 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+20 XP</div>
+            </label>
+
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="15" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Host or attend networking events/webinars</div>
+                <div class="text-sm text-gray-600">Participate in online events and make connections (15 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+15 XP</div>
+            </label>
+          </div>
+        </div>
+
+        {/* Conversations - 150 minutes */}
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-comments text-green-600 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Conversations</h3>
+                <p class="text-gray-600 text-sm">150 minutes</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-green-600" id="conversationsProgress">0/6</div>
+              <div class="text-gray-500 text-xs">completed</div>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversations" data-xp="40" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Message 25-50 warm prospects with value</div>
+                <div class="text-sm text-gray-600">Personalized outreach with high-value content (45 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+40 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversations" data-xp="35" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Follow up with previous conversations</div>
+                <div class="text-sm text-gray-600">Systematic follow-up with existing prospects (30 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+35 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversations" data-xp="45" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Conduct 3-5 product/opportunity presentations</div>
+                <div class="text-sm text-gray-600">Full business presentations with qualified prospects (75 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+45 XP</div>
+            </label>
+          </div>
+        </div>
+
+        {/* Content Creation - 90 minutes */}
+        <div class="bg-white rounded-xl p-6 border border-gray-200">
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center">
+              <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                <i class="fas fa-edit text-purple-600 text-xl"></i>
+              </div>
+              <div>
+                <h3 class="text-lg font-semibold text-gray-900">Content Creation</h3>
+                <p class="text-gray-600 text-sm">90 minutes</p>
+              </div>
+            </div>
+            <div class="text-right">
+              <div class="text-2xl font-bold text-purple-600" id="contentCreationProgress">0/6</div>
+              <div class="text-gray-500 text-xs">completed</div>
+            </div>
+          </div>
+          
+          <div class="space-y-3">
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="35" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Create and post 3-5 high-value posts</div>
+                <div class="text-sm text-gray-600">Mix of educational, motivational, and promotional content (30 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+35 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="40" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Record and post 1 comprehensive educational video</div>
+                <div class="text-sm text-gray-600">In-depth training or product demonstration (30 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+40 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="25" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Update stories with behind-the-scenes content</div>
+                <div class="text-sm text-gray-600">Multiple story updates throughout the day (15 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+25 XP</div>
+            </label>
+            
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="30" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Write and publish 1 blog post or article</div>
+                <div class="text-sm text-gray-600">Long-form content for your website or LinkedIn (15 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+30 XP</div>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <script dangerouslySetInnerHTML={{
+        __html: `
+          let tasks = {
+            connections: 0,
+            conversations: 0,
+            content: 0
+          };
+          
+          let totalXP = 0;
+          let completedCount = 0;
+          const totalTasks = 20;
+          
+          document.addEventListener('DOMContentLoaded', function() {
+            loadTaskProgress();
+            updateProgress();
+            
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+              checkbox.addEventListener('change', function() {
+                const category = this.dataset.category;
+                const xp = parseInt(this.dataset.xp);
+                
+                if (this.checked) {
+                  tasks[category]++;
+                  totalXP += xp;
+                  completedCount++;
+                  showTaskComplete(xp);
+                } else {
+                  tasks[category]--;
+                  totalXP -= xp;
+                  completedCount--;
+                }
+                
+                updateProgress();
+                saveTaskProgress();
+              });
+            });
+          });
+          
+          function updateProgress() {
+            document.getElementById('connectionsProgress').textContent = tasks.connections + '/8';
+            document.getElementById('conversationsProgress').textContent = tasks.conversations + '/6';
+            document.getElementById('contentCreationProgress').textContent = tasks.content + '/6';
+            
+            document.getElementById('throttleProgress').textContent = completedCount + '/' + totalTasks;
+            document.getElementById('completedTasks').textContent = completedCount;
+            document.getElementById('totalTasks').textContent = totalTasks;
+            document.getElementById('earnedXP').textContent = totalXP;
+            
+            const percentage = Math.round((completedCount / totalTasks) * 100);
+            document.getElementById('progressPercent').textContent = percentage + '%';
+            document.getElementById('progressBar').style.width = percentage + '%';
+            
+            updateGlobalStats();
+          }
+          
+          function showTaskComplete(xp) {
+            const notification = document.createElement('div');
+            notification.className = 'fixed top-4 right-4 bg-green-500 text-white px-4 py-2 rounded-lg shadow-lg z-50 transform translate-x-full transition-transform duration-300';
+            notification.innerHTML = \`
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-check-circle"></i>
+                <span>Task Complete! +\${xp} XP</span>
+              </div>
+            \`;
+            
+            document.body.appendChild(notification);
+            setTimeout(() => notification.style.transform = 'translateX(0)', 100);
+            setTimeout(() => {
+              notification.style.transform = 'translateX(100%)';
+              setTimeout(() => document.body.removeChild(notification), 300);
+            }, 2000);
+          }
+          
+          function saveTaskProgress() {
+            const today = new Date().toDateString();
+            const progress = {
+              date: today,
+              tasks: tasks,
+              totalXP: totalXP,
+              completedCount: completedCount,
+              level: 'full-throttle'
+            };
+            localStorage.setItem('dmo_daily_progress', JSON.stringify(progress));
+          }
+          
+          function loadTaskProgress() {
+            const today = new Date().toDateString();
+            const saved = localStorage.getItem('dmo_daily_progress');
+            
+            if (saved) {
+              const progress = JSON.parse(saved);
+              if (progress.date === today && progress.level === 'full-throttle') {
+                tasks = progress.tasks;
+                totalXP = progress.totalXP;
+                completedCount = progress.completedCount;
+                
+                document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+                  const category = checkbox.dataset.category;
+                  const categoryProgress = tasks[category];
+                  const categoryTasks = document.querySelectorAll(\`[data-category="\${category}"]\`);
+                  
+                  for (let i = 0; i < categoryProgress; i++) {
+                    if (categoryTasks[i]) {
+                      categoryTasks[i].checked = true;
+                    }
+                  }
+                });
+              }
+            }
+          }
+          
+          function updateGlobalStats() {
+            let globalStats = JSON.parse(localStorage.getItem('dmo_stats') || '{"streak": 0, "todayCompleted": 0, "totalXP": 0, "lastCompletedDate": null}');
+            globalStats.todayCompleted = completedCount;
+            
+            if (completedCount === totalTasks) {
+              const today = new Date().toDateString();
+              if (globalStats.lastCompletedDate !== today) {
+                if (globalStats.lastCompletedDate === new Date(Date.now() - 86400000).toDateString()) {
+                  globalStats.streak += 1;
+                } else {
+                  globalStats.streak = 1;
+                }
+                globalStats.lastCompletedDate = today;
+              }
+            }
+            
+            globalStats.totalXP = (globalStats.totalXP || 0) + totalXP;
+            localStorage.setItem('dmo_stats', JSON.stringify(globalStats));
+          }
+        `
+      }} />
+    </Layout>,
+    { title: 'Full Throttle DMO - Digital Era' }
   )
 })
 
