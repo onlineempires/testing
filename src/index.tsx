@@ -740,150 +740,841 @@ app.get('/courses', (c) => {
 app.get('/experts', (c) => {
   return c.render(
     <Layout title="Expert Directory" currentPage="experts">
-      <div class="mb-6">
-        <p class="text-gray-600">Connect with our top 6A+ Enagic leaders for personalized coaching</p>
+      <style dangerouslySetInnerHTML={{
+        __html: `
+          .booking-step {
+            animation: fadeIn 0.3s ease-in-out;
+          }
+          
+          @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+          }
+          
+          .time-slot {
+            transition: all 0.2s ease-in-out;
+          }
+          
+          .time-slot:hover {
+            transform: translateY(-2px);
+            shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+          }
+          
+          .modal-overlay {
+            backdrop-filter: blur(4px);
+          }
+          
+          .progress-bar {
+            transition: all 0.3s ease-in-out;
+          }
+          
+          .step-indicator {
+            transition: all 0.3s ease-in-out;
+          }
+          
+          .payment-form input:focus {
+            box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+          }
+          
+          .expert-card {
+            transition: all 0.2s ease-in-out;
+          }
+          
+          .expert-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15);
+          }
+        `
+      }} />
+      <div class="mb-8">
+        <h1 class="text-2xl font-bold text-gray-900 mb-2">Expert Directory</h1>
+        <p class="text-gray-600">Book 1-on-1 coaching calls with our top 6A+ Enagic leaders</p>
       </div>
 
-      <div class="grid grid-cols-3 gap-8">
+      <div class="grid grid-cols-3 gap-6">
+        {/* John Smith */}
+        <div class="expert-card bg-white rounded-lg shadow-sm border border-gray-100 p-6 text-center">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face" alt="John Smith" class="w-20 h-20 rounded-full mx-auto mb-3" />
+            
+            <h3 class="text-lg font-semibold text-gray-900 mb-1">John Smith</h3>
+            
+            {/* 5-star rating */}
+            <div class="flex justify-center mb-2">
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+            </div>
+            
+            <p class="text-sm text-blue-600 font-medium mb-3">6A Leader</p>
+          </div>
+          
+          <p class="text-sm text-gray-600 mb-4 leading-relaxed">
+            Sales expert with 10+ years experience. Specializes in high-ticket closing and team building strategies.
+          </p>
+          
+          <div class="space-y-2 mb-6">
+            <div class="text-lg font-bold text-gray-900">60 Minutes</div>
+            <div class="text-2xl font-bold text-blue-600">$299</div>
+          </div>
+          
+          <button 
+            onclick="openBookingModal('john-smith', 'John Smith', '$299', 'https://calendly.com/johnsmith-digitalera')"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Book Call
+          </button>
+        </div>
+
         {/* Sarah Johnson */}
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 text-center">
-          <img src="https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=120" alt="Sarah Johnson" class="w-20 h-20 rounded-full mx-auto mb-4" />
-          <h3 class="font-semibold text-gray-900 mb-1">Sarah Johnson</h3>
-          <p class="text-sm text-blue-600 mb-4">6A3 Leader</p>
+        <div class="expert-card bg-white rounded-lg shadow-sm border border-gray-100 p-6 text-center">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&crop=face" alt="Sarah Johnson" class="w-20 h-20 rounded-full mx-auto mb-3" />
+            
+            <h3 class="text-lg font-semibold text-gray-900 mb-1">Sarah Johnson</h3>
+            
+            {/* 5-star rating */}
+            <div class="flex justify-center mb-2">
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+            </div>
+            
+            <p class="text-sm text-blue-600 font-medium mb-3">6A3 Leader</p>
+          </div>
           
-          <div class="flex items-center justify-center text-sm text-gray-600 mb-2">
-            <i class="fas fa-map-marker-alt mr-1"></i>
-            Los Angeles, CA
-          </div>
-          <div class="flex items-center justify-center text-sm text-gray-600 mb-2">
-            <i class="fas fa-users mr-1"></i>
-            500+ Team Members
-          </div>
-          <div class="flex items-center justify-center text-sm text-blue-600 mb-4">
-            <i class="fas fa-trophy mr-1"></i>
-            Top Performer 2024
-          </div>
-          
-          <p class="text-xs text-gray-600 mb-6 leading-relaxed">
-            Specializes in team building and leadership development. Sarah has built a massive organization using proven systems and strategies.
+          <p class="text-sm text-gray-600 mb-4 leading-relaxed">
+            Marketing genius focusing on social media growth and content strategy. Built multiple 7-figure funnels.
           </p>
           
-          <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
-            Book Coaching Call
+          <div class="space-y-2 mb-6">
+            <div class="text-lg font-bold text-gray-900">60 Minutes</div>
+            <div class="text-2xl font-bold text-blue-600">$399</div>
+          </div>
+          
+          <button 
+            onclick="openBookingModal('sarah-johnson', 'Sarah Johnson', '$399', 'https://calendly.com/sarahjohnson-digitalera')"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Book Call
           </button>
         </div>
 
-        {/* Michael Chen */}
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 text-center">
-          <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=120" alt="Michael Chen" class="w-20 h-20 rounded-full mx-auto mb-4" />
-          <h3 class="font-semibold text-gray-900 mb-1">Michael Chen</h3>
-          <p class="text-sm text-blue-600 mb-4">6A2 Leader</p>
+        {/* Mike Davis */}
+        <div class="expert-card bg-white rounded-lg shadow-sm border border-gray-100 p-6 text-center">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face" alt="Mike Davis" class="w-20 h-20 rounded-full mx-auto mb-3" />
+            
+            <h3 class="text-lg font-semibold text-gray-900 mb-1">Mike Davis</h3>
+            
+            {/* 5-star rating */}
+            <div class="flex justify-center mb-2">
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+            </div>
+            
+            <p class="text-sm text-blue-600 font-medium mb-3">6A Leader</p>
+          </div>
           
-          <div class="flex items-center justify-center text-sm text-gray-600 mb-2">
-            <i class="fas fa-map-marker-alt mr-1"></i>
-            New York, NY
-          </div>
-          <div class="flex items-center justify-center text-sm text-gray-600 mb-2">
-            <i class="fas fa-users mr-1"></i>
-            750+ Team Members
-          </div>
-          <div class="flex items-center justify-center text-sm text-green-600 mb-4">
-            <i class="fas fa-chart-line mr-1"></i>
-            Social Media Expert
-          </div>
-          
-          <p class="text-xs text-gray-600 mb-6 leading-relaxed">
-            Digital marketing specialist with expertise in social media strategies and online lead generation for Enagic business.
+          <p class="text-sm text-gray-600 mb-4 leading-relaxed">
+            Lead generation specialist with expertise in paid advertising and conversion optimization.
           </p>
           
-          <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
-            Book Coaching Call
+          <div class="space-y-2 mb-6">
+            <div class="text-lg font-bold text-gray-900">60 Minutes</div>
+            <div class="text-2xl font-bold text-blue-600">$349</div>
+          </div>
+          
+          <button 
+            onclick="openBookingModal('mike-davis', 'Mike Davis', '$349', 'https://calendly.com/mikedavis-digitalera')"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Book Call
           </button>
         </div>
 
-        {/* Lisa Rodriguez */}
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 text-center">
-          <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=120" alt="Lisa Rodriguez" class="w-20 h-20 rounded-full mx-auto mb-4" />
-          <h3 class="font-semibold text-gray-900 mb-1">Lisa Rodriguez</h3>
-          <p class="text-sm text-blue-600 mb-4">6A4 Leader</p>
+        {/* Lisa Chen */}
+        <div class="expert-card bg-white rounded-lg shadow-sm border border-gray-100 p-6 text-center">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face" alt="Lisa Chen" class="w-20 h-20 rounded-full mx-auto mb-3" />
+            
+            <h3 class="text-lg font-semibold text-gray-900 mb-1">Lisa Chen</h3>
+            
+            {/* 5-star rating */}
+            <div class="flex justify-center mb-2">
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+            </div>
+            
+            <p class="text-sm text-blue-600 font-medium mb-3">6A3 Leader</p>
+          </div>
           
-          <div class="flex items-center justify-center text-sm text-gray-600 mb-2">
-            <i class="fas fa-map-marker-alt mr-1"></i>
-            Miami, FL
-          </div>
-          <div class="flex items-center justify-center text-sm text-gray-600 mb-2">
-            <i class="fas fa-users mr-1"></i>
-            300+ Team Members
-          </div>
-          <div class="flex items-center justify-center text-sm text-purple-600 mb-4">
-            <i class="fas fa-medal mr-1"></i>
-            Sales Champion
-          </div>
-          
-          <p class="text-xs text-gray-600 mb-6 leading-relaxed">
-            Sales and conversation specialist, focusing on helping new distributors overcome sales anxiety.
+          <p class="text-sm text-gray-600 mb-4 leading-relaxed">
+            Mindset and personal development coach. Helps entrepreneurs overcome limiting beliefs and scale faster.
           </p>
           
-          <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
-            Book Coaching Call
+          <div class="space-y-2 mb-6">
+            <div class="text-lg font-bold text-gray-900">60 Minutes</div>
+            <div class="text-2xl font-bold text-blue-600">$275</div>
+          </div>
+          
+          <button 
+            onclick="openBookingModal('lisa-chen', 'Lisa Chen', '$275', 'https://calendly.com/lisachen-digitalera')"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Book Call
           </button>
         </div>
 
-        {/* Additional experts can be added here */}
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 text-center">
-          <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=120" alt="Jennifer Walsh" class="w-20 h-20 rounded-full mx-auto mb-4" />
-          <h3 class="font-semibold text-gray-900 mb-1">Jennifer</h3>
-          <p class="text-sm text-blue-600 mb-4">Walsh</p>
+        {/* Robert Wilson */}
+        <div class="expert-card bg-white rounded-lg shadow-sm border border-gray-100 p-6 text-center">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=80&h=80&fit=crop&crop=face" alt="Robert Wilson" class="w-20 h-20 rounded-full mx-auto mb-3" />
+            
+            <h3 class="text-lg font-semibold text-gray-900 mb-1">Robert Wilson</h3>
+            
+            {/* 5-star rating */}
+            <div class="flex justify-center mb-2">
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+            </div>
+            
+            <p class="text-sm text-blue-600 font-medium mb-3">6A Leader</p>
+          </div>
           
-          <div class="flex items-center justify-center text-sm text-gray-600 mb-2">
-            <i class="fas fa-map-marker-alt mr-1"></i>
-            Dallas, TX
-          </div>
-          <div class="flex items-center justify-center text-sm text-gray-600 mb-2">
-            <i class="fas fa-users mr-1"></i>
-            400+ Team Members
-          </div>
-          <div class="flex items-center justify-center text-sm text-orange-600 mb-4">
-            <i class="fas fa-star mr-1"></i>
-            Mentor Specialist
-          </div>
-          
-          <p class="text-xs text-gray-600 mb-6 leading-relaxed">
-            Mentoring expert helping distributors develop leadership skills and create sustainable income.
+          <p class="text-sm text-gray-600 mb-4 leading-relaxed">
+            Systems and automation expert. Helps businesses streamline operations and increase efficiency.
           </p>
           
-          <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
-            Book Coaching Call
+          <div class="space-y-2 mb-6">
+            <div class="text-lg font-bold text-gray-900">60 Minutes</div>
+            <div class="text-2xl font-bold text-blue-600">$325</div>
+          </div>
+          
+          <button 
+            onclick="openBookingModal('robert-wilson', 'Robert Wilson', '$325', 'https://calendly.com/robertwilson-digitalera')"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Book Call
           </button>
         </div>
 
-        <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100 text-center">
-          <img src="https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=120" alt="David Kim" class="w-20 h-20 rounded-full mx-auto mb-4" />
-          <h3 class="font-semibold text-gray-900 mb-1">David Kim</h3>
-          <p class="text-sm text-blue-600 mb-4">6A3 Leader</p>
+        {/* Emma Rodriguez */}
+        <div class="expert-card bg-white rounded-lg shadow-sm border border-gray-100 p-6 text-center">
+          <div class="mb-4">
+            <img src="https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face" alt="Emma Rodriguez" class="w-20 h-20 rounded-full mx-auto mb-3" />
+            
+            <h3 class="text-lg font-semibold text-gray-900 mb-1">Emma Rodriguez</h3>
+            
+            {/* 5-star rating */}
+            <div class="flex justify-center mb-2">
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+              <i class="fas fa-star text-yellow-400 text-sm"></i>
+            </div>
+            
+            <p class="text-sm text-blue-600 font-medium mb-3">6A2 Leader</p>
+          </div>
           
-          <div class="flex items-center justify-center text-sm text-gray-600 mb-2">
-            <i class="fas fa-map-marker-alt mr-1"></i>
-            Seattle, WA
-          </div>
-          <div class="flex items-center justify-center text-sm text-gray-600 mb-2">
-            <i class="fas fa-users mr-1"></i>
-            600+ Team Members
-          </div>
-          <div class="flex items-center justify-center text-sm text-indigo-600 mb-4">
-            <i class="fas fa-lightbulb mr-1"></i>
-            Innovation Leader
-          </div>
-          
-          <p class="text-xs text-gray-600 mb-6 leading-relaxed">
-            Innovation specialist focusing on cutting-edge marketing strategies and technology integration.
+          <p class="text-sm text-gray-600 mb-4 leading-relaxed">
+            E-commerce and dropshipping specialist. Built multiple 6-figure online stores from scratch.
           </p>
           
-          <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
-            Book Coaching Call
+          <div class="space-y-2 mb-6">
+            <div class="text-lg font-bold text-gray-900">60 Minutes</div>
+            <div class="text-2xl font-bold text-blue-600">$375</div>
+          </div>
+          
+          <button 
+            onclick="openBookingModal('emma-rodriguez', 'Emma Rodriguez', '$375', 'https://calendly.com/emmarodriguez-digitalera')"
+            class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors"
+          >
+            Book Call
           </button>
         </div>
       </div>
+
+      {/* Booking Modal - Multi-step Process */}
+      <div id="bookingModal" class="fixed inset-0 bg-black bg-opacity-60 hidden z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-2xl max-w-4xl w-full h-[90vh] flex flex-col shadow-2xl">
+          {/* Modal Header */}
+          <div class="bg-gradient-to-r from-blue-600 to-purple-600 text-white p-6">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-4">
+                <img id="modalExpertImage" src="" alt="" class="w-16 h-16 rounded-full border-4 border-white shadow-lg" />
+                <div>
+                  <h2 class="text-2xl font-bold" id="modalExpertName"></h2>
+                  <div class="flex items-center space-x-2 mt-1">
+                    <div class="flex">
+                      <i class="fas fa-star text-yellow-300 text-sm"></i>
+                      <i class="fas fa-star text-yellow-300 text-sm"></i>
+                      <i class="fas fa-star text-yellow-300 text-sm"></i>
+                      <i class="fas fa-star text-yellow-300 text-sm"></i>
+                      <i class="fas fa-star text-yellow-300 text-sm"></i>
+                    </div>
+                    <span class="text-blue-200">•</span>
+                    <span class="text-blue-200 font-medium">6A Leader</span>
+                  </div>
+                </div>
+              </div>
+              <button onclick="closeBookingModal()" class="text-white hover:text-gray-200 transition-colors">
+                <i class="fas fa-times text-2xl"></i>
+              </button>
+            </div>
+          </div>
+
+          {/* Progress Steps */}
+          <div class="bg-gray-50 px-6 py-4 border-b">
+            <div class="flex items-center justify-center space-x-8">
+              <div id="step1" class="flex items-center space-x-2 text-blue-600">
+                <div class="w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold">1</div>
+                <span class="font-medium">Select Time</span>
+              </div>
+              <div class="w-16 h-1 bg-gray-300 rounded" id="progress1"></div>
+              <div id="step2" class="flex items-center space-x-2 text-gray-400">
+                <div class="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-bold">2</div>
+                <span class="font-medium">Payment</span>
+              </div>
+              <div class="w-16 h-1 bg-gray-300 rounded" id="progress2"></div>
+              <div id="step3" class="flex items-center space-x-2 text-gray-400">
+                <div class="w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-bold">3</div>
+                <span class="font-medium">Confirmation</span>
+              </div>
+            </div>
+          </div>
+
+          {/* Modal Content */}
+          <div class="p-6 flex-1 overflow-y-auto">
+            {/* Step 1: Calendar Selection */}
+            <div id="bookingStep1" class="booking-step flex flex-col h-full">
+              <div class="grid grid-cols-3 gap-6 flex-1">
+                {/* Session Details */}
+                <div class="bg-gradient-to-br from-blue-50 to-indigo-50 p-4 rounded-xl border border-blue-100">
+                  <h3 class="text-base font-bold text-gray-900 mb-3">
+                    <i class="fas fa-video text-blue-600 mr-2"></i>
+                    Session Details
+                  </h3>
+                  <div class="space-y-2 text-sm">
+                    <div class="flex justify-between items-center">
+                      <span class="text-gray-600">Duration:</span>
+                      <span class="font-semibold text-gray-900">60 minutes</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span class="text-gray-600">Format:</span>
+                      <span class="font-semibold text-gray-900">1-on-1 Video Call</span>
+                    </div>
+                    <div class="flex justify-between items-center">
+                      <span class="text-gray-600">Platform:</span>
+                      <span class="font-semibold text-gray-900">Zoom/Teams</span>
+                    </div>
+                    <hr class="border-blue-200 my-3" />
+                    <div class="flex justify-between items-center">
+                      <span class="text-base font-semibold text-gray-900">Total:</span>
+                      <span id="modalPrice" class="text-xl font-bold text-blue-600"></span>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Calendar */}
+                <div class="col-span-2">
+                  <h3 class="text-base font-bold text-gray-900 mb-3">
+                    <i class="fas fa-calendar-alt text-green-600 mr-2"></i>
+                    Choose Your Preferred Time
+                  </h3>
+                  <div class="bg-white border-2 border-gray-200 rounded-xl p-4">
+                    <div id="calendlyEmbed">
+                      {/* Enhanced Calendar Simulation */}
+                      <div class="text-center">
+                        <h4 class="font-semibold text-gray-900 mb-3">Available This Week</h4>
+                        <div class="grid grid-cols-2 gap-3">
+                          <button onclick="selectTimeSlot(this, 'Today 2:00 PM EST')" class="time-slot p-3 bg-green-50 border-2 border-green-200 text-green-700 rounded-lg hover:bg-green-100 transition-all font-medium">
+                            <div class="text-sm font-bold">Today</div>
+                            <div class="text-base">2:00 PM EST</div>
+                          </button>
+                          <button onclick="selectTimeSlot(this, 'Today 4:30 PM EST')" class="time-slot p-3 bg-green-50 border-2 border-green-200 text-green-700 rounded-lg hover:bg-green-100 transition-all font-medium">
+                            <div class="text-sm font-bold">Today</div>
+                            <div class="text-base">4:30 PM EST</div>
+                          </button>
+                          <button onclick="selectTimeSlot(this, 'Tomorrow 10:00 AM EST')" class="time-slot p-3 bg-green-50 border-2 border-green-200 text-green-700 rounded-lg hover:bg-green-100 transition-all font-medium">
+                            <div class="text-sm font-bold">Tomorrow</div>
+                            <div class="text-base">10:00 AM EST</div>
+                          </button>
+                          <button onclick="selectTimeSlot(this, 'Tomorrow 2:30 PM EST')" class="time-slot p-3 bg-green-50 border-2 border-green-200 text-green-700 rounded-lg hover:bg-green-100 transition-all font-medium">
+                            <div class="text-sm font-bold">Tomorrow</div>
+                            <div class="text-base">2:30 PM EST</div>
+                          </button>
+                        </div>
+                        <div class="mt-4 p-3 bg-blue-50 rounded-lg">
+                          <p class="text-xs text-blue-700">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            Production integration: <strong id="modalCalendlyUrl" class="text-xs"></strong>
+                          </p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-end mt-4 pt-4 border-t border-gray-200">
+                <button 
+                  id="nextToPayment" 
+                  onclick="goToStep2()" 
+                  disabled
+                  class="px-8 py-3 bg-gray-300 text-gray-500 rounded-lg font-semibold cursor-not-allowed transition-all"
+                >
+                  Continue to Payment
+                  <i class="fas fa-arrow-right ml-2"></i>
+                </button>
+              </div>
+            </div>
+
+            {/* Step 2: Payment */}
+            <div id="bookingStep2" class="booking-step hidden flex flex-col h-full">
+              <div class="grid grid-cols-2 gap-6 flex-1">
+                {/* Order Summary */}
+                <div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-4">
+                    <i class="fas fa-receipt text-purple-600 mr-2"></i>
+                    Order Summary
+                  </h3>
+
+                  <div class="bg-gradient-to-br from-purple-50 to-pink-50 p-6 rounded-xl border border-purple-100 mb-6">
+                    <div class="flex items-center justify-between mb-4">
+                      <div class="flex items-center space-x-3">
+                        <img id="summaryExpertImage" src="" alt="" class="w-12 h-12 rounded-full" />
+                        <div>
+                          <div class="font-semibold text-gray-900" id="summaryExpertName"></div>
+                          <div class="text-sm text-gray-600">60-minute coaching session</div>
+                        </div>
+                      </div>
+                      <div class="text-right">
+                        <div class="text-2xl font-bold text-purple-600" id="summaryPrice"></div>
+                      </div>
+                    </div>
+                    
+                    <div class="border-t border-purple-200 pt-4">
+                      <div class="flex items-center justify-between text-sm text-gray-600 mb-2">
+                        <span>Selected Time:</span>
+                        <span id="selectedTimeDisplay" class="font-medium text-gray-900"></span>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="bg-blue-50 p-4 rounded-lg mb-6">
+                    <h4 class="font-semibold text-blue-900 mb-2">
+                      <i class="fas fa-handshake text-blue-600 mr-2"></i>
+                      Revenue Split
+                    </h4>
+                    <div class="text-sm text-blue-700 space-y-1">
+                      <div class="flex justify-between">
+                        <span>Expert receives (75%):</span>
+                        <span id="expertAmount" class="font-semibold"></span>
+                      </div>
+                      <div class="flex justify-between">
+                        <span>Platform fee (25%):</span>
+                        <span id="platformFee" class="font-semibold"></span>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Payment Form */}
+                <div>
+                  <h3 class="text-lg font-bold text-gray-900 mb-4">
+                    <i class="fas fa-credit-card text-green-600 mr-2"></i>
+                    Payment Information
+                  </h3>
+
+                  <div class="space-y-4">
+                    <div class="bg-yellow-50 border border-yellow-200 rounded-lg p-3 mb-4">
+                      <div class="flex items-center text-yellow-800 text-sm">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        <span class="font-medium">Demo Mode:</span>
+                        <button onclick="fillDummyCardInfo()" class="ml-2 text-blue-600 hover:text-blue-800 underline font-medium">
+                          Click to auto-fill dummy card info
+                        </button>
+                      </div>
+                    </div>
+                    
+                    <div>
+                      <label class="block text-sm font-semibold text-gray-700 mb-2">Card Number *</label>
+                      <input 
+                        id="cardNumber"
+                        type="text" 
+                        placeholder="4242 4242 4242 4242" 
+                        class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                        maxlength="19"
+                      />
+                    </div>
+                    <div class="grid grid-cols-2 gap-4">
+                      <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">Expiry Date *</label>
+                        <input 
+                          id="cardExpiry"
+                          type="text" 
+                          placeholder="12/28" 
+                          class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                          maxlength="5"
+                        />
+                      </div>
+                      <div>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">CVC *</label>
+                        <input 
+                          id="cardCvc"
+                          type="text" 
+                          placeholder="123" 
+                          class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                          maxlength="4"
+                        />
+                      </div>
+                    </div>
+                    <div>
+                      <label class="block text-sm font-semibold text-gray-700 mb-2">Cardholder Name *</label>
+                      <input 
+                        id="cardName"
+                        type="text" 
+                        placeholder="Ashley Kemp" 
+                        class="w-full p-3 border-2 border-gray-200 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 transition-all"
+                      />
+                    </div>
+                  </div>
+
+                  <div class="mt-6 p-4 bg-green-50 rounded-lg border border-green-200">
+                    <div class="flex items-center text-green-700">
+                      <i class="fas fa-shield-alt text-xl mr-3"></i>
+                      <div>
+                        <div class="font-semibold">Secure Payment</div>
+                        <div class="text-sm">Your card details are encrypted and secure</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="flex justify-between mt-4 pt-4 border-t border-gray-200">
+                <button 
+                  onclick="goToStep1()" 
+                  class="px-6 py-3 bg-gray-100 text-gray-700 rounded-lg font-semibold hover:bg-gray-200 transition-colors"
+                >
+                  <i class="fas fa-arrow-left mr-2"></i>
+                  Back to Calendar
+                </button>
+                <button 
+                  onclick="processPayment()" 
+                  class="px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all shadow-lg"
+                >
+                  <i class="fas fa-lock mr-2"></i>
+                  Complete Payment
+                </button>
+              </div>
+            </div>
+
+            {/* Step 3: Confirmation */}
+            <div id="bookingStep3" class="booking-step hidden text-center">
+              <div class="max-w-md mx-auto">
+                <div class="w-20 h-20 bg-green-100 rounded-full flex items-center justify-center mx-auto mb-6">
+                  <i class="fas fa-check text-3xl text-green-600"></i>
+                </div>
+                <h3 class="text-2xl font-bold text-gray-900 mb-4">Booking Confirmed!</h3>
+                <p class="text-gray-600 mb-6">Your coaching session has been successfully booked. You'll receive a confirmation email with the meeting details shortly.</p>
+                
+                <div class="bg-gray-50 p-6 rounded-xl mb-6">
+                  <div class="space-y-3 text-left">
+                    <div class="flex justify-between">
+                      <span class="text-gray-600">Expert:</span>
+                      <span id="confirmationExpertName" class="font-semibold"></span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-600">Date & Time:</span>
+                      <span id="confirmationDateTime" class="font-semibold"></span>
+                    </div>
+                    <div class="flex justify-between">
+                      <span class="text-gray-600">Amount Paid:</span>
+                      <span id="confirmationAmount" class="font-semibold text-green-600"></span>
+                    </div>
+                  </div>
+                </div>
+
+                <button 
+                  onclick="closeBookingModal()" 
+                  class="w-full px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-colors"
+                >
+                  Done
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <script dangerouslySetInnerHTML={{
+        __html: `
+          let currentExpert = null;
+          let selectedTime = null;
+          let currentStep = 1;
+          
+          function openBookingModal(expertId, expertName, price, calendlyUrl) {
+            currentExpert = {
+              id: expertId,
+              name: expertName,
+              price: price,
+              calendlyUrl: calendlyUrl
+            };
+            
+            // Reset to step 1
+            currentStep = 1;
+            selectedTime = null;
+            goToStep1();
+            
+            // Update modal content
+            document.getElementById('modalExpertName').textContent = expertName;
+            document.getElementById('modalPrice').textContent = price;
+            document.getElementById('summaryExpertName').textContent = expertName;
+            document.getElementById('summaryPrice').textContent = price;
+            document.getElementById('confirmationExpertName').textContent = expertName;
+            document.getElementById('confirmationAmount').textContent = price;
+            document.getElementById('modalCalendlyUrl').textContent = calendlyUrl;
+            
+            // Calculate payment split
+            const priceNum = parseInt(price.replace('$', ''));
+            const expertAmount = Math.round(priceNum * 0.75);
+            const platformFee = priceNum - expertAmount;
+            
+            document.getElementById('expertAmount').textContent = '$' + expertAmount;
+            document.getElementById('platformFee').textContent = '$' + platformFee;
+            
+            // Set expert image based on name - FIXED Sarah Johnson
+            const imageMap = {
+              'john-smith': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=80&h=80&fit=crop&crop=face',
+              'sarah-johnson': 'https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?w=80&h=80&fit=crop&crop=face',
+              'mike-davis': 'https://images.unsplash.com/photo-1472099645785-5658abf4ff4e?w=80&h=80&fit=crop&crop=face',
+              'lisa-chen': 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=80&h=80&fit=crop&crop=face',
+              'robert-wilson': 'https://images.unsplash.com/photo-1519085360753-af0119f7cbe7?w=80&h=80&fit=crop&crop=face',
+              'emma-rodriguez': 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=80&h=80&fit=crop&crop=face'
+            };
+            
+            const imageUrl = imageMap[expertId] || '';
+            document.getElementById('modalExpertImage').src = imageUrl;
+            document.getElementById('modalExpertImage').alt = expertName;
+            document.getElementById('summaryExpertImage').src = imageUrl;
+            document.getElementById('summaryExpertImage').alt = expertName;
+            
+            // Show modal with animation
+            const modal = document.getElementById('bookingModal');
+            modal.classList.remove('hidden');
+            modal.style.opacity = '0';
+            modal.style.transform = 'scale(0.95)';
+            document.body.style.overflow = 'hidden';
+            
+            // Animate in
+            setTimeout(() => {
+              modal.style.transition = 'all 0.3s ease-out';
+              modal.style.opacity = '1';
+              modal.style.transform = 'scale(1)';
+            }, 10);
+          }
+          
+          function closeBookingModal() {
+            const modal = document.getElementById('bookingModal');
+            modal.style.transition = 'all 0.2s ease-in';
+            modal.style.opacity = '0';
+            modal.style.transform = 'scale(0.95)';
+            
+            setTimeout(() => {
+              modal.classList.add('hidden');
+              modal.style.transition = '';
+              document.body.style.overflow = 'auto';
+            }, 200);
+            
+            currentExpert = null;
+            selectedTime = null;
+            currentStep = 1;
+          }
+          
+          function updateStepUI() {
+            // Hide all steps
+            document.querySelectorAll('.booking-step').forEach(step => {
+              step.classList.add('hidden');
+            });
+            
+            // Show current step
+            document.getElementById('bookingStep' + currentStep).classList.remove('hidden');
+            
+            // Update progress indicators
+            for (let i = 1; i <= 3; i++) {
+              const stepEl = document.getElementById('step' + i);
+              const progressEl = document.getElementById('progress' + i);
+              
+              if (i < currentStep) {
+                // Completed step
+                stepEl.className = 'flex items-center space-x-2 text-green-600';
+                stepEl.querySelector('div').className = 'w-8 h-8 bg-green-600 text-white rounded-full flex items-center justify-center text-sm font-bold';
+                stepEl.querySelector('div').innerHTML = '<i class="fas fa-check"></i>';
+                if (progressEl) progressEl.className = 'w-16 h-1 bg-green-500 rounded';
+              } else if (i === currentStep) {
+                // Current step
+                stepEl.className = 'flex items-center space-x-2 text-blue-600';
+                stepEl.querySelector('div').className = 'w-8 h-8 bg-blue-600 text-white rounded-full flex items-center justify-center text-sm font-bold';
+                stepEl.querySelector('div').textContent = i;
+                if (progressEl) progressEl.className = 'w-16 h-1 bg-gray-300 rounded';
+              } else {
+                // Future step
+                stepEl.className = 'flex items-center space-x-2 text-gray-400';
+                stepEl.querySelector('div').className = 'w-8 h-8 bg-gray-300 text-gray-600 rounded-full flex items-center justify-center text-sm font-bold';
+                stepEl.querySelector('div').textContent = i;
+                if (progressEl) progressEl.className = 'w-16 h-1 bg-gray-300 rounded';
+              }
+            }
+          }
+          
+          function goToStep1() {
+            currentStep = 1;
+            updateStepUI();
+          }
+          
+          function goToStep2() {
+            if (!selectedTime) {
+              alert('Please select a time slot first!');
+              return;
+            }
+            currentStep = 2;
+            document.getElementById('selectedTimeDisplay').textContent = selectedTime;
+            updateStepUI();
+          }
+          
+          function goToStep3() {
+            currentStep = 3;
+            document.getElementById('confirmationDateTime').textContent = selectedTime;
+            updateStepUI();
+          }
+          
+          function selectTimeSlot(button, timeText) {
+            // Remove selection from all slots
+            document.querySelectorAll('.time-slot').forEach(slot => {
+              slot.classList.remove('bg-blue-100', 'border-blue-500', 'text-blue-900');
+              slot.classList.add('bg-green-50', 'border-green-200', 'text-green-700');
+            });
+            
+            // Highlight selected slot
+            button.classList.remove('bg-green-50', 'border-green-200', 'text-green-700');
+            button.classList.add('bg-blue-100', 'border-blue-500', 'text-blue-900');
+            
+            // Store selected time
+            selectedTime = timeText;
+            
+            // Enable next button
+            const nextBtn = document.getElementById('nextToPayment');
+            nextBtn.disabled = false;
+            nextBtn.className = 'px-8 py-3 bg-blue-600 text-white rounded-lg font-semibold hover:bg-blue-700 transition-all cursor-pointer';
+            nextBtn.innerHTML = 'Continue to Payment <i class="fas fa-arrow-right ml-2"></i>';
+          }
+          
+          function fillDummyCardInfo() {
+            document.getElementById('cardNumber').value = '4242 4242 4242 4242';
+            document.getElementById('cardExpiry').value = '12/28';
+            document.getElementById('cardCvc').value = '123';
+            document.getElementById('cardName').value = 'Ashley Kemp';
+            
+            // Add visual feedback
+            showToast('Dummy card info filled!', 'success');
+            
+            // Highlight the fields briefly
+            const fields = ['cardNumber', 'cardExpiry', 'cardCvc', 'cardName'];
+            fields.forEach(fieldId => {
+              const field = document.getElementById(fieldId);
+              field.style.backgroundColor = '#dbeafe';
+              field.style.borderColor = '#3b82f6';
+              setTimeout(() => {
+                field.style.backgroundColor = '';
+                field.style.borderColor = '';
+              }, 1000);
+            });
+          }
+          
+          function processPayment() {
+            if (!currentExpert || !selectedTime) return;
+            
+            // Simulate payment processing
+            const button = event.target;
+            const originalText = button.innerHTML;
+            
+            button.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Processing Payment...';
+            button.disabled = true;
+            button.className = 'px-8 py-3 bg-gray-400 text-white rounded-lg font-semibold cursor-not-allowed';
+            
+            setTimeout(() => {
+              // Show success step
+              goToStep3();
+              
+              // Show success toast
+              showToast('Payment successful! Booking confirmed.', 'success');
+              
+              button.innerHTML = originalText;
+              button.disabled = false;
+              button.className = 'px-8 py-3 bg-gradient-to-r from-green-600 to-green-700 text-white rounded-lg font-semibold hover:from-green-700 hover:to-green-800 transition-all shadow-lg';
+            }, 2500);
+          }
+          
+          function showToast(message, type = 'success') {
+            const toast = document.createElement('div');
+            toast.className = \`fixed top-4 right-4 z-[60] p-4 rounded-lg shadow-lg transform translate-x-full transition-transform duration-300 \${
+              type === 'success' ? 'bg-green-500 text-white' : 'bg-red-500 text-white'
+            }\`;
+            toast.innerHTML = \`
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-\${type === 'success' ? 'check-circle' : 'exclamation-circle'}"></i>
+                <span>\${message}</span>
+              </div>
+            \`;
+            
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+              toast.style.transform = 'translateX(0)';
+            }, 100);
+            
+            setTimeout(() => {
+              toast.style.transform = 'translateX(100%)';
+              setTimeout(() => document.body.removeChild(toast), 300);
+            }, 3000);
+          }
+          
+          // Close modal on outside click
+          document.getElementById('bookingModal').addEventListener('click', function(e) {
+            if (e.target === this) {
+              closeBookingModal();
+            }
+          });
+          
+          // Keyboard navigation
+          document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && !document.getElementById('bookingModal').classList.contains('hidden')) {
+              closeBookingModal();
+            }
+          });
+          
+          // Initialize step UI on load
+          document.addEventListener('DOMContentLoaded', function() {
+            updateStepUI();
+          });
+        `
+      }} />
     </Layout>,
     { title: 'Expert Directory - Digital Era' }
   )
@@ -1677,6 +2368,362 @@ app.get('/lesson/:courseId/:lessonId', async (c) => {
   )
 })
 
+// Admin Login page
+app.get('/admin/login', (c) => {
+  return c.render(
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Login - Digital Era</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+      </head>
+      <body class="bg-gradient-to-br from-slate-900 to-slate-800 min-h-screen flex items-center justify-center">
+        <div class="max-w-md w-full mx-4">
+          <div class="bg-white rounded-xl shadow-2xl p-8">
+            <div class="text-center mb-8">
+              <div class="w-16 h-16 bg-gradient-to-r from-blue-500 to-purple-600 rounded-xl flex items-center justify-center mx-auto mb-4">
+                <i class="fas fa-shield-alt text-white text-2xl"></i>
+              </div>
+              <h1 class="text-2xl font-bold text-gray-900">Admin Login</h1>
+              <p class="text-gray-600 mt-2">Access the Digital Era admin panel</p>
+            </div>
+
+            <form id="adminLoginForm">
+              <div class="space-y-6">
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                  <input 
+                    type="email" 
+                    id="adminEmail"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="admin@digitalera.com"
+                  />
+                </div>
+                
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Password</label>
+                  <input 
+                    type="password" 
+                    id="adminPassword"
+                    required
+                    class="w-full px-4 py-3 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    placeholder="Enter your admin password"
+                  />
+                </div>
+
+                <div class="flex items-center justify-between">
+                  <label class="flex items-center">
+                    <input type="checkbox" class="rounded border-gray-300 text-blue-600 shadow-sm focus:border-blue-300 focus:ring focus:ring-blue-200 focus:ring-opacity-50" />
+                    <span class="ml-2 text-sm text-gray-600">Remember me</span>
+                  </label>
+                  <a href="#" class="text-sm text-blue-600 hover:text-blue-800">Forgot password?</a>
+                </div>
+
+                <button 
+                  type="submit" 
+                  class="w-full bg-blue-600 text-white py-3 rounded-lg font-medium hover:bg-blue-700 transition-colors focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                >
+                  <i class="fas fa-sign-in-alt mr-2"></i>
+                  Sign In to Admin Panel
+                </button>
+              </div>
+            </form>
+
+            <div class="mt-6 text-center">
+              <p class="text-sm text-gray-500">
+                Demo Credentials: 
+                <span class="font-medium">admin@digitalera.com</span> / 
+                <span class="font-medium">admin123</span>
+              </p>
+            </div>
+
+            <div class="mt-6 text-center">
+              <a href="/" class="text-sm text-gray-600 hover:text-gray-800">
+                <i class="fas fa-arrow-left mr-1"></i>
+                Back to Member Portal
+              </a>
+            </div>
+          </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            document.getElementById('adminLoginForm').addEventListener('submit', async function(e) {
+              e.preventDefault();
+              
+              const email = document.getElementById('adminEmail').value;
+              const password = document.getElementById('adminPassword').value;
+              
+              try {
+                const response = await axios.post('/api/admin/login', { email, password });
+                if (response.data.success) {
+                  window.location.href = '/admin/dashboard';
+                } else {
+                  alert('Invalid credentials. Please try again.');
+                }
+              } catch (error) {
+                alert('Login failed. Please check your credentials.');
+              }
+            });
+          `
+        }} />
+      </body>
+    </html>,
+    { title: 'Admin Login - Digital Era' }
+  )
+})
+
+// Admin Dashboard
+app.get('/admin/dashboard', (c) => {
+  return c.render(
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Admin Dashboard - Digital Era</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+      </head>
+      <body class="bg-gray-50">
+        <div class="min-h-screen flex">
+          {/* Admin Sidebar */}
+          <div class="w-64 bg-slate-900 text-white flex flex-col">
+            <div class="p-6 border-b border-slate-700">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-4">
+                  <i class="fas fa-shield-alt text-white text-base"></i>
+                </div>
+                <div>
+                  <span class="font-bold text-lg">ADMIN PANEL</span>
+                  <p class="text-slate-400 text-xs">Digital Era</p>
+                </div>
+              </div>
+            </div>
+
+            <nav class="flex-1 py-6">
+              <div class="space-y-2 px-4">
+                <a href="/admin/dashboard" class="flex items-center px-4 py-3 rounded-lg text-base font-medium bg-blue-600 text-white">
+                  <i class="fas fa-tachometer-alt mr-4 w-5 text-lg"></i>Dashboard
+                </a>
+                <a href="/admin/users" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-users mr-4 w-5 text-lg"></i>User Management
+                </a>
+                <a href="/admin/courses" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-graduation-cap mr-4 w-5 text-lg"></i>Course Management
+                </a>
+                <a href="/admin/content" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-video mr-4 w-5 text-lg"></i>Content Management
+                </a>
+                <a href="/admin/analytics" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-chart-bar mr-4 w-5 text-lg"></i>Analytics
+                </a>
+                <a href="/admin/settings" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-cog mr-4 w-5 text-lg"></i>Settings
+                </a>
+              </div>
+            </nav>
+
+            <div class="p-4 border-t border-slate-700">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff&size=32" alt="Admin" class="w-8 h-8 rounded-full mr-3" />
+                  <div>
+                    <p class="text-sm font-medium">Admin User</p>
+                    <p class="text-xs text-slate-400">Administrator</p>
+                  </div>
+                </div>
+                <a href="/" class="text-slate-400 hover:text-white">
+                  <i class="fas fa-sign-out-alt"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div class="flex-1 flex flex-col">
+            <header class="bg-white border-b border-gray-200 px-6 py-4">
+              <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold text-gray-900">Admin Dashboard</h1>
+                <div class="flex items-center space-x-4">
+                  <button class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-plus mr-2"></i>Quick Actions
+                  </button>
+                </div>
+              </div>
+            </header>
+
+            <main class="flex-1 p-6">
+              {/* Admin Stats */}
+              <div class="grid grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                  <div class="flex items-center">
+                    <div class="w-12 h-12 bg-blue-100 rounded-lg flex items-center justify-center mr-4">
+                      <i class="fas fa-users text-blue-600 text-xl"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500 mb-1">Total Users</p>
+                      <p class="text-2xl font-bold text-gray-900">2,847</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                  <div class="flex items-center">
+                    <div class="w-12 h-12 bg-green-100 rounded-lg flex items-center justify-center mr-4">
+                      <i class="fas fa-graduation-cap text-green-600 text-xl"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500 mb-1">Total Courses</p>
+                      <p class="text-2xl font-bold text-gray-900">45</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                  <div class="flex items-center">
+                    <div class="w-12 h-12 bg-yellow-100 rounded-lg flex items-center justify-center mr-4">
+                      <i class="fas fa-video text-yellow-600 text-xl"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500 mb-1">Total Lessons</p>
+                      <p class="text-2xl font-bold text-gray-900">324</p>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                  <div class="flex items-center">
+                    <div class="w-12 h-12 bg-purple-100 rounded-lg flex items-center justify-center mr-4">
+                      <i class="fas fa-dollar-sign text-purple-600 text-xl"></i>
+                    </div>
+                    <div>
+                      <p class="text-sm text-gray-500 mb-1">Revenue</p>
+                      <p class="text-2xl font-bold text-gray-900">$127,450</p>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Quick Actions */}
+              <div class="grid grid-cols-3 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                  <h3 class="text-lg font-semibold text-gray-900 mb-4">Quick Actions</h3>
+                  <div class="space-y-3">
+                    <button onclick="window.location.href='/admin/users/add'" class="w-full bg-blue-50 text-blue-700 p-3 rounded-lg hover:bg-blue-100 text-left">
+                      <i class="fas fa-user-plus mr-3"></i>Add New User
+                    </button>
+                    <button onclick="window.location.href='/admin/courses/add'" class="w-full bg-green-50 text-green-700 p-3 rounded-lg hover:bg-green-100 text-left">
+                      <i class="fas fa-plus mr-3"></i>Create Course
+                    </button>
+                    <button onclick="window.location.href='/admin/content/upload'" class="w-full bg-purple-50 text-purple-700 p-3 rounded-lg hover:bg-purple-100 text-left">
+                      <i class="fas fa-upload mr-3"></i>Upload Content
+                    </button>
+                  </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                  <h3 class="text-lg font-semibold text-gray-900 mb-4">Recent Activity</h3>
+                  <div class="space-y-3">
+                    <div class="flex items-center text-sm">
+                      <div class="w-2 h-2 bg-green-500 rounded-full mr-3"></div>
+                      <span class="text-gray-600">New user registered</span>
+                    </div>
+                    <div class="flex items-center text-sm">
+                      <div class="w-2 h-2 bg-blue-500 rounded-full mr-3"></div>
+                      <span class="text-gray-600">Course completed</span>
+                    </div>
+                    <div class="flex items-center text-sm">
+                      <div class="w-2 h-2 bg-yellow-500 rounded-full mr-3"></div>
+                      <span class="text-gray-600">Payment received</span>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                  <h3 class="text-lg font-semibold text-gray-900 mb-4">System Status</h3>
+                  <div class="space-y-3">
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-gray-600">Server Status</span>
+                      <span class="text-green-600 text-sm font-medium">Online</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-gray-600">Database</span>
+                      <span class="text-green-600 text-sm font-medium">Connected</span>
+                    </div>
+                    <div class="flex items-center justify-between">
+                      <span class="text-sm text-gray-600">Storage</span>
+                      <span class="text-blue-600 text-sm font-medium">82% Used</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Analytics Chart */}
+              <div class="bg-white rounded-xl p-6 shadow-sm border border-gray-100">
+                <h3 class="text-lg font-semibold text-gray-900 mb-4">User Growth & Revenue</h3>
+                <canvas id="analyticsChart" width="400" height="200"></canvas>
+              </div>
+            </main>
+          </div>
+        </div>
+
+        <script src="https://cdn.jsdelivr.net/npm/axios@1.6.0/dist/axios.min.js"></script>
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            // Initialize analytics chart
+            const ctx = document.getElementById('analyticsChart').getContext('2d');
+            const chart = new Chart(ctx, {
+              type: 'line',
+              data: {
+                labels: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug'],
+                datasets: [{
+                  label: 'Users',
+                  data: [120, 190, 300, 500, 800, 1200, 1800, 2847],
+                  borderColor: 'rgb(59, 130, 246)',
+                  backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                  tension: 0.4
+                }, {
+                  label: 'Revenue ($)',
+                  data: [1200, 2300, 4500, 7800, 12000, 18500, 25000, 35000],
+                  borderColor: 'rgb(16, 185, 129)',
+                  backgroundColor: 'rgba(16, 185, 129, 0.1)',
+                  tension: 0.4
+                }]
+              },
+              options: {
+                responsive: true,
+                scales: {
+                  y: {
+                    beginAtZero: true
+                  }
+                }
+              }
+            });
+          `
+        }} />
+      </body>
+    </html>,
+    { title: 'Admin Dashboard - Digital Era' }
+  )
+})
+
+// Admin API - Login
+app.post('/api/admin/login', async (c) => {
+  const { email, password } = await c.req.json()
+  
+  // Simple demo authentication - in production, use proper auth
+  if (email === 'admin@digitalera.com' && password === 'admin123') {
+    return c.json({ success: true, message: 'Login successful' })
+  } else {
+    return c.json({ success: false, message: 'Invalid credentials' }, 401)
+  }
+})
+
 // Lesson completion API
 app.post('/api/lesson/:courseId/:lessonId/complete', async (c) => {
   const courseId = c.req.param('courseId')
@@ -1696,6 +2743,545 @@ app.post('/api/lesson/:courseId/:lessonId/complete', async (c) => {
   } catch (error) {
     return c.json({ success: false, error: 'Failed to mark lesson complete' }, 500)
   }
+})
+
+// Admin User Management
+app.get('/admin/users', (c) => {
+  return c.render(
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>User Management - Admin</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+      </head>
+      <body class="bg-gray-50">
+        <div class="min-h-screen flex">
+          {/* Admin Sidebar - Same as dashboard */}
+          <div class="w-64 bg-slate-900 text-white flex flex-col">
+            <div class="p-6 border-b border-slate-700">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-4">
+                  <i class="fas fa-shield-alt text-white text-base"></i>
+                </div>
+                <div>
+                  <span class="font-bold text-lg">ADMIN PANEL</span>
+                  <p class="text-slate-400 text-xs">Digital Era</p>
+                </div>
+              </div>
+            </div>
+
+            <nav class="flex-1 py-6">
+              <div class="space-y-2 px-4">
+                <a href="/admin/dashboard" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-tachometer-alt mr-4 w-5 text-lg"></i>Dashboard
+                </a>
+                <a href="/admin/users" class="flex items-center px-4 py-3 rounded-lg text-base font-medium bg-blue-600 text-white">
+                  <i class="fas fa-users mr-4 w-5 text-lg"></i>User Management
+                </a>
+                <a href="/admin/courses" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-graduation-cap mr-4 w-5 text-lg"></i>Course Management
+                </a>
+                <a href="/admin/content" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-video mr-4 w-5 text-lg"></i>Content Management
+                </a>
+                <a href="/admin/analytics" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-chart-bar mr-4 w-5 text-lg"></i>Analytics
+                </a>
+                <a href="/admin/settings" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-cog mr-4 w-5 text-lg"></i>Settings
+                </a>
+              </div>
+            </nav>
+
+            <div class="p-4 border-t border-slate-700">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff&size=32" alt="Admin" class="w-8 h-8 rounded-full mr-3" />
+                  <div>
+                    <p class="text-sm font-medium">Admin User</p>
+                    <p class="text-xs text-slate-400">Administrator</p>
+                  </div>
+                </div>
+                <a href="/" class="text-slate-400 hover:text-white">
+                  <i class="fas fa-sign-out-alt"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div class="flex-1 flex flex-col">
+            <header class="bg-white border-b border-gray-200 px-6 py-4">
+              <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold text-gray-900">User Management</h1>
+                <div class="flex items-center space-x-4">
+                  <button id="addUserBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-plus mr-2"></i>Add New User
+                  </button>
+                  <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-download mr-2"></i>Export Users
+                  </button>
+                </div>
+              </div>
+            </header>
+
+            <main class="flex-1 p-6">
+              {/* User Stats */}
+              <div class="grid grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                  <div class="text-center">
+                    <div class="text-2xl font-bold text-blue-600">2,847</div>
+                    <div class="text-sm text-gray-500">Total Users</div>
+                  </div>
+                </div>
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                  <div class="text-center">
+                    <div class="text-2xl font-bold text-green-600">2,156</div>
+                    <div class="text-sm text-gray-500">Active Users</div>
+                  </div>
+                </div>
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                  <div class="text-center">
+                    <div class="text-2xl font-bold text-yellow-600">524</div>
+                    <div class="text-sm text-gray-500">Trial Members</div>
+                  </div>
+                </div>
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100">
+                  <div class="text-center">
+                    <div class="text-2xl font-bold text-purple-600">167</div>
+                    <div class="text-sm text-gray-500">Premium Members</div>
+                  </div>
+                </div>
+              </div>
+
+              {/* Users Table */}
+              <div class="bg-white rounded-xl shadow-sm border border-gray-100">
+                <div class="p-6 border-b border-gray-200">
+                  <div class="flex items-center justify-between">
+                    <h3 class="text-lg font-semibold text-gray-900">All Users</h3>
+                    <div class="flex items-center space-x-4">
+                      <input type="text" placeholder="Search users..." class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                      <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                        <option>All Roles</option>
+                        <option>Admin</option>
+                        <option>Premium</option>
+                        <option>Trial</option>
+                      </select>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="overflow-x-auto">
+                  <table class="w-full">
+                    <thead class="bg-gray-50">
+                      <tr>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">User</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Email</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Role</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Status</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Joined</th>
+                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">Actions</th>
+                      </tr>
+                    </thead>
+                    <tbody class="bg-white divide-y divide-gray-200">
+                      <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="flex items-center">
+                            <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name=Ashley+Kemp&background=6366f1&color=fff" alt="" />
+                            <div class="ml-4">
+                              <div class="text-sm font-medium text-gray-900">Ashley Kemp</div>
+                              <div class="text-sm text-gray-500">ID: 001</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">ashley@digitalera.com</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-purple-100 text-purple-800">Premium</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Jan 15, 2024</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                          <button class="text-red-600 hover:text-red-900">Delete</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="flex items-center">
+                            <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name=John+Smith&background=10b981&color=fff" alt="" />
+                            <div class="ml-4">
+                              <div class="text-sm font-medium text-gray-900">John Smith</div>
+                              <div class="text-sm text-gray-500">ID: 002</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">john@example.com</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-yellow-100 text-yellow-800">Trial</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Mar 22, 2024</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                          <button class="text-red-600 hover:text-red-900">Delete</button>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <div class="flex items-center">
+                            <img class="h-10 w-10 rounded-full" src="https://ui-avatars.com/api/?name=Sarah+Johnson&background=ef4444&color=fff" alt="" />
+                            <div class="ml-4">
+                              <div class="text-sm font-medium text-gray-900">Sarah Johnson</div>
+                              <div class="text-sm text-gray-500">ID: 003</div>
+                            </div>
+                          </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">sarah@example.com</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-blue-100 text-blue-800">Admin</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                          <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full bg-green-100 text-green-800">Active</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-500">Feb 08, 2024</td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
+                          <button class="text-blue-600 hover:text-blue-900 mr-3">Edit</button>
+                          <button class="text-red-600 hover:text-red-900">Delete</button>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+
+                <div class="bg-white px-4 py-3 flex items-center justify-between border-t border-gray-200">
+                  <div class="flex-1 flex justify-between sm:hidden">
+                    <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Previous</a>
+                    <a href="#" class="ml-3 relative inline-flex items-center px-4 py-2 border border-gray-300 text-sm font-medium rounded-md text-gray-700 bg-white hover:bg-gray-50">Next</a>
+                  </div>
+                  <div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+                    <div>
+                      <p class="text-sm text-gray-700">
+                        Showing <span class="font-medium">1</span> to <span class="font-medium">10</span> of <span class="font-medium">2,847</span> results
+                      </p>
+                    </div>
+                    <div>
+                      <nav class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                          <i class="fas fa-chevron-left"></i>
+                        </a>
+                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">1</a>
+                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">2</a>
+                        <a href="#" class="relative inline-flex items-center px-4 py-2 border border-gray-300 bg-white text-sm font-medium text-gray-700 hover:bg-gray-50">3</a>
+                        <a href="#" class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-gray-300 bg-white text-sm font-medium text-gray-500 hover:bg-gray-50">
+                          <i class="fas fa-chevron-right"></i>
+                        </a>
+                      </nav>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </main>
+          </div>
+        </div>
+
+        {/* Add User Modal */}
+        <div id="addUserModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+              <h3 class="text-lg font-medium text-gray-900 mb-4">Add New User</h3>
+              <form id="addUserForm">
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Full Name</label>
+                    <input type="text" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Email</label>
+                    <input type="email" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Role</label>
+                    <select class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                      <option>Trial</option>
+                      <option>Premium</option>
+                      <option>Admin</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Password</label>
+                    <input type="password" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+                  </div>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                  <button type="button" id="cancelAddUser" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+                  <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Add User</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            // Modal functionality
+            document.getElementById('addUserBtn').addEventListener('click', function() {
+              document.getElementById('addUserModal').classList.remove('hidden');
+            });
+
+            document.getElementById('cancelAddUser').addEventListener('click', function() {
+              document.getElementById('addUserModal').classList.add('hidden');
+            });
+
+            // Form submission
+            document.getElementById('addUserForm').addEventListener('submit', function(e) {
+              e.preventDefault();
+              alert('User would be added to the system');
+              document.getElementById('addUserModal').classList.add('hidden');
+            });
+          `
+        }} />
+      </body>
+    </html>,
+    { title: 'User Management - Admin' }
+  )
+})
+
+// Admin Course Management  
+app.get('/admin/courses', (c) => {
+  return c.render(
+    <html lang="en">
+      <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Course Management - Admin</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css" rel="stylesheet" />
+      </head>
+      <body class="bg-gray-50">
+        <div class="min-h-screen flex">
+          {/* Admin Sidebar */}
+          <div class="w-64 bg-slate-900 text-white flex flex-col">
+            <div class="p-6 border-b border-slate-700">
+              <div class="flex items-center">
+                <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-4">
+                  <i class="fas fa-shield-alt text-white text-base"></i>
+                </div>
+                <div>
+                  <span class="font-bold text-lg">ADMIN PANEL</span>
+                  <p class="text-slate-400 text-xs">Digital Era</p>
+                </div>
+              </div>
+            </div>
+
+            <nav class="flex-1 py-6">
+              <div class="space-y-2 px-4">
+                <a href="/admin/dashboard" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-tachometer-alt mr-4 w-5 text-lg"></i>Dashboard
+                </a>
+                <a href="/admin/users" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-users mr-4 w-5 text-lg"></i>User Management
+                </a>
+                <a href="/admin/courses" class="flex items-center px-4 py-3 rounded-lg text-base font-medium bg-blue-600 text-white">
+                  <i class="fas fa-graduation-cap mr-4 w-5 text-lg"></i>Course Management
+                </a>
+                <a href="/admin/content" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-video mr-4 w-5 text-lg"></i>Content Management
+                </a>
+                <a href="/admin/analytics" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-chart-bar mr-4 w-5 text-lg"></i>Analytics
+                </a>
+                <a href="/admin/settings" class="flex items-center px-4 py-3 rounded-lg text-base font-medium text-gray-300 hover:bg-slate-700 hover:text-white transition-colors">
+                  <i class="fas fa-cog mr-4 w-5 text-lg"></i>Settings
+                </a>
+              </div>
+            </nav>
+
+            <div class="p-4 border-t border-slate-700">
+              <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                  <img src="https://ui-avatars.com/api/?name=Admin&background=6366f1&color=fff&size=32" alt="Admin" class="w-8 h-8 rounded-full mr-3" />
+                  <div>
+                    <p class="text-sm font-medium">Admin User</p>
+                    <p class="text-xs text-slate-400">Administrator</p>
+                  </div>
+                </div>
+                <a href="/" class="text-slate-400 hover:text-white">
+                  <i class="fas fa-sign-out-alt"></i>
+                </a>
+              </div>
+            </div>
+          </div>
+
+          {/* Main Content */}
+          <div class="flex-1 flex flex-col">
+            <header class="bg-white border-b border-gray-200 px-6 py-4">
+              <div class="flex items-center justify-between">
+                <h1 class="text-2xl font-bold text-gray-900">Course Management</h1>
+                <div class="flex items-center space-x-4">
+                  <button id="addCourseBtn" class="bg-blue-600 text-white px-4 py-2 rounded-lg hover:bg-blue-700">
+                    <i class="fas fa-plus mr-2"></i>Add New Course
+                  </button>
+                  <button class="bg-green-600 text-white px-4 py-2 rounded-lg hover:bg-green-700">
+                    <i class="fas fa-upload mr-2"></i>Bulk Import
+                  </button>
+                </div>
+              </div>
+            </header>
+
+            <main class="flex-1 p-6">
+              {/* Course Stats */}
+              <div class="grid grid-cols-4 gap-6 mb-8">
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
+                  <div class="text-2xl font-bold text-blue-600">45</div>
+                  <div class="text-sm text-gray-500">Total Courses</div>
+                </div>
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
+                  <div class="text-2xl font-bold text-green-600">324</div>
+                  <div class="text-sm text-gray-500">Total Lessons</div>
+                </div>
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
+                  <div class="text-2xl font-bold text-yellow-600">12</div>
+                  <div class="text-sm text-gray-500">Draft Courses</div>
+                </div>
+                <div class="bg-white rounded-xl p-4 shadow-sm border border-gray-100 text-center">
+                  <div class="text-2xl font-bold text-purple-600">89%</div>
+                  <div class="text-sm text-gray-500">Completion Rate</div>
+                </div>
+              </div>
+
+              {/* Courses Grid */}
+              <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-6">
+                <div class="flex items-center justify-between mb-6">
+                  <h3 class="text-lg font-semibold text-gray-900">All Courses</h3>
+                  <div class="flex items-center space-x-4">
+                    <input type="text" placeholder="Search courses..." class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500" />
+                    <select class="px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500">
+                      <option>All Categories</option>
+                      <option>Business</option>
+                      <option>Social Media</option>
+                      <option>Sales</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-3 gap-6">
+                  <div class="border border-gray-200 rounded-lg p-4">
+                    <img src="https://images.unsplash.com/photo-1611162617474-5b21e879e113?w=300" alt="TikTok Mastery" class="w-full h-32 object-cover rounded-lg mb-4" />
+                    <h4 class="font-semibold text-gray-900 mb-2">TIK-TOK MASTERY</h4>
+                    <p class="text-sm text-gray-600 mb-3">6 modules • 25 lessons</p>
+                    <div class="flex items-center justify-between mb-3">
+                      <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Published</span>
+                      <span class="text-sm text-gray-500">2,847 enrolled</span>
+                    </div>
+                    <div class="flex space-x-2">
+                      <button class="text-blue-600 hover:text-blue-800 text-sm">Edit</button>
+                      <button class="text-green-600 hover:text-green-800 text-sm">View</button>
+                      <button class="text-red-600 hover:text-red-800 text-sm">Delete</button>
+                    </div>
+                  </div>
+
+                  <div class="border border-gray-200 rounded-lg p-4">
+                    <img src="https://images.unsplash.com/photo-1560472354-b33ff0c44a43?w=300" alt="Business Blueprint" class="w-full h-32 object-cover rounded-lg mb-4" />
+                    <h4 class="font-semibold text-gray-900 mb-2">The Business Blueprint</h4>
+                    <p class="text-sm text-gray-600 mb-3">8 modules • 45 lessons</p>
+                    <div class="flex items-center justify-between mb-3">
+                      <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Published</span>
+                      <span class="text-sm text-gray-500">1,523 enrolled</span>
+                    </div>
+                    <div class="flex space-x-2">
+                      <button class="text-blue-600 hover:text-blue-800 text-sm">Edit</button>
+                      <button class="text-green-600 hover:text-green-800 text-sm">View</button>
+                      <button class="text-red-600 hover:text-red-800 text-sm">Delete</button>
+                    </div>
+                  </div>
+
+                  <div class="border border-gray-200 rounded-lg p-4">
+                    <img src="https://images.unsplash.com/photo-1611224923853-80b023f02d71?w=300" alt="Facebook Ads" class="w-full h-32 object-cover rounded-lg mb-4" />
+                    <h4 class="font-semibold text-gray-900 mb-2">Facebook Advertising Mastery</h4>
+                    <p class="text-sm text-gray-600 mb-3">5 modules • 32 lessons</p>
+                    <div class="flex items-center justify-between mb-3">
+                      <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Draft</span>
+                      <span class="text-sm text-gray-500">0 enrolled</span>
+                    </div>
+                    <div class="flex space-x-2">
+                      <button class="text-blue-600 hover:text-blue-800 text-sm">Edit</button>
+                      <button class="text-green-600 hover:text-green-800 text-sm">Preview</button>
+                      <button class="text-red-600 hover:text-red-800 text-sm">Delete</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </main>
+          </div>
+        </div>
+
+        {/* Add Course Modal */}
+        <div id="addCourseModal" class="hidden fixed inset-0 bg-gray-600 bg-opacity-50 overflow-y-auto h-full w-full z-50">
+          <div class="relative top-20 mx-auto p-5 border w-96 shadow-lg rounded-md bg-white">
+            <div class="mt-3">
+              <h3 class="text-lg font-medium text-gray-900 mb-4">Add New Course</h3>
+              <form id="addCourseForm">
+                <div class="space-y-4">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Course Title</label>
+                    <input type="text" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Description</label>
+                    <textarea rows="3" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500"></textarea>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Category</label>
+                    <select class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500">
+                      <option>Business</option>
+                      <option>Social Media</option>
+                      <option>Sales</option>
+                      <option>Marketing</option>
+                    </select>
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700">Thumbnail URL</label>
+                    <input type="url" class="mt-1 block w-full px-3 py-2 border border-gray-300 rounded-md shadow-sm focus:outline-none focus:ring-blue-500 focus:border-blue-500" />
+                  </div>
+                </div>
+                <div class="flex justify-end space-x-3 mt-6">
+                  <button type="button" id="cancelAddCourse" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md hover:bg-gray-400">Cancel</button>
+                  <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-md hover:bg-blue-700">Create Course</button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        <script dangerouslySetInnerHTML={{
+          __html: `
+            // Modal functionality
+            document.getElementById('addCourseBtn').addEventListener('click', function() {
+              document.getElementById('addCourseModal').classList.remove('hidden');
+            });
+
+            document.getElementById('cancelAddCourse').addEventListener('click', function() {
+              document.getElementById('addCourseModal').classList.add('hidden');
+            });
+
+            // Form submission
+            document.getElementById('addCourseForm').addEventListener('submit', function(e) {
+              e.preventDefault();
+              alert('Course would be created in the system');
+              document.getElementById('addCourseModal').classList.add('hidden');
+            });
+          `
+        }} />
+      </body>
+    </html>,
+    { title: 'Course Management - Admin' }
+  )
 })
 
 export default app
