@@ -33,50 +33,50 @@ async function safeDBQuery(db: any, query: string, params: any[] = []) {
 const Layout = ({ children, title, currentPage }: { children: any, title: string, currentPage: string }) => (
   <div class="min-h-screen bg-gray-50 flex">
     {/* Dark Sidebar */}
-    <div class="w-48 bg-slate-800 text-white flex flex-col">
+    <div class="w-64 bg-slate-800 text-white flex flex-col">
       {/* Logo */}
-      <div class="p-4 border-b border-slate-700">
+      <div class="p-6 border-b border-slate-700">
         <div class="flex items-center">
-          <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3">
-            <i class="fas fa-bolt text-white text-sm"></i>
+          <div class="w-10 h-10 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-4">
+            <i class="fas fa-bolt text-white text-base"></i>
           </div>
-          <span class="font-bold text-lg">DIGITAL ERA</span>
+          <span class="font-bold text-xl">DIGITAL ERA</span>
         </div>
       </div>
 
       {/* Navigation */}
-      <nav class="flex-1 py-4">
-        <div class="space-y-1 px-3">
-          <a href="/" class={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${currentPage === 'dashboard' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
-            <i class="fas fa-tachometer-alt mr-3 w-4"></i>
+      <nav class="flex-1 py-6">
+        <div class="space-y-2 px-4">
+          <a href="/" class={`flex items-center px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 ${currentPage === 'dashboard' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
+            <i class="fas fa-tachometer-alt mr-4 w-5 text-lg"></i>
             Dashboard
           </a>
-          <a href="/courses" class={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${currentPage === 'courses' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
-            <i class="fas fa-graduation-cap mr-3 w-4"></i>
+          <a href="/courses" class={`flex items-center px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 ${currentPage === 'courses' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
+            <i class="fas fa-graduation-cap mr-4 w-5 text-lg"></i>
             All Courses
           </a>
-          <a href="/experts" class={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${currentPage === 'experts' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
-            <i class="fas fa-users mr-3 w-4"></i>
+          <a href="/experts" class={`flex items-center px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 ${currentPage === 'experts' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
+            <i class="fas fa-users mr-4 w-5 text-lg"></i>
             Expert Directory
           </a>
-          <a href="/dmo" class={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${currentPage === 'dmo' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
-            <i class="fas fa-calendar-check mr-3 w-4"></i>
+          <a href="/dmo" class={`flex items-center px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 ${currentPage === 'dmo' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
+            <i class="fas fa-calendar-check mr-4 w-5 text-lg"></i>
             Daily Method (DMO)
           </a>
-          <a href="/affiliate" class={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${currentPage === 'affiliate' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
-            <i class="fas fa-handshake mr-3 w-4"></i>
+          <a href="/affiliate" class={`flex items-center px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 ${currentPage === 'affiliate' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
+            <i class="fas fa-handshake mr-4 w-5 text-lg"></i>
             Affiliate Portal
           </a>
-          <a href="/statistics" class={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${currentPage === 'statistics' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
-            <i class="fas fa-chart-bar mr-3 w-4"></i>
+          <a href="/statistics" class={`flex items-center px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 ${currentPage === 'statistics' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
+            <i class="fas fa-chart-bar mr-4 w-5 text-lg"></i>
             Statistics
           </a>
-          <a href="/leads" class={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${currentPage === 'leads' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
-            <i class="fas fa-user-plus mr-3 w-4"></i>
+          <a href="/leads" class={`flex items-center px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 ${currentPage === 'leads' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
+            <i class="fas fa-user-plus mr-4 w-5 text-lg"></i>
             Leads
           </a>
-          <a href="/profile" class={`flex items-center px-3 py-2 rounded-md text-sm font-medium ${currentPage === 'profile' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
-            <i class="fas fa-user mr-3 w-4"></i>
+          <a href="/profile" class={`flex items-center px-4 py-3 rounded-lg text-base font-medium transition-colors duration-200 ${currentPage === 'profile' ? 'bg-blue-600 text-white' : 'text-gray-300 hover:bg-slate-700 hover:text-white'}`}>
+            <i class="fas fa-user mr-4 w-5 text-lg"></i>
             Profile
           </a>
         </div>
@@ -138,8 +138,8 @@ const Layout = ({ children, title, currentPage }: { children: any, title: string
               
               {/* Notification Bell */}
               <div class="relative">
-                <button id="notificationBtn" class="p-2 text-gray-400 hover:text-gray-600 relative">
-                  <i class="fas fa-bell"></i>
+                <button id="notificationBtn" class="p-2 text-gray-400 hover:text-gray-600 rounded-lg transition-colors duration-200">
+                  <i class="fas fa-bell text-lg"></i>
                   <span id="notificationBadge" class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
                 </button>
 {/* Notifications Dropdown */}
@@ -227,7 +227,7 @@ app.get('/', async (c) => {
     const newLeads = 47
 
     return c.render(
-      <Layout title="Digital Era" currentPage="dashboard">
+      <Layout title="Dashboard" currentPage="dashboard">
         {/* Welcome Banner */}
         <div class="bg-gradient-to-r from-purple-500 to-blue-600 rounded-xl p-6 text-white mb-8">
           <div class="flex items-center">

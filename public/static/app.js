@@ -73,10 +73,10 @@ function performSearch(query) {
   });
   
   if (results.length > 0) {
-    showNotification(`Found ${results.length} result(s) for "${query}"`, 'success');
+    console.log(`Found ${results.length} result(s) for "${query}"`);
     highlightSearchResults(results);
   } else {
-    showNotification(`No results found for "${query}"`, 'info');
+    console.log(`No results found for "${query}"`);
   }
 }
 
@@ -287,16 +287,19 @@ document.addEventListener('click', function(e) {
 
 // Course card interactions - ENHANCED
 function initializeCourseCards() {
-  const courseCards = document.querySelectorAll('.course-card, .bg-white.rounded-xl');
+  const courseCards = document.querySelectorAll('.course-card');
   courseCards.forEach(card => {
-    card.addEventListener('mouseenter', function() {
-      this.classList.add('shadow-xl', 'scale-105');
-      this.style.transition = 'all 0.3s ease';
-    });
-    
-    card.addEventListener('mouseleave', function() {
-      this.classList.remove('shadow-xl', 'scale-105');
-    });
+    // Only apply hover effects to actual course cards, not Continue Journey
+    if (!card.closest('[class*="Continue Your Journey"]') && !card.textContent.includes('TIK-TOK MASTERY')) {
+      card.addEventListener('mouseenter', function() {
+        this.classList.add('shadow-xl', 'scale-105');
+        this.style.transition = 'all 0.3s ease';
+      });
+      
+      card.addEventListener('mouseleave', function() {
+        this.classList.remove('shadow-xl', 'scale-105');
+      });
+    }
   });
 }
 
@@ -310,12 +313,7 @@ function initializeExpertCards() {
         e.preventDefault();
         const expertName = card.querySelector('h3').textContent;
         console.log('Booking coaching call with:', expertName);
-        showNotification(`Booking request sent to ${expertName}! You'll receive a confirmation email shortly.`, 'success');
-        
-        // Simulate booking process
-        setTimeout(() => {
-          showNotification(`${expertName} will contact you within 24 hours to schedule your coaching call.`, 'info');
-        }, 2000);
+        console.log(`Booking request sent to ${expertName}!`);
       });
     }
   });
@@ -447,7 +445,6 @@ function initializeLessonNavigation() {
     checkbox.addEventListener('change', function() {
       if (this.checked) {
         console.log('Lesson marked as complete');
-        showNotification('Lesson marked as complete! Great job!', 'success');
       }
     });
   });
@@ -494,6 +491,11 @@ function initializeProfilePage() {
           const response = await axios.post('/api/user/1/upload-avatar', { file: file.name });
           if (response.data.success) {
             console.log('Avatar uploaded successfully');
+            // Update all profile images on the page
+            const allProfileImages = document.querySelectorAll('img[alt="Profile"], #profileImage');
+            allProfileImages.forEach(img => {
+              img.src = response.data.avatar_url || e.target.result;
+            });
           }
         } catch (error) {
           console.error('Failed to upload avatar:', error);
@@ -530,6 +532,12 @@ function initializeProfilePage() {
         
         if (response.data.success) {
           showSuccessMessage('Profile updated successfully!');
+          // Update header profile image if it exists
+          const headerProfileImg = document.querySelector('img[alt="Profile"]');
+          const currentProfileImg = document.getElementById('profileImage');
+          if (headerProfileImg && currentProfileImg) {
+            headerProfileImg.src = currentProfileImg.src;
+          }
         }
       } catch (error) {
         showErrorMessage('Failed to update profile. Please try again.');
