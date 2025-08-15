@@ -1825,16 +1825,123 @@ app.get('/dmo', (c) => {
       <script dangerouslySetInnerHTML={{
         __html: `
           function selectDMO(level) {
-            window.location.href = '/dmo/' + level;
+            // Check if user has already selected a DMO for today
+            const today = new Date().toDateString();
+            const todaysDMO = localStorage.getItem('todays_dmo_selection');
+            
+            if (todaysDMO) {
+              const dmoData = JSON.parse(todaysDMO);
+              if (dmoData.date === today) {
+                // User already selected a DMO today
+                if (dmoData.level === level) {
+                  // Same DMO, allow them to continue
+                  window.location.href = '/dmo/' + level;
+                } else {
+                  // Different DMO, show warning
+                  alert('You have already selected ' + dmoData.level.replace('-', ' ').toUpperCase() + ' DMO for today. You can only work on one DMO level per day to maintain leaderboard integrity. Come back tomorrow to choose a different level!');
+                  return;
+                }
+              } else {
+                // New day, allow selection
+                storeTodaysDMO(level, today);
+                window.location.href = '/dmo/' + level;
+              }
+            } else {
+              // First time selecting today
+              storeTodaysDMO(level, today);
+              window.location.href = '/dmo/' + level;
+            }
           }
           
-          // Initialize DMO stats from localStorage
+          function storeTodaysDMO(level, date) {
+            const dmoSelection = {
+              level: level,
+              date: date,
+              startTime: new Date().toISOString(),
+              submitted: false
+            };
+            localStorage.setItem('todays_dmo_selection', JSON.stringify(dmoSelection));
+          }
+          
+          // Initialize DMO stats and check daily selection
           document.addEventListener('DOMContentLoaded', function() {
             const stats = getDMOStats();
             document.getElementById('currentStreak').textContent = stats.streak;
             document.getElementById('todayCompleted').textContent = stats.todayCompleted;
             document.getElementById('totalXP').textContent = stats.totalXP.toLocaleString();
+            
+            // Check if user has already selected a DMO today and show status
+            checkTodaysDMOSelection();
           });
+          
+          function checkTodaysDMOSelection() {
+            const today = new Date().toDateString();
+            const todaysDMO = localStorage.getItem('todays_dmo_selection');
+            
+            if (todaysDMO) {
+              const dmoData = JSON.parse(todaysDMO);
+              if (dmoData.date === today) {
+                // Show which DMO is selected today
+                showSelectedDMOStatus(dmoData);
+              }
+            }
+          }
+          
+          function showSelectedDMOStatus(dmoData) {
+            // Add visual indicator to show which DMO is selected
+            const levelMap = {
+              'express': 'Express (1 Hour)',
+              'pocket-builder': 'Pocket Builder (2 Hours)', 
+              'steady-climber': 'Steady Climber (4 Hours)',
+              'full-throttle': 'Full Throttle (6+ Hours)'
+            };
+            
+            const statusMessage = document.createElement('div');
+            statusMessage.className = 'mb-6 bg-blue-50 border border-blue-200 rounded-lg p-4';
+            statusMessage.innerHTML = \`
+              <div class="flex items-center">
+                <i class="fas fa-info-circle text-blue-600 mr-3"></i>
+                <div>
+                  <p class="font-semibold text-blue-900">Today's DMO Selection: \${levelMap[dmoData.level]}</p>
+                  <p class="text-blue-700 text-sm">Started at \${new Date(dmoData.startTime).toLocaleTimeString()}\${dmoData.submitted ? ' - ✅ Submitted' : ' - In Progress'}</p>
+                </div>
+              </div>
+            \`;
+            
+            // Insert after the description paragraph
+            const description = document.querySelector('.mb-6 p');
+            description.parentNode.insertBefore(statusMessage, description.nextSibling);
+            
+            // Highlight the selected DMO card
+            const cards = document.querySelectorAll('.cursor-pointer');
+            cards.forEach(card => {
+              const onclick = card.getAttribute('onclick');
+              if (onclick && onclick.includes(dmoData.level)) {
+                card.classList.add('ring-2', 'ring-blue-500', 'ring-opacity-50');
+                card.style.transform = 'scale(1.02)';
+                
+                // Update button text
+                const button = card.querySelector('button');
+                if (button) {
+                  button.textContent = dmoData.submitted ? '✅ Completed Today' : '➤ Continue DMO';
+                  if (dmoData.submitted) {
+                    button.classList.remove('hover:bg-blue-700', 'hover:bg-green-700', 'hover:bg-orange-700', 'hover:bg-red-700');
+                    button.classList.add('bg-gray-400', 'cursor-not-allowed');
+                  }
+                }
+              } else {
+                // Fade out non-selected cards
+                card.style.opacity = '0.6';
+                card.style.pointerEvents = 'none';
+                const button = card.querySelector('button');
+                if (button) {
+                  button.textContent = 'Available Tomorrow';
+                  button.classList.add('bg-gray-400', 'cursor-not-allowed');
+                  button.classList.remove('hover:bg-blue-700', 'hover:bg-green-700', 'hover:bg-orange-700', 'hover:bg-red-700');
+                }
+              }
+            });
+          }
           
           function getDMOStats() {
             const stats = localStorage.getItem('dmo_stats');
@@ -1900,6 +2007,22 @@ app.get('/dmo/express', (c) => {
         
         <div class="mt-4 bg-gray-200 rounded-full h-3">
           <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
+        </div>
+        
+        {/* Submit Section */}
+        <div class="mt-6 flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
+            <p class="text-xs text-gray-500">This will lock in your progress and add to your streak</p>
+          </div>
+          <button 
+            id="submitDMOBtn" 
+            onclick="submitDMO('express')" 
+            class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled
+          >
+            Submit DMO
+          </button>
         </div>
       </div>
 
@@ -2077,6 +2200,20 @@ app.get('/dmo/express', (c) => {
             document.getElementById('progressPercent').textContent = percentage + '%';
             document.getElementById('progressBar').style.width = percentage + '%';
             
+            // Enable/disable submit button based on completion
+            const submitBtn = document.getElementById('submitDMOBtn');
+            if (completedCount >= totalTasks) {
+              submitBtn.disabled = false;
+              submitBtn.textContent = 'Submit Complete DMO 🎉';
+              submitBtn.classList.remove('bg-gray-400');
+              submitBtn.classList.add('bg-blue-600', 'hover:bg-blue-700');
+            } else {
+              submitBtn.disabled = true;
+              submitBtn.textContent = \`Complete \${totalTasks - completedCount} more tasks to submit\`;
+              submitBtn.classList.add('bg-gray-400');
+              submitBtn.classList.remove('bg-blue-600', 'hover:bg-blue-700');
+            }
+            
             // Update global stats
             updateGlobalStats();
           }
@@ -2165,6 +2302,71 @@ app.get('/dmo/express', (c) => {
             globalStats.totalXP += totalXP;
             localStorage.setItem('dmo_stats', JSON.stringify(globalStats));
           }
+          
+          function submitDMO(level) {
+            const today = new Date().toDateString();
+            const todaysDMO = localStorage.getItem('todays_dmo_selection');
+            
+            if (!todaysDMO) {
+              alert('Error: No DMO selection found for today.');
+              return;
+            }
+            
+            const dmoData = JSON.parse(todaysDMO);
+            
+            // Verify this is the correct DMO for today
+            if (dmoData.level !== level || dmoData.date !== today) {
+              alert('Error: This is not your selected DMO for today.');
+              return;
+            }
+            
+            // Check if already submitted
+            if (dmoData.submitted) {
+              alert('You have already submitted your DMO for today! Great job! ✅');
+              return;
+            }
+            
+            // Mark as submitted
+            dmoData.submitted = true;
+            dmoData.submittedAt = new Date().toISOString();
+            dmoData.completedTasks = completedCount;
+            dmoData.totalXP = totalXP;
+            dmoData.completionPercentage = Math.round((completedCount / totalTasks) * 100);
+            
+            localStorage.setItem('todays_dmo_selection', JSON.stringify(dmoData));
+            
+            // Update global stats for streak and completion
+            const globalStats = JSON.parse(localStorage.getItem('dmo_stats') || '{}');
+            globalStats.streak = (globalStats.streak || 0) + 1;
+            globalStats.todayCompleted = completedCount;
+            globalStats.totalXP = (globalStats.totalXP || 0) + totalXP;
+            globalStats.lastCompletedDate = today;
+            localStorage.setItem('dmo_stats', JSON.stringify(globalStats));
+            
+            // Show success message
+            showTaskComplete(0, 'DMO Submitted Successfully! 🎉\\n\\nYour progress has been locked in and your streak has been updated. Come back tomorrow for your next DMO!');
+            
+            // Disable submit button and update UI
+            const submitBtn = document.getElementById('submitDMOBtn');
+            submitBtn.disabled = true;
+            submitBtn.textContent = '✅ Submitted Today';
+            submitBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
+            submitBtn.classList.remove('hover:bg-blue-700');
+            
+            // Disable all task checkboxes
+            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+              checkbox.disabled = true;
+            });
+            
+            // Add completion badge
+            const progressSummary = document.querySelector('.bg-gradient-to-r');
+            progressSummary.classList.add('ring-2', 'ring-green-500');
+            
+            // Redirect to main DMO page after 3 seconds
+            setTimeout(() => {
+              window.location.href = '/dmo';
+            }, 3000);
+          }
         `
       }} />
     </Layout>,
@@ -2252,6 +2454,7 @@ app.get('/dmo/pocket-builder', (c) => {
             </label>
           </div>
         </div>
+      }
 
         <div class="bg-white rounded-xl p-6 border border-gray-200">
           <div class="flex items-center justify-between mb-4">
@@ -2371,6 +2574,22 @@ app.get('/dmo/pocket-builder', (c) => {
         
         <div class="mt-4 bg-gray-200 rounded-full h-3">
           <div id="progressBar" class="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
+        </div>
+        
+        {/* Submit Section */}
+        <div class="mt-6 flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
+            <p class="text-xs text-gray-500">This will lock in your progress and add to your streak</p>
+          </div>
+          <button 
+            id="submitDMOBtn" 
+            onclick="submitDMO('pocket-builder')" 
+            class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled
+          >
+            Submit DMO
+          </button>
         </div>
       </div>
 
@@ -2557,6 +2776,22 @@ app.get('/dmo/steady-climber', (c) => {
         
         <div class="mt-4 bg-gray-200 rounded-full h-3">
           <div id="progressBar" class="bg-gradient-to-r from-orange-500 to-orange-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
+        </div>
+        
+        {/* Submit Section */}
+        <div class="mt-6 flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
+            <p class="text-xs text-gray-500">This will lock in your progress and add to your streak</p>
+          </div>
+          <button 
+            id="submitDMOBtn" 
+            onclick="submitDMO('steady-climber')" 
+            class="bg-orange-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled
+          >
+            Submit DMO
+          </button>
         </div>
       </div>
 
@@ -2906,6 +3141,22 @@ app.get('/dmo/full-throttle', (c) => {
         
         <div class="mt-4 bg-gray-200 rounded-full h-3">
           <div id="progressBar" class="bg-gradient-to-r from-red-500 to-red-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
+        </div>
+        
+        {/* Submit Section */}
+        <div class="mt-6 flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200">
+          <div>
+            <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
+            <p class="text-xs text-gray-500">This will lock in your progress and add to your streak</p>
+          </div>
+          <button 
+            id="submitDMOBtn" 
+            onclick="submitDMO('full-throttle')" 
+            class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled
+          >
+            Submit DMO
+          </button>
         </div>
       </div>
 
