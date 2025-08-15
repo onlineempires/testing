@@ -3238,37 +3238,46 @@ app.get('/dmo/steady-climber', (c) => {
 
       <script dangerouslySetInnerHTML={{
         __html: `
-          let tasks = {
-            connections: 0,
-            conversations: 0,
-            content: 0
-          };
+          // 🚀 BULLETPROOF STEADY CLIMBER DMO PROGRESS TRACKING - SINGLE CLEAN IMPLEMENTATION
+          console.log('🚀 Steady Climber DMO script loading...');
           
+          // Global state
+          let tasks = { connections: 0, conversations: 0, content: 0 };
           let totalXP = 0;
           let completedCount = 0;
           const totalTasks = 15;
           
+          // SINGLE DOM READY EVENT LISTENER
           document.addEventListener('DOMContentLoaded', function() {
-            loadTaskProgress();
-            updateProgress();
+            console.log('✅ Steady Climber DMO page loaded');
             
             // Start countdown timer
             updateCountdownTimer();
             setInterval(updateCountdownTimer, 1000);
             
-            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+            // Load any saved progress
+            loadTaskProgress();
+            
+            // Add event listeners to all checkboxes - ONLY ONCE
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            console.log('Found', checkboxes.length, 'checkboxes');
+            
+            checkboxes.forEach((checkbox, index) => {
               checkbox.addEventListener('change', function() {
-                const xp = parseInt(this.dataset.xp);
+                console.log('📋 Checkbox', index, 'changed to:', this.checked);
+                updateAllProgress();
+                saveTaskProgress();
                 
+                // Show XP notification for newly checked items
                 if (this.checked) {
+                  const xp = parseInt(this.dataset.xp);
                   showTaskComplete(xp);
                 }
-                
-                // Recalculate everything from scratch
-                recalculateProgress();
-                saveTaskProgress();
               });
             });
+            
+            // Force initial progress calculation
+            updateAllProgress();
           });
           
           function updateCountdownTimer() {
@@ -3288,31 +3297,86 @@ app.get('/dmo/steady-climber', (c) => {
             }
           }
           
-          function updateProgress() {
-            document.getElementById('connectionsProgress').textContent = tasks.connections + '/6';
-            document.getElementById('conversationsProgress').textContent = tasks.conversations + '/5';
-            document.getElementById('contentCreationProgress').textContent = tasks.content + '/4';
+          function updateAllProgress() {
+            console.log('🔄 Calculating progress...');
             
-            document.getElementById('steadyProgress').textContent = completedCount + '/' + totalTasks;
-            document.getElementById('completedTasks').textContent = completedCount;
-            document.getElementById('totalTasks').textContent = totalTasks;
-            document.getElementById('earnedXP').textContent = totalXP;
+            // Reset counters
+            tasks = { connections: 0, conversations: 0, content: 0 };
+            totalXP = 0;
+            completedCount = 0;
+            
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            console.log('Checking', checkboxes.length, 'checkboxes...');
+            
+            checkboxes.forEach((checkbox, index) => {
+              console.log('Checkbox', index, '- checked:', checkbox.checked, 'category:', checkbox.dataset.category);
+              if (checkbox.checked) {
+                const category = checkbox.dataset.category;
+                const xp = parseInt(checkbox.dataset.xp) || 0;
+                
+                if (category === 'connections') tasks.connections++;
+                if (category === 'conversations') tasks.conversations++;
+                if (category === 'content') tasks.content++;
+                
+                totalXP += xp;
+                completedCount++;
+              }
+            });
+            
+            console.log('📊 Final Progress:', {
+              connections: tasks.connections,
+              conversations: tasks.conversations,
+              content: tasks.content,  
+              totalCompleted: completedCount,
+              totalXP: totalXP
+            });
+            
+            // Update all displays
+            updateElement('connectionsProgress', tasks.connections + '/6');
+            updateElement('conversationsProgress', tasks.conversations + '/5');
+            updateElement('contentCreationProgress', tasks.content + '/4');
+            updateElement('steadyProgress', completedCount + '/15');
+            updateElement('completedTasks', completedCount);
+            updateElement('earnedXP', totalXP);
             
             const percentage = Math.round((completedCount / totalTasks) * 100);
-            document.getElementById('progressPercent').textContent = percentage + '%';
-            document.getElementById('progressBar').style.width = percentage + '%';
+            updateElement('progressPercent', percentage + '%');
             
-            // Enable/disable submit button
-            const submitBtn = document.getElementById('submitDMOBtn');
-            if (completedCount === totalTasks) {
-              submitBtn.disabled = false;
-              submitBtn.classList.remove('disabled:bg-gray-400', 'disabled:cursor-not-allowed');
-            } else {
-              submitBtn.disabled = true;
-              submitBtn.classList.add('disabled:bg-gray-400', 'disabled:cursor-not-allowed');
+            // Update progress bar
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) {
+              progressBar.style.width = percentage + '%';
+              console.log('📈 Progress bar set to:', percentage + '%');
             }
             
+            // Update submit button
+            const submitBtn = document.getElementById('submitDMOBtn');
+            if (submitBtn) {
+              if (completedCount >= totalTasks) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Complete DMO 🎉';
+                submitBtn.className = 'bg-orange-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-700 transition-colors';
+                console.log('✅ Submit button ENABLED');
+              } else {
+                submitBtn.disabled = true;
+                submitBtn.textContent = \`Complete \${totalTasks - completedCount} more tasks\`;
+                submitBtn.className = 'bg-gray-400 text-white px-6 py-2 rounded-lg font-semibold cursor-not-allowed';
+                console.log('❌ Submit button disabled -', (totalTasks - completedCount), 'tasks remaining');
+              }
+            }
+            
+            // Update global stats
             updateGlobalStats();
+          }
+          
+          function updateElement(id, text) {
+            const element = document.getElementById(id);
+            if (element) {
+              element.textContent = text;
+              console.log('📝 Updated', id, 'to:', text);
+            } else {
+              console.warn('⚠️ Element not found:', id);
+            }
           }
           
           function recalculateProgress() {
@@ -3586,6 +3650,24 @@ app.get('/dmo/full-throttle', (c) => {
               </div>
               <div class="text-blue-600 font-medium text-sm">+15 XP</div>
             </label>
+
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="20" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Create and optimize professional profiles across platforms</div>
+                <div class="text-sm text-gray-600">Update LinkedIn, Facebook, Instagram business profiles (15 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+20 XP</div>
+            </label>
+
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-blue-600" data-category="connections" data-xp="25" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Engage with competitor's audiences and followers</div>
+                <div class="text-sm text-gray-600">Strategic engagement to build relationships (20 min)</div>
+              </div>
+              <div class="text-blue-600 font-medium text-sm">+25 XP</div>
+            </label>
           </div>
         </div>
 
@@ -3633,6 +3715,33 @@ app.get('/dmo/full-throttle', (c) => {
                 <div class="text-sm text-gray-600">Full business presentations with qualified prospects (75 min)</div>
               </div>
               <div class="text-green-600 font-medium text-sm">+45 XP</div>
+            </label>
+
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversations" data-xp="30" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Host live Q&A sessions or consultations</div>
+                <div class="text-sm text-gray-600">Interactive sessions to build trust and rapport (25 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+30 XP</div>
+            </label>
+
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversations" data-xp="25" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Engage in high-value group discussions</div>
+                <div class="text-sm text-gray-600">Participate in industry forums and communities (20 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+25 XP</div>
+            </label>
+
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-green-600" data-category="conversations" data-xp="20" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Schedule and conduct discovery calls</div>
+                <div class="text-sm text-gray-600">One-on-one calls to understand prospect needs (20 min)</div>
+              </div>
+              <div class="text-green-600 font-medium text-sm">+20 XP</div>
             </label>
           </div>
         </div>
@@ -3691,43 +3800,70 @@ app.get('/dmo/full-throttle', (c) => {
               </div>
               <div class="text-purple-600 font-medium text-sm">+30 XP</div>
             </label>
+
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="35" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Create podcast episodes or audio content</div>
+                <div class="text-sm text-gray-600">Record and publish audio content for your audience (30 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+35 XP</div>
+            </label>
+
+            <label class="flex items-center p-3 bg-gray-50 rounded-lg hover:bg-gray-100 transition-colors cursor-pointer">
+              <input type="checkbox" class="task-checkbox mr-4 w-5 h-5 text-purple-600" data-category="content" data-xp="25" />
+              <div class="flex-1">
+                <div class="font-medium text-gray-900">Design and post infographics or visual content</div>
+                <div class="text-sm text-gray-600">Create engaging visual content for social media (15 min)</div>
+              </div>
+              <div class="text-purple-600 font-medium text-sm">+25 XP</div>
+            </label>
           </div>
         </div>
       </div>
 
       <script dangerouslySetInnerHTML={{
         __html: `
-          let tasks = {
-            connections: 0,
-            conversations: 0,
-            content: 0
-          };
+          // 🚀 BULLETPROOF FULL THROTTLE DMO PROGRESS TRACKING - SINGLE CLEAN IMPLEMENTATION
+          console.log('🚀 Full Throttle DMO script loading...');
           
+          // Global state
+          let tasks = { connections: 0, conversations: 0, content: 0 };
           let totalXP = 0;
           let completedCount = 0;
           const totalTasks = 20;
           
+          // SINGLE DOM READY EVENT LISTENER
           document.addEventListener('DOMContentLoaded', function() {
-            loadTaskProgress();
-            updateProgress();
+            console.log('✅ Full Throttle DMO page loaded');
             
             // Start countdown timer
             updateCountdownTimer();
             setInterval(updateCountdownTimer, 1000);
             
-            document.querySelectorAll('.task-checkbox').forEach(checkbox => {
+            // Load any saved progress
+            loadTaskProgress();
+            
+            // Add event listeners to all checkboxes - ONLY ONCE
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            console.log('Found', checkboxes.length, 'checkboxes');
+            
+            checkboxes.forEach((checkbox, index) => {
               checkbox.addEventListener('change', function() {
-                const xp = parseInt(this.dataset.xp);
+                console.log('📋 Checkbox', index, 'changed to:', this.checked);
+                updateAllProgress();
+                saveTaskProgress();
                 
+                // Show XP notification for newly checked items
                 if (this.checked) {
+                  const xp = parseInt(this.dataset.xp);
                   showTaskComplete(xp);
                 }
-                
-                // Recalculate everything from scratch
-                recalculateProgress();
-                saveTaskProgress();
               });
             });
+            
+            // Force initial progress calculation
+            updateAllProgress();
           });
           
           function updateCountdownTimer() {
@@ -3747,31 +3883,86 @@ app.get('/dmo/full-throttle', (c) => {
             }
           }
           
-          function updateProgress() {
-            document.getElementById('connectionsProgress').textContent = tasks.connections + '/8';
-            document.getElementById('conversationsProgress').textContent = tasks.conversations + '/6';
-            document.getElementById('contentCreationProgress').textContent = tasks.content + '/6';
+          function updateAllProgress() {
+            console.log('🔄 Calculating progress...');
             
-            document.getElementById('throttleProgress').textContent = completedCount + '/' + totalTasks;
-            document.getElementById('completedTasks').textContent = completedCount;
-            document.getElementById('totalTasks').textContent = totalTasks;
-            document.getElementById('earnedXP').textContent = totalXP;
+            // Reset counters
+            tasks = { connections: 0, conversations: 0, content: 0 };
+            totalXP = 0;
+            completedCount = 0;
+            
+            const checkboxes = document.querySelectorAll('.task-checkbox');
+            console.log('Checking', checkboxes.length, 'checkboxes...');
+            
+            checkboxes.forEach((checkbox, index) => {
+              console.log('Checkbox', index, '- checked:', checkbox.checked, 'category:', checkbox.dataset.category);
+              if (checkbox.checked) {
+                const category = checkbox.dataset.category;
+                const xp = parseInt(checkbox.dataset.xp) || 0;
+                
+                if (category === 'connections') tasks.connections++;
+                if (category === 'conversations') tasks.conversations++;
+                if (category === 'content') tasks.content++;
+                
+                totalXP += xp;
+                completedCount++;
+              }
+            });
+            
+            console.log('📊 Final Progress:', {
+              connections: tasks.connections,
+              conversations: tasks.conversations,
+              content: tasks.content,
+              totalCompleted: completedCount,
+              totalXP: totalXP
+            });
+            
+            // Update all displays
+            updateElement('connectionsProgress', tasks.connections + '/8');
+            updateElement('conversationsProgress', tasks.conversations + '/6');
+            updateElement('contentCreationProgress', tasks.content + '/6');
+            updateElement('throttleProgress', completedCount + '/20');
+            updateElement('completedTasks', completedCount);
+            updateElement('earnedXP', totalXP);
             
             const percentage = Math.round((completedCount / totalTasks) * 100);
-            document.getElementById('progressPercent').textContent = percentage + '%';
-            document.getElementById('progressBar').style.width = percentage + '%';
+            updateElement('progressPercent', percentage + '%');
             
-            // Enable/disable submit button
-            const submitBtn = document.getElementById('submitDMOBtn');
-            if (completedCount === totalTasks) {
-              submitBtn.disabled = false;
-              submitBtn.classList.remove('disabled:bg-gray-400', 'disabled:cursor-not-allowed');
-            } else {
-              submitBtn.disabled = true;
-              submitBtn.classList.add('disabled:bg-gray-400', 'disabled:cursor-not-allowed');
+            // Update progress bar
+            const progressBar = document.getElementById('progressBar');
+            if (progressBar) {
+              progressBar.style.width = percentage + '%';
+              console.log('📈 Progress bar set to:', percentage + '%');
             }
             
+            // Update submit button
+            const submitBtn = document.getElementById('submitDMOBtn');
+            if (submitBtn) {
+              if (completedCount >= totalTasks) {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Complete DMO 🎉';
+                submitBtn.className = 'bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors';
+                console.log('✅ Submit button ENABLED');
+              } else {
+                submitBtn.disabled = true;
+                submitBtn.textContent = \`Complete \${totalTasks - completedCount} more tasks\`;
+                submitBtn.className = 'bg-gray-400 text-white px-6 py-2 rounded-lg font-semibold cursor-not-allowed';
+                console.log('❌ Submit button disabled -', (totalTasks - completedCount), 'tasks remaining');
+              }
+            }
+            
+            // Update global stats
             updateGlobalStats();
+          }
+          
+          function updateElement(id, text) {
+            const element = document.getElementById(id);
+            if (element) {
+              element.textContent = text;
+              console.log('📝 Updated', id, 'to:', text);
+            } else {
+              console.warn('⚠️ Element not found:', id);
+            }
           }
           
           function recalculateProgress() {
