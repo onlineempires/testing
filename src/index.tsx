@@ -37,10 +37,10 @@ const Layout = ({ children, title, currentPage }: { children: any, title: string
       {/* Logo */}
       <div class="p-4 border-b border-slate-700">
         <div class="flex items-center">
-          <div class="w-8 h-8 bg-blue-500 rounded-lg flex items-center justify-center mr-3">
-            <i class="fas fa-crown text-white text-sm"></i>
+          <div class="w-8 h-8 bg-gradient-to-r from-blue-500 to-purple-600 rounded-lg flex items-center justify-center mr-3">
+            <i class="fas fa-bolt text-white text-sm"></i>
           </div>
-          <span class="font-bold text-lg">ONLINE EMPIRES</span>
+          <span class="font-bold text-lg">DIGITAL ERA</span>
         </div>
       </div>
 
@@ -94,6 +94,7 @@ const Layout = ({ children, title, currentPage }: { children: any, title: string
             <div class="relative">
               <input 
                 type="text" 
+                id="searchInput"
                 placeholder="Search courses, lessons..."
                 class="w-80 pl-10 pr-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
               />
@@ -102,20 +103,90 @@ const Layout = ({ children, title, currentPage }: { children: any, title: string
             
             {/* User Menu */}
             <div class="flex items-center space-x-3">
-              <button class="p-2 text-gray-400 hover:text-gray-600">
-                <i class="fas fa-users"></i>
-              </button>
-              <button class="p-2 text-gray-400 hover:text-gray-600 relative">
-                <i class="fas fa-bell"></i>
-                <span class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
-              </button>
-              <button class="p-2 text-gray-400 hover:text-gray-600 relative">
-                <i class="fas fa-envelope"></i>
-                <span class="absolute -top-1 -right-1 w-3 h-3 bg-blue-500 rounded-full"></span>
-              </button>
-              <div class="flex items-center space-x-2">
-                <img src="https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=32" alt="Profile" class="w-8 h-8 rounded-full" />
-                <span class="text-sm font-medium text-gray-700">Ashley Kemp</span>
+              <a href="https://www.facebook.com/groups/onlineempiresvip" target="_blank" class="p-2 text-gray-400 hover:text-blue-600">
+                <i class="fab fa-facebook"></i>
+              </a>
+              
+              {/* Feedback Button */}
+              <div class="relative">
+                <button id="feedbackBtn" class="p-2 text-gray-400 hover:text-gray-600">
+                  <i class="fas fa-comment"></i>
+                </button>
+{/* Feedback Dropdown */}
+                <div id="feedbackDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                  <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-3">Send Feedback</h3>
+                    <form id="feedbackForm">
+                      <textarea 
+                        id="feedbackText" 
+                        placeholder="Share your thoughts, suggestions, or report issues..."
+                        class="w-full p-3 border border-gray-300 rounded-lg resize-none h-24 text-sm focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                        required
+                      ></textarea>
+                      <div class="flex justify-end space-x-2 mt-3">
+                        <button type="button" id="cancelFeedback" class="px-4 py-2 text-gray-600 hover:text-gray-800 text-sm">
+                          Cancel
+                        </button>
+                        <button type="submit" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-sm hover:bg-blue-700">
+                          Send Feedback
+                        </button>
+                      </div>
+                    </form>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Notification Bell */}
+              <div class="relative">
+                <button id="notificationBtn" class="p-2 text-gray-400 hover:text-gray-600 relative">
+                  <i class="fas fa-bell"></i>
+                  <span id="notificationBadge" class="absolute -top-1 -right-1 w-3 h-3 bg-red-500 rounded-full"></span>
+                </button>
+{/* Notifications Dropdown */}
+                <div id="notificationsDropdown" class="hidden absolute right-0 mt-2 w-80 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                  <div class="p-4">
+                    <h3 class="font-semibold text-gray-900 mb-3">Notifications</h3>
+                    <div id="notificationsList" class="space-y-2 max-h-64 overflow-y-auto">
+                      <div class="p-3 bg-blue-50 rounded-lg border-l-4 border-blue-500">
+                        <p class="text-sm font-medium text-blue-900">New Lead Generated!</p>
+                        <p class="text-xs text-blue-700 mt-1">John Smith signed up through your referral link</p>
+                        <p class="text-xs text-gray-500 mt-1">2 hours ago</p>
+                      </div>
+                      <div class="p-3 bg-green-50 rounded-lg border-l-4 border-green-500">
+                        <p class="text-sm font-medium text-green-900">Commission Earned!</p>
+                        <p class="text-xs text-green-700 mt-1">$150 commission from Sarah's purchase</p>
+                        <p class="text-xs text-gray-500 mt-1">1 day ago</p>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              {/* Profile Dropdown */}
+              <div class="relative">
+                <button id="profileBtn" class="flex items-center space-x-2 hover:bg-gray-50 rounded-lg p-2">
+                  <img src="https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=32" alt="Profile" class="w-8 h-8 rounded-full" />
+                  <span class="text-sm font-medium text-gray-700">Ashley Kemp</span>
+                  <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
+                </button>
+{/* Profile Dropdown */}
+                <div id="profileDropdown" class="hidden absolute right-0 mt-2 w-48 bg-white rounded-lg shadow-lg border border-gray-200 z-50">
+                  <div class="py-2">
+                    <a href="/profile" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                      <i class="fas fa-user mr-2"></i>
+                      Profile
+                    </a>
+                    <a href="/settings" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                      <i class="fas fa-cog mr-2"></i>
+                      Settings
+                    </a>
+                    <hr class="my-1" />
+                    <a href="/logout" class="block px-4 py-2 text-sm text-gray-700 hover:bg-gray-50">
+                      <i class="fas fa-sign-out-alt mr-2"></i>
+                      Logout
+                    </a>
+                  </div>
+                </div>
               </div>
             </div>
           </div>
@@ -163,7 +234,7 @@ app.get('/', async (c) => {
             <img src="https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=64" alt="Ashley" class="w-12 h-12 rounded-full mr-4" />
             <div>
               <h2 class="text-2xl font-bold mb-1">Hello, {userName}!</h2>
-              <p class="text-purple-100">Welcome back to Online Empires! Ready to build your empire?</p>
+              <p class="text-purple-100">Welcome back {userName} to The Digital Era!</p>
             </div>
           </div>
         </div>
@@ -236,7 +307,7 @@ app.get('/', async (c) => {
                   <div class="bg-blue-600 h-2 rounded-full" style="width: 67%"></div>
                 </div>
               </div>
-              <button class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 ml-4">
+              <button onclick="window.location.href='/lesson/1/2'" class="bg-blue-600 text-white px-6 py-2 rounded-lg font-medium hover:bg-blue-700 ml-4">
                 Continue Learning
               </button>
             </div>
@@ -253,7 +324,7 @@ app.get('/', async (c) => {
                 <h4 class="font-semibold text-gray-900 mb-2">The Business Blueprint</h4>
                 <p class="text-sm text-gray-600 mb-4">Foundation principles for building your online business</p>
                 <p class="text-xs text-gray-500 mb-4">5 modules</p>
-                <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
+                <button onclick="window.location.href='/lesson/1/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
                   Start Course
                 </button>
               </div>
@@ -265,7 +336,7 @@ app.get('/', async (c) => {
                 <h4 class="font-semibold text-gray-900 mb-2">The Discovery Process</h4>
                 <p class="text-sm text-gray-600 mb-4">Find your niche and identify opportunities</p>
                 <p class="text-xs text-gray-500 mb-4">3 modules</p>
-                <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
+                <button onclick="window.location.href='/lesson/3/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
                   Start Course
                 </button>
               </div>
@@ -277,7 +348,7 @@ app.get('/', async (c) => {
                 <h4 class="font-semibold text-gray-900 mb-2">Next Steps</h4>
                 <p class="text-sm text-gray-600 mb-4">Action plan for immediate implementation</p>
                 <p class="text-xs text-gray-500 mb-4">4 modules</p>
-                <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
+                <button onclick="window.location.href='/lesson/3/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
                   Start Course
                 </button>
               </div>
@@ -311,7 +382,7 @@ app.get('/courses', (c) => {
               <h4 class="font-semibold text-gray-900 mb-2">The Business Blueprint</h4>
               <p class="text-sm text-gray-600 mb-4">Foundation principles for building your online business</p>
               <p class="text-xs text-gray-500 mb-4">5 modules</p>
-              <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
+              <button onclick="window.location.href='/lesson/1/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
                 Start Course
               </button>
             </div>
@@ -323,7 +394,7 @@ app.get('/courses', (c) => {
               <h4 class="font-semibold text-gray-900 mb-2">The Discovery Process</h4>
               <p class="text-sm text-gray-600 mb-4">Find your niche and identify opportunities</p>
               <p class="text-xs text-gray-500 mb-4">3 modules</p>
-              <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
+              <button onclick="window.location.href='/lesson/2/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
                 Start Course
               </button>
             </div>
@@ -335,7 +406,7 @@ app.get('/courses', (c) => {
               <h4 class="font-semibold text-gray-900 mb-2">Next Steps</h4>
               <p class="text-sm text-gray-600 mb-4">Action plan for immediate implementation</p>
               <p class="text-xs text-gray-500 mb-4">4 modules</p>
-              <button class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
+              <button onclick="window.location.href='/lesson/3/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg font-medium hover:bg-blue-700">
                 Start Course
               </button>
             </div>
@@ -352,7 +423,7 @@ app.get('/courses', (c) => {
             <div class="p-4">
               <h4 class="font-semibold text-gray-900 mb-2">TikTok Mastery</h4>
               <p class="text-xs text-gray-500 mb-3">6 modules</p>
-              <button class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
+              <button onclick="window.location.href='/lesson/4/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
                 Start Course
               </button>
             </div>
@@ -363,7 +434,7 @@ app.get('/courses', (c) => {
             <div class="p-4">
               <h4 class="font-semibold text-gray-900 mb-2">Facebook Advertising</h4>
               <p class="text-xs text-gray-500 mb-3">8 modules</p>
-              <button class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
+              <button onclick="window.location.href='/lesson/4/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
                 Start Course
               </button>
             </div>
@@ -374,7 +445,7 @@ app.get('/courses', (c) => {
             <div class="p-4">
               <h4 class="font-semibold text-gray-900 mb-2">Instagram Marketing</h4>
               <p class="text-xs text-gray-500 mb-3">5 modules</p>
-              <button class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
+              <button onclick="window.location.href='/lesson/4/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
                 Start Course
               </button>
             </div>
@@ -385,7 +456,7 @@ app.get('/courses', (c) => {
             <div class="p-4">
               <h4 class="font-semibold text-gray-900 mb-2">Sales Funnel Mastery</h4>
               <p class="text-xs text-gray-500 mb-3">7 modules</p>
-              <button class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
+              <button onclick="window.location.href='/lesson/4/1'" class="w-full bg-blue-600 text-white py-2 rounded-lg text-sm font-medium hover:bg-blue-700">
                 Start Course
               </button>
             </div>

@@ -1,4 +1,4 @@
-/* Online Empires Custom Styles - Professional Design */
+/* Digital Era Custom Styles - Professional Design with Enhanced Functionality */
 
 /* Custom scrollbar */
 ::-webkit-scrollbar {
@@ -21,6 +21,43 @@
 /* Smooth transitions */
 * {
   transition: all 0.2s ease-in-out;
+}
+
+/* Search highlight styles */
+.search-highlight {
+  background-color: #fef3c7 !important;
+  color: #92400e !important;
+  font-weight: 600;
+  border-radius: 4px;
+  padding: 2px 4px;
+  animation: highlight-pulse 2s ease-in-out;
+}
+
+@keyframes highlight-pulse {
+  0%, 100% { background-color: #fef3c7; }
+  50% { background-color: #fcd34d; }
+}
+
+/* Dropdown styles */
+.dropdown-enter {
+  opacity: 0;
+  transform: translateY(-10px);
+}
+
+.dropdown-enter-active {
+  opacity: 1;
+  transform: translateY(0);
+  transition: all 0.2s ease-out;
+}
+
+/* Notification styles */
+.notification {
+  transform: translateX(100%);
+  transition: all 0.3s ease-out;
+}
+
+.notification.show {
+  transform: translateX(0);
 }
 
 /* Custom button styles */
@@ -109,6 +146,10 @@
 .progress-bar {
   background: linear-gradient(90deg, #2563eb, #3b82f6);
   animation: progress-shimmer 2s ease-in-out infinite;
+}
+
+.progress-bar-animated {
+  transition: width 1s ease-in-out;
 }
 
 @keyframes progress-shimmer {
@@ -209,6 +250,49 @@ textarea:focus {
   background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
+/* Feedback form styles */
+#feedbackDropdown textarea {
+  resize: none;
+  font-family: inherit;
+}
+
+#feedbackDropdown button[type="submit"] {
+  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+}
+
+#feedbackDropdown button[type="submit"]:hover {
+  background: linear-gradient(135deg, #1d4ed8, #1e40af);
+}
+
+/* Notification bell animation */
+@keyframes bell-ring {
+  0%, 20%, 50%, 80%, 100% {
+    transform: rotate(0deg);
+  }
+  10% {
+    transform: rotate(-10deg);
+  }
+  30% {
+    transform: rotate(10deg);
+  }
+  60% {
+    transform: rotate(-5deg);
+  }
+  70% {
+    transform: rotate(5deg);
+  }
+}
+
+.notification-ring:hover .fas.fa-bell {
+  animation: bell-ring 1s ease-in-out;
+}
+
+/* Profile dropdown styles */
+#profileDropdown a:hover {
+  background-color: #f8fafc;
+  color: #374151;
+}
+
 /* Mobile responsiveness */
 @media (max-width: 768px) {
   .mobile-hide {
@@ -232,6 +316,23 @@ textarea:focus {
   .grid-responsive {
     grid-template-columns: 1fr;
   }
+
+  /* Mobile dropdowns */
+  #feedbackDropdown,
+  #notificationsDropdown,
+  #profileDropdown {
+    position: fixed;
+    right: 1rem;
+    left: 1rem;
+    width: auto;
+    margin-top: 0.5rem;
+  }
+
+  /* Mobile search */
+  .search-input {
+    width: 100%;
+    max-width: 300px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -241,6 +342,14 @@ textarea:focus {
   
   .grid-cols-4 {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  /* Even smaller mobile adjustments */
+  #feedbackDropdown,
+  #notificationsDropdown {
+    width: calc(100vw - 2rem);
+    right: 1rem;
+    left: 1rem;
   }
 }
 
@@ -296,6 +405,46 @@ p {
 
 .fade-in-up {
   animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes slideInRight {
+  from {
+    opacity: 0;
+    transform: translateX(100%);
+  }
+  to {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+.slide-in-right {
+  animation: slideInRight 0.3s ease-out;
+}
+
+/* Scale animation for cards */
+.scale-105 {
+  transform: scale(1.05);
+}
+
+/* Loading states */
+.loading {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.loading::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 20px;
+  height: 20px;
+  margin: -10px 0 0 -10px;
+  border: 2px solid #f3f4f6;
+  border-top: 2px solid #2563eb;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
 }
 
 /* Print styles */
