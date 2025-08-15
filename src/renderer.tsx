@@ -1,6 +1,6 @@
 import { jsxRenderer } from 'hono/jsx-renderer'
 
-export const renderer = jsxRenderer(({ children, title = 'Online Empires' }) => {
+export const renderer = jsxRenderer(({ children, title = 'Digital Era' }) => {
   return (
     <html lang="en">
       <head>

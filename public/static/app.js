@@ -467,6 +467,188 @@ function handleResponsiveDesign() {
   window.addEventListener('resize', checkMobile);
 }
 
+// Profile page functionality
+function initializeProfilePage() {
+  // Profile picture upload
+  const changeProfilePicBtn = document.getElementById('changeProfilePicBtn');
+  const profilePicInput = document.getElementById('profilePicInput');
+  const profileImage = document.getElementById('profileImage');
+
+  if (changeProfilePicBtn && profilePicInput && profileImage) {
+    changeProfilePicBtn.addEventListener('click', () => {
+      profilePicInput.click();
+    });
+
+    profilePicInput.addEventListener('change', async (e) => {
+      const file = e.target.files[0];
+      if (file) {
+        // Create preview
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          profileImage.src = e.target.result;
+        };
+        reader.readAsDataURL(file);
+
+        // Upload file (simulated)
+        try {
+          const response = await axios.post('/api/user/1/upload-avatar', { file: file.name });
+          if (response.data.success) {
+            console.log('Avatar uploaded successfully');
+          }
+        } catch (error) {
+          console.error('Failed to upload avatar:', error);
+        }
+      }
+    });
+  }
+
+  // Save profile form
+  const saveProfileBtn = document.getElementById('saveProfileBtn');
+  const profileForm = document.getElementById('profileForm');
+
+  if (saveProfileBtn && profileForm) {
+    saveProfileBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      
+      const formData = {
+        name: document.getElementById('fullName')?.value,
+        email: document.getElementById('email')?.value,
+        phone: document.getElementById('phone')?.value,
+        location: document.getElementById('location')?.value,
+        website: document.getElementById('website')?.value,
+        bio: document.getElementById('bio')?.value,
+        notifications_email: document.getElementById('emailNotifications')?.checked,
+        notifications_push: document.getElementById('pushNotifications')?.checked,
+        privacy_profile: document.getElementById('profileVisibility')?.value
+      };
+
+      try {
+        saveProfileBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Saving...';
+        saveProfileBtn.disabled = true;
+
+        const response = await axios.put('/api/user/1/profile', formData);
+        
+        if (response.data.success) {
+          showSuccessMessage('Profile updated successfully!');
+        }
+      } catch (error) {
+        showErrorMessage('Failed to update profile. Please try again.');
+      } finally {
+        saveProfileBtn.innerHTML = '<i class="fas fa-save mr-2"></i>Save Changes';
+        saveProfileBtn.disabled = false;
+      }
+    });
+  }
+
+  // Change password
+  const changePasswordBtn = document.getElementById('changePasswordBtn');
+  if (changePasswordBtn) {
+    changePasswordBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      
+      const currentPassword = document.getElementById('currentPassword')?.value;
+      const newPassword = document.getElementById('newPassword')?.value;
+      const confirmPassword = document.getElementById('confirmPassword')?.value;
+
+      if (!currentPassword || !newPassword || !confirmPassword) {
+        showErrorMessage('Please fill in all password fields.');
+        return;
+      }
+
+      if (newPassword !== confirmPassword) {
+        showErrorMessage('New passwords do not match.');
+        return;
+      }
+
+      if (newPassword.length < 8) {
+        showErrorMessage('Password must be at least 8 characters long.');
+        return;
+      }
+
+      try {
+        changePasswordBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>Changing...';
+        changePasswordBtn.disabled = true;
+
+        const response = await axios.post('/api/user/1/change-password', {
+          currentPassword,
+          newPassword,
+          confirmPassword
+        });
+        
+        if (response.data.success) {
+          showSuccessMessage('Password changed successfully!');
+          // Clear password fields
+          document.getElementById('currentPassword').value = '';
+          document.getElementById('newPassword').value = '';
+          document.getElementById('confirmPassword').value = '';
+        }
+      } catch (error) {
+        showErrorMessage(error.response?.data?.error || 'Failed to change password.');
+      } finally {
+        changePasswordBtn.innerHTML = '<i class="fas fa-key mr-2"></i>Change Password';
+        changePasswordBtn.disabled = false;
+      }
+    });
+  }
+
+  // Delete account
+  const deleteAccountBtn = document.getElementById('deleteAccountBtn');
+  if (deleteAccountBtn) {
+    deleteAccountBtn.addEventListener('click', async (e) => {
+      e.preventDefault();
+      
+      if (confirm('Are you sure you want to delete your account? This action cannot be undone.')) {
+        if (confirm('This will permanently delete all your data. Are you absolutely sure?')) {
+          try {
+            const response = await axios.delete('/api/user/1/account');
+            if (response.data.success) {
+              alert('Account deleted successfully. You will now be logged out.');
+              window.location.href = '/';
+            }
+          } catch (error) {
+            showErrorMessage('Failed to delete account. Please try again.');
+          }
+        }
+      }
+    });
+  }
+}
+
+// Helper functions for profile messages
+function showSuccessMessage(message) {
+  const messagesDiv = document.getElementById('profileMessages');
+  if (messagesDiv) {
+    messagesDiv.innerHTML = `
+      <div class="bg-green-50 border border-green-200 text-green-800 px-4 py-3 rounded-lg">
+        <div class="flex items-center">
+          <i class="fas fa-check-circle mr-2"></i>
+          ${message}
+        </div>
+      </div>
+    `;
+    setTimeout(() => {
+      messagesDiv.innerHTML = '';
+    }, 5000);
+  }
+}
+
+function showErrorMessage(message) {
+  const messagesDiv = document.getElementById('profileMessages');
+  if (messagesDiv) {
+    messagesDiv.innerHTML = `
+      <div class="bg-red-50 border border-red-200 text-red-800 px-4 py-3 rounded-lg">
+        <div class="flex items-center">
+          <i class="fas fa-exclamation-circle mr-2"></i>
+          ${message}
+        </div>
+      </div>
+    `;
+    setTimeout(() => {
+      messagesDiv.innerHTML = '';
+    }, 5000);
+  }
+}
+
 // Initialize all functionality
 function initializeApp() {
   initializeNavigation();
@@ -478,12 +660,12 @@ function initializeApp() {
   initializeExpertCards();
   initializeVideoPlayer();
   initializeLessonNavigation();
+  initializeProfilePage();
   updateProgress();
   animateStats();
   handleResponsiveDesign();
   
   console.log('Digital Era app initialized successfully');
-  showNotification('Welcome to Digital Era! All systems ready.', 'success');
 }
 
 // Page-specific initializations
@@ -494,15 +676,16 @@ function initializePage() {
     case '/':
       console.log('Dashboard page loaded');
       // Dashboard-specific functionality
-      setTimeout(() => {
-        showNotification('Dashboard loaded successfully!', 'info');
-      }, 1000);
       break;
     case '/courses':
       console.log('Courses page loaded');
       break;
     case '/experts':
       console.log('Experts page loaded');
+      break;
+    case '/profile':
+      console.log('Profile page loaded');
+      // Profile-specific functionality
       break;
     default:
       if (path.includes('/lesson/')) {

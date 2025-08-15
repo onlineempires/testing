@@ -227,7 +227,7 @@ app.get('/', async (c) => {
     const newLeads = 47
 
     return c.render(
-      <Layout title="ONLINE EMPIRES" currentPage="dashboard">
+      <Layout title="Digital Era" currentPage="dashboard">
         {/* Welcome Banner */}
         <div class="bg-gradient-to-r from-purple-500 to-blue-600 rounded-xl p-6 text-white mb-8">
           <div class="flex items-center">
@@ -356,7 +356,7 @@ app.get('/', async (c) => {
           </div>
         </div>
       </Layout>,
-      { title: 'Dashboard - Online Empires' }
+      { title: 'Dashboard - Digital Era' }
     )
   } catch (error) {
     console.error('Dashboard error:', error)
@@ -464,7 +464,7 @@ app.get('/courses', (c) => {
         </div>
       </div>
     </Layout>,
-    { title: 'All Courses - Online Empires' }
+    { title: 'All Courses - Digital Era' }
   )
 })
 
@@ -617,7 +617,7 @@ app.get('/experts', (c) => {
         </div>
       </div>
     </Layout>,
-    { title: 'Expert Directory - Online Empires' }
+    { title: 'Expert Directory - Digital Era' }
   )
 })
 
@@ -719,7 +719,7 @@ app.get('/lesson/:courseId/:lessonId', (c) => {
         </div>
       </div>
     </Layout>,
-    { title: 'Lesson - Online Empires' }
+    { title: 'Lesson - Digital Era' }
   )
 })
 
@@ -733,7 +733,7 @@ app.get('/dmo', (c) => {
         <p class="text-gray-600">Track your daily activities and goals</p>
       </div>
     </Layout>,
-    { title: 'Daily Method (DMO) - Online Empires' }
+    { title: 'Daily Method (DMO) - Digital Era' }
   )
 })
 
@@ -746,7 +746,7 @@ app.get('/affiliate', (c) => {
         <p class="text-gray-600">Track your commissions and earnings</p>
       </div>
     </Layout>,
-    { title: 'Affiliate Portal - Online Empires' }
+    { title: 'Affiliate Portal - Digital Era' }
   )
 })
 
@@ -759,7 +759,7 @@ app.get('/statistics', (c) => {
         <p class="text-gray-600">View your performance analytics</p>
       </div>
     </Layout>,
-    { title: 'Statistics - Online Empires' }
+    { title: 'Statistics - Digital Era' }
   )
 })
 
@@ -772,20 +772,263 @@ app.get('/leads', (c) => {
         <p class="text-gray-600">Manage your leads and prospects</p>
       </div>
     </Layout>,
-    { title: 'Leads - Online Empires' }
+    { title: 'Leads - Digital Era' }
   )
 })
 
-app.get('/profile', (c) => {
+app.get('/profile', async (c) => {
+  const { env } = c
+  const userId = 1
+
+  // Get user data
+  let user = null
+  if (env.DB) {
+    const userResult = await safeDBQuery(env.DB, 'SELECT * FROM users WHERE id = ?', [userId])
+    user = userResult.results?.[0] || null
+  }
+
+  // Fallback user data
+  const userData = user || {
+    id: 1,
+    name: 'Ashley Kemp',
+    email: 'ashley@digitalera.com',
+    avatar_url: 'https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=150',
+    phone: '+1 (555) 123-4567',
+    location: 'Los Angeles, CA',
+    bio: 'Digital entrepreneur passionate about building online empires and helping others succeed.',
+    website: 'https://ashleykemp.com',
+    created_at: '2024-01-15',
+    notifications_email: true,
+    notifications_push: true,
+    privacy_profile: 'public'
+  }
+
   return c.render(
     <Layout title="Profile" currentPage="profile">
-      <div class="text-center py-20">
-        <i class="fas fa-user text-6xl text-gray-400 mb-4"></i>
-        <h2 class="text-2xl font-semibold text-gray-900 mb-2">Profile</h2>
-        <p class="text-gray-600">Manage your account settings</p>
+      <div class="max-w-4xl mx-auto">
+        {/* Profile Header */}
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+          <div class="flex items-center justify-between mb-6">
+            <h2 class="text-2xl font-bold text-gray-900">Profile Settings</h2>
+            <button id="saveProfileBtn" class="bg-blue-600 text-white px-6 py-2 rounded-lg hover:bg-blue-700 transition-colors">
+              <i class="fas fa-save mr-2"></i>
+              Save Changes
+            </button>
+          </div>
+
+          <div class="grid grid-cols-1 lg:grid-cols-3 gap-8">
+            {/* Profile Picture Section */}
+            <div class="text-center">
+              <div class="relative inline-block">
+                <img 
+                  id="profileImage" 
+                  src={userData.avatar_url} 
+                  alt="Profile" 
+                  class="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
+                />
+                <button 
+                  id="changeProfilePicBtn"
+                  class="absolute bottom-0 right-0 bg-blue-600 text-white rounded-full w-10 h-10 flex items-center justify-center hover:bg-blue-700 transition-colors"
+                >
+                  <i class="fas fa-camera text-sm"></i>
+                </button>
+                <input 
+                  type="file" 
+                  id="profilePicInput" 
+                  accept="image/*" 
+                  class="hidden"
+                />
+              </div>
+              <h3 class="mt-4 text-xl font-semibold text-gray-900">{userData.name}</h3>
+              <p class="text-gray-600">{userData.email}</p>
+              <p class="text-sm text-gray-500 mt-2">Member since {new Date(userData.created_at).toLocaleDateString()}</p>
+            </div>
+
+            {/* Profile Form */}
+            <div class="lg:col-span-2">
+              <form id="profileForm" class="space-y-6">
+                {/* Basic Information */}
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Full Name</label>
+                    <input 
+                      type="text" 
+                      id="fullName"
+                      value={userData.name}
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Email Address</label>
+                    <input 
+                      type="email" 
+                      id="email"
+                      value={userData.email}
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                      required
+                    />
+                  </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Phone Number</label>
+                    <input 
+                      type="tel" 
+                      id="phone"
+                      value={userData.phone}
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                  <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Location</label>
+                    <input 
+                      type="text" 
+                      id="location"
+                      value={userData.location}
+                      class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                    />
+                  </div>
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Website</label>
+                  <input 
+                    type="url" 
+                    id="website"
+                    value={userData.website}
+                    placeholder="https://yourwebsite.com"
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  />
+                </div>
+
+                <div>
+                  <label class="block text-sm font-medium text-gray-700 mb-2">Bio</label>
+                  <textarea 
+                    id="bio"
+                    rows="4"
+                    placeholder="Tell us about yourself..."
+                    class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  >{userData.bio}</textarea>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+
+        {/* Security Settings */}
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-6">Security Settings</h3>
+          
+          <div class="space-y-6">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Current Password</label>
+              <input 
+                type="password" 
+                id="currentPassword"
+                placeholder="Enter your current password"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              />
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">New Password</label>
+                <input 
+                  type="password" 
+                  id="newPassword"
+                  placeholder="Enter new password"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+              <div>
+                <label class="block text-sm font-medium text-gray-700 mb-2">Confirm New Password</label>
+                <input 
+                  type="password" 
+                  id="confirmPassword"
+                  placeholder="Confirm new password"
+                  class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                />
+              </div>
+            </div>
+
+            <button 
+              id="changePasswordBtn"
+              type="button"
+              class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+            >
+              <i class="fas fa-key mr-2"></i>
+              Change Password
+            </button>
+          </div>
+        </div>
+
+        {/* Notification Settings */}
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6 mb-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-6">Notification Preferences</h3>
+          
+          <div class="space-y-4">
+            <div class="flex items-center justify-between">
+              <div>
+                <h4 class="text-sm font-medium text-gray-900">Email Notifications</h4>
+                <p class="text-sm text-gray-600">Receive notifications via email</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="emailNotifications" class="sr-only peer" checked={userData.notifications_email} />
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+
+            <div class="flex items-center justify-between">
+              <div>
+                <h4 class="text-sm font-medium text-gray-900">Push Notifications</h4>
+                <p class="text-sm text-gray-600">Receive browser push notifications</p>
+              </div>
+              <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="pushNotifications" class="sr-only peer" checked={userData.notifications_push} />
+                <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-blue-600"></div>
+              </label>
+            </div>
+          </div>
+        </div>
+
+        {/* Privacy Settings */}
+        <div class="bg-white rounded-xl shadow-sm border border-gray-200 p-6">
+          <h3 class="text-xl font-bold text-gray-900 mb-6">Privacy Settings</h3>
+          
+          <div class="space-y-4">
+            <div>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Profile Visibility</label>
+              <select 
+                id="profileVisibility"
+                class="w-full px-4 py-2 border border-gray-300 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              >
+                <option value="public" selected={userData.privacy_profile === 'public'}>Public - Anyone can see your profile</option>
+                <option value="members" selected={userData.privacy_profile === 'members'}>Members Only - Only logged-in members can see your profile</option>
+                <option value="private" selected={userData.privacy_profile === 'private'}>Private - Only you can see your profile</option>
+              </select>
+            </div>
+
+            <div class="pt-4 border-t border-gray-200">
+              <button 
+                id="deleteAccountBtn"
+                type="button"
+                class="bg-red-600 text-white px-6 py-2 rounded-lg hover:bg-red-700 transition-colors"
+              >
+                <i class="fas fa-trash mr-2"></i>
+                Delete Account
+              </button>
+              <p class="text-sm text-gray-500 mt-2">This action cannot be undone. All your data will be permanently deleted.</p>
+            </div>
+          </div>
+        </div>
+
+        {/* Success/Error Messages */}
+        <div id="profileMessages" class="mt-6"></div>
       </div>
     </Layout>,
-    { title: 'Profile - Online Empires' }
+    { title: 'Profile - Digital Era' }
   )
 })
 
@@ -828,6 +1071,124 @@ app.get('/api/user/:id/stats', async (c) => {
     total_commissions: 2847.00,
     last_activity_date: '2024-08-14'
   })
+})
+
+// Profile API endpoints
+app.get('/api/user/:id/profile', async (c) => {
+  const { env } = c
+  const userId = c.req.param('id')
+
+  try {
+    let user = null
+    if (env.DB) {
+      const userResult = await safeDBQuery(env.DB, 'SELECT * FROM users WHERE id = ?', [userId])
+      user = userResult.results?.[0] || null
+    }
+
+    // Fallback user data
+    const userData = user || {
+      id: 1,
+      name: 'Ashley Kemp',
+      email: 'ashley@digitalera.com',
+      avatar_url: 'https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=150',
+      phone: '+1 (555) 123-4567',
+      location: 'Los Angeles, CA',
+      bio: 'Digital entrepreneur passionate about building digital success.',
+      website: 'https://ashleykemp.com',
+      created_at: '2024-01-15',
+      notifications_email: true,
+      notifications_push: true,
+      privacy_profile: 'public'
+    }
+
+    return c.json(userData)
+  } catch (error) {
+    return c.json({ error: 'Failed to fetch profile' }, 500)
+  }
+})
+
+app.put('/api/user/:id/profile', async (c) => {
+  const { env } = c
+  const userId = c.req.param('id')
+  
+  try {
+    const profileData = await c.req.json()
+    
+    // In a real app, you would update the database here
+    if (env.DB) {
+      // Update user profile in database
+      await safeDBQuery(env.DB, `
+        UPDATE users SET 
+          name = ?, email = ?, phone = ?, location = ?, bio = ?, website = ?,
+          notifications_email = ?, notifications_push = ?, privacy_profile = ?
+        WHERE id = ?
+      `, [
+        profileData.name, profileData.email, profileData.phone, 
+        profileData.location, profileData.bio, profileData.website,
+        profileData.notifications_email, profileData.notifications_push, 
+        profileData.privacy_profile, userId
+      ])
+    }
+
+    return c.json({ success: true, message: 'Profile updated successfully' })
+  } catch (error) {
+    return c.json({ error: 'Failed to update profile' }, 500)
+  }
+})
+
+app.post('/api/user/:id/upload-avatar', async (c) => {
+  const userId = c.req.param('id')
+  
+  try {
+    // In a real app, you would handle file upload here
+    // For demo purposes, we'll simulate a successful upload
+    const mockAvatarUrl = `https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=150&t=${Date.now()}`
+    
+    return c.json({ 
+      success: true, 
+      avatar_url: mockAvatarUrl,
+      message: 'Avatar uploaded successfully' 
+    })
+  } catch (error) {
+    return c.json({ error: 'Failed to upload avatar' }, 500)
+  }
+})
+
+app.post('/api/user/:id/change-password', async (c) => {
+  const userId = c.req.param('id')
+  
+  try {
+    const { currentPassword, newPassword, confirmPassword } = await c.req.json()
+    
+    // Basic validation
+    if (!currentPassword || !newPassword || !confirmPassword) {
+      return c.json({ error: 'All password fields are required' }, 400)
+    }
+    
+    if (newPassword !== confirmPassword) {
+      return c.json({ error: 'New passwords do not match' }, 400)
+    }
+    
+    if (newPassword.length < 8) {
+      return c.json({ error: 'Password must be at least 8 characters long' }, 400)
+    }
+    
+    // In a real app, you would verify current password and update it in database
+    return c.json({ success: true, message: 'Password changed successfully' })
+  } catch (error) {
+    return c.json({ error: 'Failed to change password' }, 500)
+  }
+})
+
+app.delete('/api/user/:id/account', async (c) => {
+  const userId = c.req.param('id')
+  
+  try {
+    // In a real app, you would delete user account and all associated data
+    return c.json({ success: true, message: 'Account deleted successfully' })
+  } catch (error) {
+    return c.json({ error: 'Failed to delete account' }, 500)
+  }
 })
 
 export default app
