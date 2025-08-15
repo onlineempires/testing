@@ -1701,7 +1701,7 @@ app.get('/dmo', (c) => {
       </div>
 
       {/* Clean Stats Section */}
-      <div class="grid grid-cols-3 gap-6 mb-8">
+      <div class="grid grid-cols-4 gap-6 mb-8">
         <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 rounded-xl">
           <div class="flex items-center">
             <i class="fas fa-fire text-2xl text-orange-200 mr-3"></i>
