@@ -1700,38 +1700,35 @@ app.get('/dmo', (c) => {
         </div>
       </div>
 
-      {/* Current Streak & Stats */}
-      <div class="grid grid-cols-4 gap-6 mb-8">
-        <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white p-6 rounded-xl">
-          <div class="flex items-center justify-between">
+      {/* Clean Stats Section */}
+      <div class="grid grid-cols-3 gap-6 mb-8">
+        <div class="bg-gradient-to-r from-orange-500 to-red-500 text-white p-4 rounded-xl">
+          <div class="flex items-center">
+            <i class="fas fa-fire text-2xl text-orange-200 mr-3"></i>
             <div>
               <p class="text-orange-100 text-sm font-medium">Current Streak</p>
-              <p class="text-3xl font-bold" id="currentStreak">7</p>
-              <p class="text-orange-100 text-xs">days in a row</p>
+              <p class="text-2xl font-bold" id="currentStreak">7</p>
             </div>
-            <i class="fas fa-fire text-4xl text-orange-200"></i>
           </div>
         </div>
         
-        <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-6 rounded-xl">
-          <div class="flex items-center justify-between">
+        <div class="bg-gradient-to-r from-green-500 to-emerald-500 text-white p-4 rounded-xl">
+          <div class="flex items-center">
+            <i class="fas fa-check-circle text-2xl text-green-200 mr-3"></i>
             <div>
-              <p class="text-green-100 text-sm font-medium">Tasks Completed</p>
-              <p class="text-3xl font-bold" id="todayCompleted">12</p>
-              <p class="text-green-100 text-xs">today</p>
+              <p class="text-green-100 text-sm font-medium">Tasks Today</p>
+              <p class="text-2xl font-bold" id="todayCompleted">12</p>
             </div>
-            <i class="fas fa-check-circle text-4xl text-green-200"></i>
           </div>
         </div>
         
-        <div class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-6 rounded-xl">
-          <div class="flex items-center justify-between">
+        <div class="bg-gradient-to-r from-blue-500 to-indigo-500 text-white p-4 rounded-xl">
+          <div class="flex items-center">
+            <i class="fas fa-star text-2xl text-blue-200 mr-3"></i>
             <div>
               <p class="text-blue-100 text-sm font-medium">Total XP</p>
-              <p class="text-3xl font-bold" id="totalXP">2,450</p>
-              <p class="text-blue-100 text-xs">experience points</p>
+              <p class="text-2xl font-bold" id="totalXP">2,450</p>
             </div>
-            <i class="fas fa-star text-4xl text-blue-200"></i>
           </div>
         </div>
         
@@ -1925,7 +1922,7 @@ app.get('/dmo', (c) => {
                 <i class="fas fa-info-circle text-blue-600 mr-3"></i>
                 <div>
                   <p class="font-semibold text-blue-900">Today's DMO Selection: \${levelMap[dmoData.level]}</p>
-                  <p class="text-blue-700 text-sm">Started at \${new Date(dmoData.startTime).toLocaleTimeString()}\${dmoData.submitted ? ' - ✅ Submitted' : ' - In Progress'}</p>
+                  <p class="text-blue-700 text-sm">Started at \${new Date(dmoData.startTime).toLocaleTimeString()}\${dmoData.submitted ? ' - 🎉 Completed!' : ' - 🔄 In Progress'}</p>
                 </div>
               </div>
             \`;
@@ -1945,7 +1942,7 @@ app.get('/dmo', (c) => {
                 // Update button text
                 const button = card.querySelector('button');
                 if (button) {
-                  button.textContent = dmoData.submitted ? '✅ Completed Today' : '➤ Continue DMO';
+                  button.textContent = dmoData.submitted ? '🎉 Completed Today!' : '➤ Continue DMO';
                   if (dmoData.submitted) {
                     button.classList.remove('hover:bg-blue-700', 'hover:bg-green-700', 'hover:bg-orange-700', 'hover:bg-red-700');
                     button.classList.add('bg-gray-400', 'cursor-not-allowed');
@@ -1976,6 +1973,128 @@ app.get('/dmo', (c) => {
               totalXP: 0,
               lastCompletedDate: null
             };
+          }
+          
+          // 🎉 SHAREABLE AWARD FEATURE
+          function showDMOCompletionAward(level, tasksCompleted, xpEarned) {
+            const levelNames = {
+              'express': 'Express DMO',
+              'pocket-builder': 'Pocket Builder DMO',
+              'steady-climber': 'Steady Climber DMO',
+              'full-throttle': 'Full Throttle DMO'
+            };
+            
+            const levelEmojis = {
+              'express': '⚡',
+              'pocket-builder': '🚀',
+              'steady-climber': '⛰️',
+              'full-throttle': '🔥'
+            };
+            
+            const today = new Date().toLocaleDateString();
+            const levelName = levelNames[level] || level;
+            const emoji = levelEmojis[level] || '🎯';
+            
+            // Create modal with award
+            const modal = document.createElement('div');
+            modal.className = 'fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+            modal.innerHTML = \`
+              <div class="bg-white rounded-2xl p-8 max-w-md mx-4 text-center transform scale-0 transition-transform duration-300" id="awardModal">
+                <div class="bg-gradient-to-r from-yellow-400 to-orange-500 text-white p-6 rounded-xl mb-6">
+                  <div class="text-6xl mb-4">🏆</div>
+                  <h2 class="text-2xl font-bold mb-2">DMO COMPLETED!</h2>
+                  <div class="text-lg">\${emoji} \${levelName}</div>
+                </div>
+                
+                <div class="space-y-4 mb-6">
+                  <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+                    <span class="font-medium text-gray-700">Tasks Completed:</span>
+                    <span class="font-bold text-green-600">\${tasksCompleted}</span>
+                  </div>
+                  <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+                    <span class="font-medium text-gray-700">XP Earned:</span>
+                    <span class="font-bold text-blue-600">+\${xpEarned}</span>
+                  </div>
+                  <div class="flex justify-between items-center bg-gray-50 p-3 rounded-lg">
+                    <span class="font-medium text-gray-700">Date:</span>
+                    <span class="font-bold text-purple-600">\${today}</span>
+                  </div>
+                </div>
+                
+                <div class="space-y-3">
+                  <button onclick="shareToFacebookGroup()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 px-6 rounded-lg transition-colors flex items-center justify-center">
+                    <i class="fab fa-facebook mr-2"></i>
+                    Share to VIP Group
+                  </button>
+                  <button onclick="copyShareText()" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                    <i class="fas fa-copy mr-2"></i>
+                    Copy Share Text
+                  </button>
+                  <button onclick="closeAwardModal()" class="w-full bg-green-600 hover:bg-green-700 text-white font-medium py-2 px-6 rounded-lg transition-colors">
+                    ✅ Awesome, Continue
+                  </button>
+                </div>
+              </div>
+            \`;
+            
+            document.body.appendChild(modal);
+            
+            // Animate in
+            setTimeout(() => {
+              const awardModal = document.getElementById('awardModal');
+              awardModal.style.transform = 'scale(1)';
+            }, 100);
+            
+            // Store share data globally
+            window.shareData = {
+              level: levelName,
+              emoji: emoji,
+              tasks: tasksCompleted,
+              xp: xpEarned,
+              date: today
+            };
+          }
+          
+          function shareToFacebookGroup() {
+            const data = window.shareData;
+            const shareText = \`🎉 Just completed my \${data.emoji} \${data.level}! \n\n✅ \${data.tasks} tasks completed\n⭐ +\${data.xp} XP earned\n📅 \${data.date}\n\n#OnlineEmpires #DMOComplete #ConsistentAction #BusinessGrowth\n\nJoin us: https://www.facebook.com/groups/onlineempiresvip\`;
+            
+            // Open Facebook with pre-filled post
+            const facebookUrl = \`https://www.facebook.com/groups/onlineempiresvip/\`;
+            const facebookShareUrl = \`https://www.facebook.com/sharer/sharer.php?u=\${encodeURIComponent(window.location.origin)}&quote=\${encodeURIComponent(shareText)}\`;
+            
+            window.open(facebookShareUrl, '_blank', 'width=600,height=400');
+          }
+          
+          function copyShareText() {
+            const data = window.shareData;
+            const shareText = \`🎉 Just completed my \${data.emoji} \${data.level}! \n\n✅ \${data.tasks} tasks completed\n⭐ +\${data.xp} XP earned\n📅 \${data.date}\n\n#OnlineEmpires #DMOComplete #ConsistentAction #BusinessGrowth\n\nJoin us: https://www.facebook.com/groups/onlineempiresvip\`;
+            
+            navigator.clipboard.writeText(shareText).then(() => {
+              // Show feedback
+              const button = event.target;
+              const originalText = button.innerHTML;
+              button.innerHTML = '<i class="fas fa-check mr-2"></i>Copied!';
+              button.classList.add('bg-green-600');
+              button.classList.remove('bg-gray-600');
+              
+              setTimeout(() => {
+                button.innerHTML = originalText;
+                button.classList.remove('bg-green-600');
+                button.classList.add('bg-gray-600');
+              }, 2000);
+            });
+          }
+          
+          function closeAwardModal() {
+            const modal = document.querySelector('.fixed.inset-0.bg-black');
+            if (modal) {
+              const awardModal = document.getElementById('awardModal');
+              awardModal.style.transform = 'scale(0)';
+              setTimeout(() => {
+                modal.remove();
+              }, 300);
+            }
           }
         `
       }} />
@@ -2011,8 +2130,46 @@ app.get('/dmo/express', (c) => {
         </div>
       </div>
 
-      {/* Progress Summary - Moved Above Tasks */}
-      <div class="mb-8 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-6">
+      {/* Today's Progress Section - NEW */}
+      <div class="mb-8 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-6 border border-gray-200">
+        <h3 class="text-xl font-bold text-gray-900 mb-4">📊 Today's Progress</h3>
+        <div class="grid grid-cols-2 gap-6 mb-6">
+          <div class="bg-white rounded-lg p-4 border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-sm text-gray-600 mb-1"><span id="completedTasks">0</span> of <span id="totalTasks">6</span> tasks completed</div>
+                <div class="text-sm text-blue-600 font-medium">+<span id="earnedXP">0</span> XP earned today</div>
+              </div>
+              <div class="text-right">
+                <div class="text-3xl font-bold text-blue-600" id="progressPercent">0%</div>
+                <div class="text-sm text-gray-600">completion</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg p-4 border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
+                <p class="text-xs text-gray-500">Lock in progress and build your streak</p>
+              </div>
+              <button 
+                id="submitDMOBtn" 
+                onclick="submitDMO('express')" 
+                class="bg-blue-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed text-sm"
+                disabled
+              >
+                Submit DMO
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-200 rounded-full h-3">
+          <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
+        </div>
+      </div>
+
+      {/* Original Progress Summary - Keep for backward compatibility */}
+      <div class="mb-8 bg-gradient-to-r from-gray-50 to-blue-50 rounded-xl p-6" style={{display: 'none'}}>
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Today's Progress</h3>
@@ -2035,15 +2192,15 @@ app.get('/dmo/express', (c) => {
           <div id="progressBar" class="bg-gradient-to-r from-blue-500 to-blue-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
         </div>
         
-        {/* Submit Section */}
-        <div class="mt-6 space-y-4">
+        {/* Submit Section - Hidden since moved to top */}
+        <div class="mt-6 space-y-4" style={{display: 'none'}}>
           <div class="flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200">
             <div>
               <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
               <p class="text-xs text-gray-500">This will lock in your progress and add to your streak</p>
             </div>
             <button 
-              id="submitDMOBtn" 
+              id="submitDMOBtn2" 
               onclick="submitDMO('express')" 
               class="bg-blue-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-blue-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
               disabled
@@ -2490,15 +2647,15 @@ app.get('/dmo/express', (c) => {
             globalStats.lastCompletedDate = today;
             localStorage.setItem('dmo_stats', JSON.stringify(globalStats));
             
-            // Show success message
-            alert('DMO Submitted Successfully! 🎉\\n\\nYour progress has been locked in and your streak has been updated. Come back tomorrow for your next DMO!');
+            // Show success message with award
+            showDMOCompletionAward(level, completedCount, totalXP);
             
             // Disable submit button and update UI
             const submitBtn = document.getElementById('submitDMOBtn');
             submitBtn.disabled = true;
-            submitBtn.textContent = '✅ Submitted Today';
+            submitBtn.textContent = '🎉 Completed Today!';
             submitBtn.classList.add('bg-gray-400', 'cursor-not-allowed');
-            submitBtn.classList.remove('hover:bg-blue-700');
+            submitBtn.classList.remove('hover:bg-blue-700', 'hover:bg-green-700', 'hover:bg-orange-700', 'hover:bg-red-700');
             
             // Disable all task checkboxes
             document.querySelectorAll('.task-checkbox').forEach(checkbox => {
@@ -2705,8 +2862,46 @@ app.get('/dmo/pocket-builder', (c) => {
         </div>
       </div>
 
-      {/* Progress Summary */}
-      <div class="mt-8 bg-gradient-to-r from-gray-50 to-green-50 rounded-xl p-6">
+      {/* TODAY'S PROGRESS SECTION - MOVED TO TOP */}
+      <div class="mb-8 bg-gradient-to-r from-gray-50 to-green-50 rounded-xl p-6 border border-gray-200">
+        <h3 class="text-xl font-bold text-gray-900 mb-4">📊 Today's Progress</h3>
+        <div class="grid grid-cols-2 gap-6 mb-6">
+          <div class="bg-white rounded-lg p-4 border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-sm text-gray-600 mb-1"><span id="completedTasks">0</span> of <span id="totalTasks">10</span> tasks completed</div>
+                <div class="text-sm text-green-600 font-medium">+<span id="earnedXP">0</span> XP earned today</div>
+              </div>
+              <div class="text-right">
+                <div class="text-3xl font-bold text-green-600" id="progressPercent">0%</div>
+                <div class="text-sm text-gray-600">completion</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg p-4 border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
+                <p class="text-xs text-gray-500">Lock in progress and build your streak</p>
+              </div>
+              <button 
+                id="submitDMOBtn" 
+                onclick="submitDMO('pocket-builder')" 
+                class="bg-green-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed text-sm"
+                disabled
+              >
+                Submit DMO
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-200 rounded-full h-3">
+          <div id="progressBar" class="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
+        </div>
+      </div>
+
+      {/* ORIGINAL PROGRESS SUMMARY - MOVED TO BOTTOM */}
+      <div class="mt-8 bg-gradient-to-r from-gray-50 to-green-50 rounded-xl p-6" style={{display: 'none'}}>
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Today's Progress</h3>
@@ -2729,14 +2924,14 @@ app.get('/dmo/pocket-builder', (c) => {
           <div id="progressBar" class="bg-gradient-to-r from-green-500 to-green-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
         </div>
         
-        {/* Submit Section */}
-        <div class="mt-6 flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200">
+        {/* Submit Section - Hidden since moved to top */}
+        <div class="mt-6 flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200" style={{display: 'none'}}>
           <div>
             <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
             <p class="text-xs text-gray-500">This will lock in your progress and add to your streak</p>
           </div>
           <button 
-            id="submitDMOBtn" 
+            id="submitDMOBtn2" 
             onclick="submitDMO('pocket-builder')" 
             class="bg-green-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-green-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             disabled
@@ -3031,8 +3226,46 @@ app.get('/dmo/steady-climber', (c) => {
         </div>
       </div>
 
-      {/* Progress Summary - Moved Above Tasks */}
-      <div class="mb-8 bg-gradient-to-r from-gray-50 to-orange-50 rounded-xl p-6">
+      {/* TODAY'S PROGRESS SECTION */}
+      <div class="mb-8 bg-gradient-to-r from-gray-50 to-orange-50 rounded-xl p-6 border border-gray-200">
+        <h3 class="text-xl font-bold text-gray-900 mb-4">📊 Today's Progress</h3>
+        <div class="grid grid-cols-2 gap-6 mb-6">
+          <div class="bg-white rounded-lg p-4 border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-sm text-gray-600 mb-1"><span id="completedTasks">0</span> of <span id="totalTasks">15</span> tasks completed</div>
+                <div class="text-sm text-orange-600 font-medium">+<span id="earnedXP">0</span> XP earned today</div>
+              </div>
+              <div class="text-right">
+                <div class="text-3xl font-bold text-orange-600" id="progressPercent">0%</div>
+                <div class="text-sm text-gray-600">completion</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg p-4 border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
+                <p class="text-xs text-gray-500">Lock in progress and build your streak</p>
+              </div>
+              <button 
+                id="submitDMOBtn" 
+                onclick="submitDMO('steady-climber')" 
+                class="bg-orange-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-orange-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed text-sm"
+                disabled
+              >
+                Submit DMO
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-200 rounded-full h-3">
+          <div id="progressBar" class="bg-gradient-to-r from-orange-500 to-orange-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
+        </div>
+      </div>
+
+      {/* ORIGINAL PROGRESS SUMMARY */}
+      <div class="mb-8 bg-gradient-to-r from-gray-50 to-orange-50 rounded-xl p-6" style={{display: 'none'}}>
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Today's Progress</h3>
@@ -3055,14 +3288,14 @@ app.get('/dmo/steady-climber', (c) => {
           <div id="progressBar" class="bg-gradient-to-r from-orange-500 to-orange-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
         </div>
         
-        {/* Submit Section */}
-        <div class="mt-6 flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200">
+        {/* Submit Section - Hidden since moved to top */}
+        <div class="mt-6 flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200" style={{display: 'none'}}>
           <div>
             <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
             <p class="text-xs text-gray-500">This will lock in your progress and add to your streak</p>
           </div>
           <button 
-            id="submitDMOBtn" 
+            id="submitDMOBtn2" 
             onclick="submitDMO('steady-climber')" 
             class="bg-orange-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-orange-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             disabled
@@ -3536,8 +3769,46 @@ app.get('/dmo/full-throttle', (c) => {
         </div>
       </div>
 
-      {/* Progress Summary - Moved Above Tasks */}
-      <div class="mb-8 bg-gradient-to-r from-gray-50 to-red-50 rounded-xl p-6">
+      {/* TODAY'S PROGRESS SECTION */}
+      <div class="mb-8 bg-gradient-to-r from-gray-50 to-red-50 rounded-xl p-6 border border-gray-200">
+        <h3 class="text-xl font-bold text-gray-900 mb-4">📊 Today's Progress</h3>
+        <div class="grid grid-cols-2 gap-6 mb-6">
+          <div class="bg-white rounded-lg p-4 border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <div class="text-sm text-gray-600 mb-1"><span id="completedTasks">0</span> of <span id="totalTasks">20</span> tasks completed</div>
+                <div class="text-sm text-red-600 font-medium">+<span id="earnedXP">0</span> XP earned today</div>
+              </div>
+              <div class="text-right">
+                <div class="text-3xl font-bold text-red-600" id="progressPercent">0%</div>
+                <div class="text-sm text-gray-600">completion</div>
+              </div>
+            </div>
+          </div>
+          <div class="bg-white rounded-lg p-4 border border-gray-100">
+            <div class="flex items-center justify-between">
+              <div>
+                <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
+                <p class="text-xs text-gray-500">Lock in progress and build your streak</p>
+              </div>
+              <button 
+                id="submitDMOBtn" 
+                onclick="submitDMO('full-throttle')" 
+                class="bg-red-600 text-white px-4 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed text-sm"
+                disabled
+              >
+                Submit DMO
+              </button>
+            </div>
+          </div>
+        </div>
+        <div class="bg-gray-200 rounded-full h-3">
+          <div id="progressBar" class="bg-gradient-to-r from-red-500 to-red-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
+        </div>
+      </div>
+
+      {/* ORIGINAL PROGRESS SUMMARY */}
+      <div class="mb-8 bg-gradient-to-r from-gray-50 to-red-50 rounded-xl p-6" style={{display: 'none'}}>
         <div class="flex items-center justify-between">
           <div>
             <h3 class="text-lg font-semibold text-gray-900 mb-2">Today's Progress</h3>
@@ -3560,14 +3831,14 @@ app.get('/dmo/full-throttle', (c) => {
           <div id="progressBar" class="bg-gradient-to-r from-red-500 to-red-600 h-3 rounded-full transition-all duration-500" style={{width: '0%'}}></div>
         </div>
         
-        {/* Submit Section */}
-        <div class="mt-6 flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200">
+        {/* Submit Section - Hidden since moved to top */}
+        <div class="mt-6 flex items-center justify-between bg-white rounded-lg p-4 border border-gray-200" style={{display: 'none'}}>
           <div>
             <p class="text-sm text-gray-600 mb-1">Ready to submit your DMO?</p>
             <p class="text-xs text-gray-500">This will lock in your progress and add to your streak</p>
           </div>
           <button 
-            id="submitDMOBtn" 
+            id="submitDMOBtn2" 
             onclick="submitDMO('full-throttle')" 
             class="bg-red-600 text-white px-6 py-2 rounded-lg font-semibold hover:bg-red-700 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
             disabled
