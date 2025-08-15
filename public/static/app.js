@@ -290,7 +290,7 @@ function initializeCourseCards() {
   const courseCards = document.querySelectorAll('.course-card');
   courseCards.forEach(card => {
     // Only apply hover effects to actual course cards, not Continue Journey
-    if (!card.closest('[class*="Continue Your Journey"]') && !card.textContent.includes('TIK-TOK MASTERY')) {
+    if (!card.textContent.includes('Continue Your Journey')) {
       card.addEventListener('mouseenter', function() {
         this.classList.add('shadow-xl', 'scale-105');
         this.style.transition = 'all 0.3s ease';
@@ -491,14 +491,27 @@ function initializeProfilePage() {
           const response = await axios.post('/api/user/1/upload-avatar', { file: file.name });
           if (response.data.success) {
             console.log('Avatar uploaded successfully');
-            // Update all profile images on the page
-            const allProfileImages = document.querySelectorAll('img[alt="Profile"], #profileImage');
-            allProfileImages.forEach(img => {
-              img.src = response.data.avatar_url || e.target.result;
-            });
+            // Update profile page image
+            const profilePageImage = document.getElementById('profileImage');
+            if (profilePageImage) {
+              profilePageImage.src = response.data.avatar_url || e.target.result;
+            }
+            
+            // Update header profile image (smaller version)
+            const headerProfileImage = document.getElementById('headerProfileImage');
+            if (headerProfileImage) {
+              const headerUrl = response.data.avatar_url ? 
+                response.data.avatar_url.replace('w=150', 'w=32') : 
+                e.target.result;
+              headerProfileImage.src = headerUrl;
+            }
+            
+            // Show success message
+            showSuccessMessage('Profile picture updated successfully!');
           }
         } catch (error) {
           console.error('Failed to upload avatar:', error);
+          showErrorMessage('Failed to upload profile picture. Please try again.');
         }
       }
     });
@@ -532,11 +545,10 @@ function initializeProfilePage() {
         
         if (response.data.success) {
           showSuccessMessage('Profile updated successfully!');
-          // Update header profile image if it exists
-          const headerProfileImg = document.querySelector('img[alt="Profile"]');
-          const currentProfileImg = document.getElementById('profileImage');
-          if (headerProfileImg && currentProfileImg) {
-            headerProfileImg.src = currentProfileImg.src;
+          // Update header profile name
+          const headerProfileName = document.querySelector('#profileBtn span');
+          if (headerProfileName) {
+            headerProfileName.textContent = formData.name;
           }
         }
       } catch (error) {

@@ -165,7 +165,7 @@ const Layout = ({ children, title, currentPage }: { children: any, title: string
               {/* Profile Dropdown */}
               <div class="relative">
                 <button id="profileBtn" class="flex items-center space-x-2 hover:bg-gray-50 rounded-lg p-2">
-                  <img src="https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=32" alt="Profile" class="w-8 h-8 rounded-full" />
+                  <img id="headerProfileImage" src="https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=32" alt="Profile" class="w-8 h-8 rounded-full object-cover" onerror="this.src='https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=32'" />
                   <span class="text-sm font-medium text-gray-700">Ashley Kemp</span>
                   <i class="fas fa-chevron-down text-gray-400 text-xs"></i>
                 </button>
@@ -825,6 +825,7 @@ app.get('/profile', async (c) => {
                   src={userData.avatar_url} 
                   alt="Profile" 
                   class="w-32 h-32 rounded-full object-cover border-4 border-gray-200"
+                  onerror="this.src='https://images.unsplash.com/photo-1494790108755-2616b25643e0?w=150'"
                 />
                 <button 
                   id="changeProfilePicBtn"
